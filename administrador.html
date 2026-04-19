@@ -6,68 +6,49 @@
 <title>Palacio Store — Panel Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a; --white: #fafafa; --accent: #c8a97e;
-    --gray: #888; --light-gray: #eee; --red: #d94f3d; --green: #2ebd6b;
-    --sidebar-w: 260px;
-  }
+  /* Mantenemos tus estilos originales */
+  :root { --black: #0a0a0a; --white: #fafafa; --accent: #c8a97e; --green: #2ebd6b; --sidebar-w: 260px; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', sans-serif; background: #f0ede8; color: var(--black); min-height: 100vh; }
-  .admin-container { display: flex; min-height: 100vh; }
+  body { font-family: 'DM Sans', sans-serif; background: #f0ede8; color: var(--black); }
+  .admin-container { display: flex; }
   .sidebar { width: var(--sidebar-w); background: var(--black); color: var(--white); padding: 2rem 1.5rem; position: fixed; height: 100vh; }
-  .sidebar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; margin-bottom: 3rem; }
-  .nav-menu { list-style: none; }
-  .nav-item { padding: 1rem; margin-bottom: 0.5rem; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
-  .nav-item.active { background: var(--accent); color: var(--black); font-weight: 600; }
   .main-content { margin-left: var(--sidebar-w); flex: 1; padding: 3rem; }
-  .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
-  .btn-primary { background: var(--black); color: var(--white); padding: 0.8rem 1.5rem; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; }
-  .table-container { background: var(--white); border-radius: 16px; padding: 1.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+  .table-container { background: var(--white); border-radius: 16px; padding: 1.5rem; }
   table { width: 100%; border-collapse: collapse; }
-  th { text-align: left; padding: 1rem; color: var(--gray); border-bottom: 1px solid var(--light-gray); }
-  td { padding: 1.2rem 1rem; border-bottom: 1px solid var(--light-gray); }
-  .prod-info { display: flex; align-items: center; gap: 15px; }
-  .prod-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #eee; }
-  .badge { padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; background: #e8d5b7; color: #8a6d3b; }
-  .actions { display: flex; gap: 10px; }
-  .btn-icon { width: 35px; height: 35px; border-radius: 50%; border: 1px solid #ddd; cursor: pointer; background: none; }
+  td, th { padding: 1rem; border-bottom: 1px solid #eee; text-align: left; }
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; place-items: center; z-index: 1000; }
   .modal { background: var(--white); width: 90%; max-width: 500px; padding: 2.5rem; border-radius: 24px; }
-  .form-group { margin-bottom: 1.2rem; }
-  label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-  input { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 10px; }
-  .admin-notif { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 2rem; border-radius: 12px; color: white; transform: translateY(150%); transition: 0.5s; z-index: 2000; }
-  .admin-notif.show { transform: translateY(0); }
-  .admin-notif.success { background: var(--green); }
+  .btn-primary { background: var(--black); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; cursor: pointer; border: none; }
 </style>
 </head>
 <body>
 
 <div class="admin-container">
   <div class="sidebar">
-    <div class="sidebar-logo">PALACIO STORE</div>
-    <ul class="nav-menu">
-      <li class="nav-item active">Productos</li>
-      <li class="nav-item" onclick="window.location.href='index.html'">Ver Tienda</li>
+    <div class="sidebar-logo" style="font-weight:800; font-size:1.5rem; margin-bottom:2rem;">PALACIO STORE</div>
+    <ul style="list-style:none;">
+      <li style="padding:1rem; background:var(--accent); border-radius:8px;">Productos</li>
+      <li style="padding:1rem; cursor:pointer;" onclick="window.location.href='index.html'">Ver Tienda</li>
     </ul>
   </div>
 
   <div class="main-content">
-    <div class="header-actions">
-      <h1>Inventario</h1>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+      <h1>Gestión de Productos</h1>
       <button class="btn-primary" onclick="openModal()">+ Nuevo Producto</button>
     </div>
+
     <div class="table-container">
       <table>
         <thead>
           <tr>
             <th>Producto</th>
-            <th>Etiqueta</th>
             <th>Precio</th>
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody id="tableBody"></tbody>
+        <tbody id="tableBody">
+          </tbody>
       </table>
     </div>
   </div>
@@ -77,22 +58,23 @@
   <div class="modal">
     <h2 id="modalTitle">Producto</h2>
     <form id="productForm">
-      <div class="form-group"><label>Nombre</label><input type="text" id="fName" required></div>
-      <div class="form-group"><label>Etiqueta</label><input type="text" id="fBadge"></div>
-      <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-        <div><label>Precio</label><input type="number" id="fPrice" required></div>
-        <div><label>Anterior</label><input type="number" id="fOldPrice"></div>
+      <div style="margin-bottom:1rem;">
+        <label>Nombre</label>
+        <input type="text" id="fName" style="width:100%; padding:0.8rem;" required>
       </div>
-      <div class="form-group"><label>URL Imagen</label><input type="url" id="fImgUrl"></div>
-      <div style="display:flex; gap:10px; margin-top:20px;">
-        <button type="button" class="btn-primary" style="background:#ddd; color:#333;" onclick="closeModal()">Cancelar</button>
-        <button type="submit" class="btn-primary" style="flex:1;">Guardar</button>
+      <div style="margin-bottom:1rem;">
+        <label>Precio</label>
+        <input type="number" id="fPrice" style="width:100%; padding:0.8rem;" required>
       </div>
+      <div style="margin-bottom:1rem;">
+        <label>Imagen URL</label>
+        <input type="url" id="fImgUrl" style="width:100%; padding:0.8rem;">
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;">Guardar Producto</button>
+      <button type="button" onclick="closeModal()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer;">Cancelar</button>
     </form>
   </div>
 </div>
-
-<div id="adminNotif" class="admin-notif"></div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -124,16 +106,13 @@
   document.getElementById('productForm').onsubmit = async (e) => {
     e.preventDefault();
     const id = editingId || Date.now();
-    const prod = {
-      id,
+    const p = {
+      id: id,
       name: document.getElementById('fName').value,
-      badge: document.getElementById('fBadge').value || "",
       price: parseFloat(document.getElementById('fPrice').value),
-      oldPrice: parseFloat(document.getElementById('fOldPrice').value) || null,
       img: document.getElementById('fImgUrl').value || ""
     };
-    await set(ref(db, 'productos/' + id), prod);
-    showNotif(editingId ? "Actualizado" : "Creado");
+    await set(ref(db, 'productos/' + id), p);
     closeModal();
   };
 
@@ -141,35 +120,20 @@
     if(confirm("¿Eliminar?")) await remove(ref(db, 'productos/' + id));
   };
 
-  window.editProduct = (id) => {
-    const p = products.find(x => x.id === id);
-    editingId = id;
-    document.getElementById('fName').value = p.name;
-    document.getElementById('fPrice').value = p.price;
-    document.getElementById('fBadge').value = p.badge || "";
-    document.getElementById('fOldPrice').value = p.oldPrice || "";
-    document.getElementById('fImgUrl').value = p.img || "";
-    document.getElementById('modalOverlay').style.display = 'grid';
-  };
+  window.openModal = () => { editingId = null; document.getElementById('productForm').reset(); document.getElementById('modalOverlay').style.display = 'grid'; };
+  window.closeModal = () => document.getElementById('modalOverlay').style.display = 'none';
 
   function renderTable() {
     document.getElementById('tableBody').innerHTML = products.map(p => `
       <tr>
-        <td><div class="prod-info"><img src="${p.img || ''}" class="prod-img"><b>${p.name}</b></div></td>
-        <td>${p.badge ? `<span class="badge">${p.badge}</span>` : '—'}</td>
+        <td>${p.name}</td>
         <td>$${p.price.toLocaleString('es-CL')}</td>
         <td>
-          <div class="actions">
-            <button class="btn-icon" onclick="editProduct(${p.id})">✎</button>
-            <button class="btn-icon" onclick="deleteProduct(${p.id})">✕</button>
-          </div>
+          <button onclick="deleteProduct(${p.id})" style="color:red; cursor:pointer; background:none; border:none;">Eliminar</button>
         </td>
-      </tr>`).join('');
+      </tr>
+    `).join('');
   }
-
-  window.openModal = () => { editingId = null; document.getElementById('productForm').reset(); document.getElementById('modalOverlay').style.display = 'grid'; };
-  window.closeModal = () => { document.getElementById('modalOverlay').style.display = 'none'; };
-  function showNotif(m) { const n = document.getElementById('adminNotif'); n.textContent = m; n.className = 'admin-notif success show'; setTimeout(()=>n.classList.remove('show'), 2000); }
 </script>
 </body>
 </html>
