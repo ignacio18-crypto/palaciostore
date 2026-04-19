@@ -6,79 +6,143 @@
 <title>Palacio Store — Panel Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-  /* Mantenemos tus estilos originales */
-  :root { --black: #0a0a0a; --white: #fafafa; --accent: #c8a97e; --green: #2ebd6b; --sidebar-w: 260px; }
+  :root {
+    --black: #0a0a0a; --white: #fafafa; --accent: #c8a97e;
+    --gray: #888; --light-gray: #eee; --red: #d94f3d; --green: #2ebd6b;
+    --sidebar-w: 260px;
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'DM Sans', sans-serif; background: #f0ede8; color: var(--black); }
-  .admin-container { display: flex; }
+  body { font-family: 'DM Sans', sans-serif; background: #f0ede8; color: var(--black); min-height: 100vh; }
+  
+  .admin-container { display: flex; min-height: 100vh; }
+  
+  /* SIDEBAR */
   .sidebar { width: var(--sidebar-w); background: var(--black); color: var(--white); padding: 2rem 1.5rem; position: fixed; height: 100vh; }
+  .sidebar-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; margin-bottom: 3rem; }
+  .nav-menu { list-style: none; }
+  .nav-item { padding: 1rem; margin-bottom: 0.5rem; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
+  .nav-item.active { background: var(--accent); color: var(--black); font-weight: 600; }
+
+  /* MAIN */
   .main-content { margin-left: var(--sidebar-w); flex: 1; padding: 3rem; }
-  .table-container { background: var(--white); border-radius: 16px; padding: 1.5rem; }
-  table { width: 100%; border-collapse: collapse; }
-  td, th { padding: 1rem; border-bottom: 1px solid #eee; text-align: left; }
+  .section-card { background: var(--white); border-radius: 16px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+  
+  .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+  .btn-primary { background: var(--black); color: var(--white); padding: 0.7rem 1.2rem; border: none; border-radius: 50px; cursor: pointer; font-weight: 600; }
+  
+  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+  th { text-align: left; padding: 1rem; color: var(--gray); border-bottom: 1px solid var(--light-gray); }
+  td { padding: 1rem; border-bottom: 1px solid var(--light-gray); }
+
+  /* MODAL */
   .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; place-items: center; z-index: 1000; }
-  .modal { background: var(--white); width: 90%; max-width: 500px; padding: 2.5rem; border-radius: 24px; }
-  .btn-primary { background: var(--black); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; cursor: pointer; border: none; }
+  .modal { background: var(--white); width: 90%; max-width: 450px; padding: 2rem; border-radius: 20px; }
+  .form-group { margin-bottom: 1rem; }
+  label { display: block; margin-bottom: 0.4rem; font-weight: 600; font-size: 0.9rem; }
+  input, select { width: 100%; padding: 0.7rem; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; }
+
+  .admin-notif { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 2rem; border-radius: 12px; color: white; transform: translateY(150%); transition: 0.5s; z-index: 2000; }
+  .admin-notif.show { transform: translateY(0); }
+  .admin-notif.success { background: var(--green); }
 </style>
 </head>
 <body>
 
 <div class="admin-container">
   <div class="sidebar">
-    <div class="sidebar-logo" style="font-weight:800; font-size:1.5rem; margin-bottom:2rem;">PALACIO STORE</div>
-    <ul style="list-style:none;">
-      <li style="padding:1rem; background:var(--accent); border-radius:8px;">Productos</li>
-      <li style="padding:1rem; cursor:pointer;" onclick="window.location.href='index.html'">Ver Tienda</li>
+    <div class="sidebar-logo">PALACIO STORE</div>
+    <ul class="nav-menu">
+      <li class="nav-item active">Panel General</li>
+      <li class="nav-item" onclick="window.location.href='index.html'">Ver Tienda</li>
     </ul>
   </div>
 
   <div class="main-content">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-      <h1>Gestión de Productos</h1>
-      <button class="btn-primary" onclick="openModal()">+ Nuevo Producto</button>
+    <div class="section-card">
+      <div class="header-flex">
+        <h2>Categorías</h2>
+        <button class="btn-primary" onclick="openCatModal()">+ Nueva Categoría</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre de Categoría</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="catTableBody"></tbody>
+      </table>
     </div>
 
-    <div class="table-container">
+    <div class="section-card">
+      <div class="header-flex">
+        <h2>Productos</h2>
+        <button class="btn-primary" onclick="openProdModal()">+ Nuevo Producto</button>
+      </div>
       <table>
         <thead>
           <tr>
             <th>Producto</th>
+            <th>Categoría</th>
             <th>Precio</th>
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody id="tableBody">
-          </tbody>
+        <tbody id="prodTableBody"></tbody>
       </table>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modalOverlay">
+<div class="modal-overlay" id="catModal">
   <div class="modal">
-    <h2 id="modalTitle">Producto</h2>
-    <form id="productForm">
-      <div style="margin-bottom:1rem;">
-        <label>Nombre</label>
-        <input type="text" id="fName" style="width:100%; padding:0.8rem;" required>
+    <h3 id="catModalTitle">Categoría</h3>
+    <form id="catForm">
+      <div class="form-group">
+        <label>Nombre de la Categoría</label>
+        <input type="text" id="catName" required>
       </div>
-      <div style="margin-bottom:1rem;">
-        <label>Precio</label>
-        <input type="number" id="fPrice" style="width:100%; padding:0.8rem;" required>
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn-primary" style="background:#ccc" onclick="closeModals()">Cancelar</button>
+        <button type="submit" class="btn-primary" style="flex:1">Guardar</button>
       </div>
-      <div style="margin-bottom:1rem;">
-        <label>Imagen URL</label>
-        <input type="url" id="fImgUrl" style="width:100%; padding:0.8rem;">
-      </div>
-      <button type="submit" class="btn-primary" style="width:100%;">Guardar Producto</button>
-      <button type="button" onclick="closeModal()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer;">Cancelar</button>
     </form>
   </div>
 </div>
 
+<div class="modal-overlay" id="prodModal">
+  <div class="modal">
+    <h3 id="prodModalTitle">Producto</h3>
+    <form id="prodForm">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" id="pName" required>
+      </div>
+      <div class="form-group">
+        <label>Categoría</label>
+        <select id="pCat"></select>
+      </div>
+      <div class="form-group">
+        <label>Precio</label>
+        <input type="number" id="pPrice" required>
+      </div>
+      <div class="form-group">
+        <label>URL Imagen</label>
+        <input type="url" id="pImg">
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button type="button" class="btn-primary" style="background:#ccc" onclick="closeModals()">Cancelar</button>
+        <button type="submit" class="btn-primary" style="flex:1">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="adminNotif" class="admin-notif"></div>
+
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getDatabase, ref, set, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB_Kgid_oL0wscMQlViW1ZweO9v6z_hsz0",
@@ -92,47 +156,136 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-  const dbRef = ref(db, 'productos');
 
+  let categories = [];
   let products = [];
-  let editingId = null;
+  let editCatId = null;
+  let editProdId = null;
 
-  onValue(dbRef, (snapshot) => {
-    const data = snapshot.val();
-    products = data ? Object.values(data) : [];
-    renderTable();
+  // --- SINCRONIZACIÓN EN TIEMPO REAL ---
+  onValue(ref(db, 'categorias'), (snap) => {
+    const data = snap.val();
+    categories = data ? Object.values(data) : [];
+    renderCategories();
+    updateCatSelect();
   });
 
-  document.getElementById('productForm').onsubmit = async (e) => {
+  onValue(ref(db, 'productos'), (snap) => {
+    const data = snap.val();
+    products = data ? Object.values(data) : [];
+    renderProducts();
+  });
+
+  // --- LÓGICA CATEGORÍAS ---
+  window.openCatModal = (id = null) => {
+    editCatId = id;
+    document.getElementById('catForm').reset();
+    if(id) {
+      const c = categories.find(x => x.id === id);
+      document.getElementById('catName').value = c.name;
+      document.getElementById('catModalTitle').textContent = "Editar Categoría";
+    } else {
+      document.getElementById('catModalTitle').textContent = "Nueva Categoría";
+    }
+    document.getElementById('catModal').style.display = 'grid';
+  }
+
+  document.getElementById('catForm').onsubmit = async (e) => {
     e.preventDefault();
-    const id = editingId || Date.now();
-    const p = {
-      id: id,
-      name: document.getElementById('fName').value,
-      price: parseFloat(document.getElementById('fPrice').value),
-      img: document.getElementById('fImgUrl').value || ""
-    };
-    await set(ref(db, 'productos/' + id), p);
-    closeModal();
-  };
+    const id = editCatId || Date.now();
+    const name = document.getElementById('catName').value;
+    await set(ref(db, 'categorias/' + id), { id, name });
+    closeModals();
+    showNotif("Categoría guardada");
+  }
 
-  window.deleteProduct = async (id) => {
-    if(confirm("¿Eliminar?")) await remove(ref(db, 'productos/' + id));
-  };
+  window.deleteCategory = async (id) => {
+    if(confirm("¿Eliminar categoría? Los productos asociados se mantendrán pero sin categoría.")) {
+      await remove(ref(db, 'categorias/' + id));
+      showNotif("Categoría eliminada");
+    }
+  }
 
-  window.openModal = () => { editingId = null; document.getElementById('productForm').reset(); document.getElementById('modalOverlay').style.display = 'grid'; };
-  window.closeModal = () => document.getElementById('modalOverlay').style.display = 'none';
-
-  function renderTable() {
-    document.getElementById('tableBody').innerHTML = products.map(p => `
+  function renderCategories() {
+    document.getElementById('catTableBody').innerHTML = categories.map(c => `
       <tr>
-        <td>${p.name}</td>
-        <td>$${p.price.toLocaleString('es-CL')}</td>
+        <td><b>${c.name}</b></td>
         <td>
-          <button onclick="deleteProduct(${p.id})" style="color:red; cursor:pointer; background:none; border:none;">Eliminar</button>
+          <button onclick="openCatModal(${c.id})" style="border:none; background:none; cursor:pointer; color:blue; margin-right:10px;">Editar</button>
+          <button onclick="deleteCategory(${c.id})" style="border:none; background:none; cursor:pointer; color:red;">Eliminar</button>
         </td>
       </tr>
     `).join('');
+  }
+
+  function updateCatSelect() {
+    const select = document.getElementById('pCat');
+    select.innerHTML = `<option value="">Sin categoría</option>` + 
+      categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+  }
+
+  // --- LÓGICA PRODUCTOS ---
+  window.openProdModal = (id = null) => {
+    editProdId = id;
+    document.getElementById('prodForm').reset();
+    if(id) {
+      const p = products.find(x => x.id === id);
+      document.getElementById('pName').value = p.name;
+      document.getElementById('pCat').value = p.category || "";
+      document.getElementById('pPrice').value = p.price;
+      document.getElementById('pImg').value = p.img || "";
+      document.getElementById('prodModalTitle').textContent = "Editar Producto";
+    } else {
+      document.getElementById('prodModalTitle').textContent = "Nuevo Producto";
+    }
+    document.getElementById('prodModal').style.display = 'grid';
+  }
+
+  document.getElementById('prodForm').onsubmit = async (e) => {
+    e.preventDefault();
+    const id = editProdId || Date.now();
+    const data = {
+      id,
+      name: document.getElementById('pName').value,
+      category: document.getElementById('pCat').value,
+      price: parseFloat(document.getElementById('pPrice').value),
+      img: document.getElementById('pImg').value || ""
+    };
+    await set(ref(db, 'productos/' + id), data);
+    closeModals();
+    showNotif("Producto guardado");
+  }
+
+  window.deleteProduct = async (id) => {
+    if(confirm("¿Eliminar producto?")) {
+      await remove(ref(db, 'productos/' + id));
+      showNotif("Producto eliminado");
+    }
+  }
+
+  function renderProducts() {
+    document.getElementById('prodTableBody').innerHTML = products.map(p => `
+      <tr>
+        <td>${p.name}</td>
+        <td><span style="background:#eee; padding:2px 8px; border-radius:4px; font-size:0.8rem;">${p.category || 'General'}</span></td>
+        <td>$${p.price.toLocaleString('es-CL')}</td>
+        <td>
+          <button onclick="openProdModal(${p.id})" style="border:none; background:none; cursor:pointer; color:blue; margin-right:10px;">Editar</button>
+          <button onclick="deleteProduct(${p.id})" style="border:none; background:none; cursor:pointer; color:red;">Eliminar</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // UI AUX
+  window.closeModals = () => {
+    document.getElementById('catModal').style.display = 'none';
+    document.getElementById('prodModal').style.display = 'none';
+  }
+  function showNotif(m) {
+    const n = document.getElementById('adminNotif');
+    n.textContent = m; n.className = 'admin-notif success show';
+    setTimeout(() => n.classList.remove('show'), 2500);
   }
 </script>
 </body>
