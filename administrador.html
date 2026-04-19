@@ -99,12 +99,6 @@
     margin-top: 12px; display: none;
   }
 
-  .login-hint {
-    margin-top: 20px; font-size: 12px; color: var(--gray);
-    background: #f5f5f5; padding: 10px 14px; border-radius: 4px;
-    text-align: left; line-height: 1.6;
-  }
-
   /* MAIN LAYOUT */
   .admin-layout {
     display: none;
@@ -277,7 +271,20 @@
   tr:hover td { background: #fcfcfc; }
   tr:last-child td { border-bottom: none; }
 
-  .prod-emoji { font-size: 24px; }
+  .prod-thumb {
+    width: 48px; height: 48px;
+    border-radius: 6px; object-fit: cover;
+    border: 1px solid #eee;
+  }
+
+  .prod-thumb-placeholder {
+    width: 48px; height: 48px;
+    border-radius: 6px;
+    background: #f0ede8;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    border: 1px solid #eee;
+  }
 
   .badge-pill {
     display: inline-block; padding: 3px 10px;
@@ -319,8 +326,8 @@
   .modal {
     background: var(--white);
     border-radius: 12px;
-    width: 520px; max-width: 90vw;
-    max-height: 85vh; overflow-y: auto;
+    width: 540px; max-width: 90vw;
+    max-height: 90vh; overflow-y: auto;
     padding: 36px;
     transform: scale(0.95);
     transition: transform 0.3s;
@@ -359,6 +366,87 @@
 
   .form-group input:focus,
   .form-group select:focus { border-color: var(--accent); }
+
+  /* IMAGE UPLOAD */
+  .image-upload-area {
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    min-height: 120px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 8px;
+  }
+
+  .image-upload-area:hover { border-color: var(--accent); background: #fdf9f4; }
+  .image-upload-area.has-image { border-style: solid; border-color: var(--accent); padding: 8px; }
+
+  .image-upload-area input[type="file"] {
+    position: absolute; inset: 0;
+    opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    border: none; padding: 0;
+  }
+
+  .upload-preview {
+    width: 100%; max-height: 160px;
+    object-fit: contain; border-radius: 4px;
+    display: none;
+  }
+
+  .upload-placeholder {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 6px;
+  }
+
+  .upload-placeholder-icon { font-size: 28px; opacity: 0.4; }
+
+  .upload-placeholder-text {
+    font-size: 13px; color: var(--gray);
+    font-weight: 500;
+  }
+
+  .upload-placeholder-sub { font-size: 11px; color: #bbb; }
+
+  .upload-change-btn {
+    position: absolute; top: 8px; right: 8px;
+    background: var(--black); color: white;
+    border: none; border-radius: 4px;
+    font-size: 11px; padding: 4px 10px;
+    cursor: pointer; font-family: inherit;
+    z-index: 1; display: none;
+  }
+
+  .image-upload-area.has-image .upload-change-btn { display: block; }
+  .image-upload-area.has-image .upload-placeholder { display: none; }
+  .image-upload-area.has-image .upload-preview { display: block; }
+
+  /* URL input */
+  .img-url-row {
+    display: flex; gap: 8px; align-items: center;
+    margin-top: 10px;
+  }
+
+  .img-url-row input {
+    flex: 1; padding: 8px 12px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 4px; font-family: inherit;
+    font-size: 13px; outline: none;
+    transition: border 0.2s;
+  }
+
+  .img-url-row input:focus { border-color: var(--accent); }
+
+  .img-url-row button {
+    padding: 8px 14px;
+    background: var(--black); color: white;
+    border: none; border-radius: 4px;
+    font-size: 12px; cursor: pointer;
+    font-family: inherit; white-space: nowrap;
+  }
 
   .modal-actions {
     display: flex; gap: 12px; justify-content: flex-end;
@@ -458,6 +546,24 @@
     height: 100%; background: var(--accent);
     border-radius: 3px; transition: width 0.5s;
   }
+
+  .img-tab-row {
+    display: flex; gap: 0; margin-bottom: 12px;
+    border: 1.5px solid #e0e0e0; border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .img-tab {
+    flex: 1; padding: 8px;
+    font-size: 12px; font-weight: 500;
+    background: var(--white); color: var(--gray);
+    border: none; cursor: pointer;
+    font-family: inherit; transition: all 0.2s;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  .img-tab.active { background: var(--black); color: white; }
+  .img-tab:not(:last-child) { border-right: 1.5px solid #e0e0e0; }
 </style>
 </head>
 <body>
@@ -465,11 +571,11 @@
 <!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
   <div class="login-box">
-    <div class="login-logo">PALACIO<span>.</span></div>
+    <div class="login-logo">PALACIO <span>STORE</span></div>
     <div class="login-sub">Panel de Administración</div>
     <div class="login-field">
       <label>Usuario</label>
-      <input type="text" id="loginUser" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()">
+      <input type="text" id="loginUser" placeholder="Usuario" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div class="login-field">
       <label>Contraseña</label>
@@ -477,10 +583,6 @@
     </div>
     <button class="login-btn" onclick="doLogin()">Ingresar al Panel</button>
     <div class="login-error" id="loginError">Credenciales incorrectas. Intenta de nuevo.</div>
-    <div class="login-hint">
-      <strong>Credenciales de prueba:</strong><br>
-      Usuario: <code>admin</code> — Contraseña: <code>palacio2025</code>
-    </div>
   </div>
 </div>
 
@@ -490,7 +592,7 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      PALACIO<span>.</span>
+      PALACIO <span>STORE</span>
       <small>Panel Admin</small>
     </div>
     <div class="nav-item active" onclick="showPanel('dashboard', this)">
@@ -503,7 +605,7 @@
       <span class="nav-icon">⚙️</span> Configuración
     </div>
     <div class="sidebar-footer">
-      <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:10px;">Sesión activa: admin</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:10px;">Sesión activa: <span id="activeUser">Nicol123</span></div>
       <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
     </div>
   </aside>
@@ -515,7 +617,7 @@
     <div class="panel active" id="panel-dashboard">
       <div class="page-header">
         <h1 class="page-title">Dashboard</h1>
-        <div style="font-size:13px;color:var(--gray)">Bienvenido de vuelta, admin 👋</div>
+        <div style="font-size:13px;color:var(--gray)">Bienvenida de vuelta 👋</div>
       </div>
       <div class="stats-grid" id="statsGrid"></div>
       <div class="dash-grid">
@@ -528,7 +630,6 @@
           <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
             <button onclick="showPanel('products',document.querySelector('.nav-item:nth-child(3)'));openModal()" style="background:var(--black);color:white;border:none;padding:12px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:left;">+ Agregar nuevo producto</button>
             <a href="palacio-store.html" target="_blank" style="display:block;background:#f5f0eb;color:var(--black);padding:12px;border-radius:4px;font-size:13px;font-weight:500;text-decoration:none;">↗ Ver tienda en vivo</a>
-            <button onclick="exportProducts()" style="background:#f0f0f0;color:var(--black);border:none;padding:12px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:left;">⬇ Exportar productos (JSON)</button>
           </div>
         </div>
       </div>
@@ -556,7 +657,7 @@
         <table>
           <thead>
             <tr>
-              <th>Imagen</th>
+              <th>Foto</th>
               <th>Nombre</th>
               <th>Categoría</th>
               <th>Precio</th>
@@ -644,6 +745,41 @@
         <input type="number" id="fOldPrice" placeholder="34990">
       </div>
     </div>
+
+    <!-- IMAGE SECTION -->
+    <div class="form-group">
+      <label>Foto del producto</label>
+      <div class="img-tab-row">
+        <button class="img-tab active" onclick="switchImgTab('upload')" id="tabUpload">Subir archivo</button>
+        <button class="img-tab" onclick="switchImgTab('url')" id="tabUrl">Pegar URL</button>
+      </div>
+
+      <!-- Upload tab -->
+      <div id="imgTabUpload">
+        <div class="image-upload-area" id="uploadArea">
+          <input type="file" id="fImgFile" accept="image/*" onchange="handleFileUpload(event)">
+          <div class="upload-placeholder">
+            <div class="upload-placeholder-icon">🖼️</div>
+            <div class="upload-placeholder-text">Haz clic o arrastra una imagen aquí</div>
+            <div class="upload-placeholder-sub">PNG, JPG, WEBP hasta 5MB</div>
+          </div>
+          <img class="upload-preview" id="uploadPreview" src="" alt="Preview">
+          <button class="upload-change-btn" onclick="resetImage(event)">✕ Cambiar</button>
+        </div>
+      </div>
+
+      <!-- URL tab -->
+      <div id="imgTabUrl" style="display:none;">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="text" id="fImgUrl" placeholder="https://ejemplo.com/foto.jpg" style="flex:1;padding:11px 14px;border:1.5px solid #e0e0e0;border-radius:4px;font-family:inherit;font-size:14px;outline:none;transition:border 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#e0e0e0'">
+          <button onclick="previewUrl()" style="padding:11px 16px;background:var(--black);color:white;border:none;border-radius:4px;font-family:inherit;font-size:13px;cursor:pointer;white-space:nowrap;">Vista previa</button>
+        </div>
+        <div id="urlPreviewWrap" style="margin-top:10px;display:none;">
+          <img id="urlPreview" src="" alt="Preview" style="width:100%;max-height:160px;object-fit:contain;border-radius:6px;border:1px solid #eee;">
+        </div>
+      </div>
+    </div>
+
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
       <button class="btn-save" onclick="saveProduct()">Guardar producto</button>
@@ -656,25 +792,27 @@
 
 <script>
 const STORAGE_KEY = 'palacio_products';
-const CREDS = { user: 'admin', pass: 'palacio2025' };
+const CREDS = { user: 'Nicol123', pass: 'palacio2026' };
 
 const DEFAULT_PRODUCTS = [
-  { id:1, name:'Oversized Tee Acid', cat:'remeras', price:24990, oldPrice:34990, emoji:'👕', badge:'sale' },
-  { id:2, name:'Cargo Jogger Negro', cat:'pantalones', price:49990, emoji:'👖', badge:'new' },
-  { id:3, name:'Bomber Coach Jacket', cat:'outerwear', price:79990, emoji:'🧥', badge:'hot' },
-  { id:4, name:'Bucket Hat Logo', cat:'accesorios', price:18990, emoji:'🧢', badge:'new' },
-  { id:5, name:'Vintage Washed Tee', cat:'remeras', price:22990, emoji:'👕', badge:null },
-  { id:6, name:'Wide Leg Cargo', cat:'pantalones', price:54990, oldPrice:69990, emoji:'👖', badge:'sale' },
-  { id:7, name:'Puffer Jacket Color', cat:'outerwear', price:89990, emoji:'🧥', badge:'new' },
-  { id:8, name:'Crossbody Bag', cat:'accesorios', price:32990, emoji:'👜', badge:null },
-  { id:9, name:'Graphic Hoodie', cat:'remeras', price:44990, emoji:'👕', badge:'hot' },
-  { id:10, name:'Parachute Pants', cat:'pantalones', price:59990, emoji:'👖', badge:'new' },
-  { id:11, name:'Corduroy Overshirt', cat:'outerwear', price:64990, oldPrice:79990, emoji:'🧥', badge:'sale' },
-  { id:12, name:'Chain Necklace', cat:'accesorios', price:14990, emoji:'📿', badge:null },
+  { id:1, name:'Oversized Tee Acid', cat:'remeras', price:24990, oldPrice:34990, emoji:'👕', badge:'sale', img:null },
+  { id:2, name:'Cargo Jogger Negro', cat:'pantalones', price:49990, emoji:'👖', badge:'new', img:null },
+  { id:3, name:'Bomber Coach Jacket', cat:'outerwear', price:79990, emoji:'🧥', badge:'hot', img:null },
+  { id:4, name:'Bucket Hat Logo', cat:'accesorios', price:18990, emoji:'🧢', badge:'new', img:null },
+  { id:5, name:'Vintage Washed Tee', cat:'remeras', price:22990, emoji:'👕', badge:null, img:null },
+  { id:6, name:'Wide Leg Cargo', cat:'pantalones', price:54990, oldPrice:69990, emoji:'👖', badge:'sale', img:null },
+  { id:7, name:'Puffer Jacket Color', cat:'outerwear', price:89990, emoji:'🧥', badge:'new', img:null },
+  { id:8, name:'Crossbody Bag', cat:'accesorios', price:32990, emoji:'👜', badge:null, img:null },
+  { id:9, name:'Graphic Hoodie', cat:'remeras', price:44990, emoji:'👕', badge:'hot', img:null },
+  { id:10, name:'Parachute Pants', cat:'pantalones', price:59990, emoji:'👖', badge:'new', img:null },
+  { id:11, name:'Corduroy Overshirt', cat:'outerwear', price:64990, oldPrice:79990, emoji:'🧥', badge:'sale', img:null },
+  { id:12, name:'Chain Necklace', cat:'accesorios', price:14990, emoji:'📿', badge:null, img:null },
 ];
 
 let products = [];
 let editingId = null;
+let currentImgTab = 'upload';
+let currentImgData = null; // base64 or URL string
 
 // LOGIN
 function doLogin() {
@@ -683,6 +821,7 @@ function doLogin() {
   if (u === CREDS.user && p === CREDS.pass) {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminLayout').classList.add('active');
+    document.getElementById('activeUser').textContent = u;
     loadProducts();
     renderDashboard();
     renderTable();
@@ -696,6 +835,7 @@ function doLogout() {
   document.getElementById('adminLayout').classList.remove('active');
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
+  document.getElementById('loginError').style.display = 'none';
 }
 
 // PRODUCTS
@@ -781,7 +921,12 @@ function renderTable() {
 
   document.getElementById('productTable').innerHTML = filtered.map(p => `
     <tr>
-      <td class="prod-emoji">${p.emoji}</td>
+      <td>
+        ${p.img
+          ? `<img class="prod-thumb" src="${p.img}" alt="${p.name}">`
+          : `<div class="prod-thumb-placeholder">${p.emoji}</div>`
+        }
+      </td>
       <td><strong style="font-size:14px">${p.name}</strong></td>
       <td style="text-transform:capitalize;color:var(--gray)">${p.cat}</td>
       <td><strong>$${p.price.toLocaleString('es-CL')}</strong></td>
@@ -797,10 +942,60 @@ function renderTable() {
   `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
 }
 
+// IMAGE TABS
+function switchImgTab(tab) {
+  currentImgTab = tab;
+  document.getElementById('tabUpload').classList.toggle('active', tab === 'upload');
+  document.getElementById('tabUrl').classList.toggle('active', tab === 'url');
+  document.getElementById('imgTabUpload').style.display = tab === 'upload' ? 'block' : 'none';
+  document.getElementById('imgTabUrl').style.display = tab === 'url' ? 'block' : 'none';
+}
+
+function handleFileUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { showNotif('La imagen supera 5MB', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    currentImgData = ev.target.result;
+    const preview = document.getElementById('uploadPreview');
+    preview.src = currentImgData;
+    document.getElementById('uploadArea').classList.add('has-image');
+  };
+  reader.readAsDataURL(file);
+}
+
+function resetImage(e) {
+  e.preventDefault(); e.stopPropagation();
+  currentImgData = null;
+  document.getElementById('uploadPreview').src = '';
+  document.getElementById('uploadArea').classList.remove('has-image');
+  document.getElementById('fImgFile').value = '';
+}
+
+function previewUrl() {
+  const url = document.getElementById('fImgUrl').value.trim();
+  if (!url) return;
+  const wrap = document.getElementById('urlPreviewWrap');
+  const img = document.getElementById('urlPreview');
+  img.src = url;
+  img.onerror = () => { showNotif('No se pudo cargar la imagen desde esa URL', 'error'); wrap.style.display = 'none'; };
+  img.onload = () => { wrap.style.display = 'block'; currentImgData = url; };
+}
+
 // MODAL
 function openModal(id) {
   editingId = id || null;
+  currentImgData = null;
   document.getElementById('modalTitle').textContent = id ? 'Editar Producto' : 'Agregar Producto';
+
+  // Reset image UI
+  document.getElementById('uploadPreview').src = '';
+  document.getElementById('uploadArea').classList.remove('has-image');
+  document.getElementById('fImgFile').value = '';
+  document.getElementById('fImgUrl').value = '';
+  document.getElementById('urlPreviewWrap').style.display = 'none';
+  switchImgTab('upload');
 
   if (id) {
     const p = products.find(x => x.id === id);
@@ -810,6 +1005,22 @@ function openModal(id) {
     document.getElementById('fBadge').value = p.badge || '';
     document.getElementById('fPrice').value = p.price;
     document.getElementById('fOldPrice').value = p.oldPrice || '';
+
+    // Load existing image
+    if (p.img) {
+      currentImgData = p.img;
+      if (p.img.startsWith('data:')) {
+        // base64 - show in upload area
+        document.getElementById('uploadPreview').src = p.img;
+        document.getElementById('uploadArea').classList.add('has-image');
+      } else {
+        // URL - switch to URL tab
+        switchImgTab('url');
+        document.getElementById('fImgUrl').value = p.img;
+        document.getElementById('urlPreview').src = p.img;
+        document.getElementById('urlPreviewWrap').style.display = 'block';
+      }
+    }
   } else {
     document.getElementById('fName').value = '';
     document.getElementById('fEmoji').value = '👕';
@@ -834,15 +1045,22 @@ function saveProduct() {
   const price = parseInt(document.getElementById('fPrice').value);
   const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
 
+  // Resolve image: check url tab if active
+  let img = currentImgData;
+  if (currentImgTab === 'url') {
+    const urlVal = document.getElementById('fImgUrl').value.trim();
+    if (urlVal) img = urlVal;
+  }
+
   if (!name || !price) { showNotif('Completa nombre y precio', 'error'); return; }
 
   if (editingId) {
     const idx = products.findIndex(x => x.id === editingId);
-    products[idx] = { ...products[idx], name, emoji, cat, badge, price, oldPrice };
+    products[idx] = { ...products[idx], name, emoji, cat, badge, price, oldPrice, img: img || products[idx].img || null };
     showNotif('Producto actualizado correctamente', 'success');
   } else {
     const newId = Math.max(...products.map(p=>p.id), 0) + 1;
-    products.push({ id: newId, name, emoji, cat, badge, price, oldPrice });
+    products.push({ id: newId, name, emoji, cat, badge, price, oldPrice, img: img || null });
     showNotif('Producto agregado correctamente', 'success');
   }
 
@@ -864,15 +1082,6 @@ function deleteProduct(id) {
 // SETTINGS
 function saveSettings() {
   showNotif('Configuración guardada', 'success');
-}
-
-function exportProducts() {
-  const data = JSON.stringify(products, null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = 'palacio-productos.json';
-  a.click(); URL.revokeObjectURL(url);
 }
 
 // NOTIF
