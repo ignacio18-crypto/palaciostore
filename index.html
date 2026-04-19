@@ -24,16 +24,6 @@
     overflow-x: hidden;
   }
 
-  /* REUSABLE CROWN ICON */
-  .crown-icon {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    fill: var(--gold);
-    vertical-align: middle;
-    margin: 0 5px;
-  }
-
   /* NAV */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 100;
@@ -84,7 +74,6 @@
     position: relative; overflow: hidden;
   }
 
-
   .hero-title {
     font-family: 'Syne', sans-serif; font-weight: 800;
     font-size: clamp(50px, 10vw, 100px); line-height: 0.9;
@@ -96,6 +85,7 @@
   .category-nav {
     display: flex; justify-content: center; gap: 20px;
     padding: 40px 0; background: var(--white);
+    flex-wrap: wrap;
   }
   .filter-btn {
     padding: 12px 30px; border: 1px solid #ddd;
@@ -122,10 +112,18 @@
   .product-img {
     aspect-ratio: 3/4; background: var(--gray);
     overflow: hidden; position: relative; margin-bottom: 15px;
+    display: flex; align-items: center; justify-content: center;
   }
 
   .product-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
   .product-card:hover .product-img img { transform: scale(1.05); }
+
+  /* Emoji placeholder for products without image */
+  .product-emoji-placeholder {
+    font-size: 72px;
+    opacity: 0.4;
+    user-select: none;
+  }
 
   .quick-add {
     position: absolute; bottom: 0; left: 0; right: 0;
@@ -137,15 +135,36 @@
   }
   .product-card:hover .quick-add { transform: translateY(0); }
 
+  .product-badge {
+    position: absolute; top: 12px; left: 12px;
+    font-size: 10px; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    z-index: 1;
+  }
+  .badge-new { background: #e8f5f0; color: #1a8a5a; }
+  .badge-sale { background: #fff0ee; color: #d94f3d; }
+  .badge-hot { background: #fdf2e6; color: #b07820; }
+
   .product-name { font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 5px; font-size: 18px; }
-  .product-price { font-weight: 400; font-size: 16px; color: var(--gold); border-top: 1px solid #eee; padding-top: 5px; display: inline-block;}
+  .product-price { font-weight: 400; font-size: 16px; color: var(--gold); border-top: 1px solid #eee; padding-top: 5px; display: flex; gap: 10px; align-items: center; }
+  .product-old-price { font-size: 13px; color: #aaa; text-decoration: line-through; }
+  .product-cat { font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+
+  /* Empty state */
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center; padding: 80px 20px;
+    color: #aaa;
+  }
+  .empty-state p { font-size: 18px; margin-top: 16px; }
 
   /* CART DRAWER */
   .cart-drawer { 
-      position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 450px; 
-      background: var(--white); transform: translateX(100%); transition: 0.5s cubic-bezier(0.77,0,0.175,1); 
-      z-index: 301; display: flex; flex-direction: column;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 450px; 
+    background: var(--white); transform: translateX(100%); transition: 0.5s cubic-bezier(0.77,0,0.175,1); 
+    z-index: 301; display: flex; flex-direction: column;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.1);
   }
   .cart-drawer.open { transform: translateX(0); }
   .cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); opacity: 0; pointer-events: none; transition: 0.3s; z-index: 300; }
@@ -153,13 +172,28 @@
   
   .cart-header { padding: 30px; background: var(--black); color: var(--gold); display: flex; justify-content: space-between; align-items: center; }
   
+  /* LIVE BADGE */
+  .live-badge {
+    position: fixed; bottom: 110px; right: 30px;
+    background: var(--black); color: var(--gold);
+    font-size: 11px; font-weight: 700;
+    padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--gold);
+    z-index: 200; letter-spacing: 1px;
+    text-transform: uppercase;
+    display: flex; align-items: center; gap: 6px;
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.4s;
+    pointer-events: none;
+  }
+  .live-badge.show { opacity: 1; transform: translateY(0); }
+  .live-dot { width: 7px; height: 7px; background: #2ebd6b; border-radius: 50%; animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
   /* FOOTER */
   footer { background: var(--black); color: var(--white); padding: 80px 40px; text-align: center; border-top: 5px solid var(--gold); }
 
   .wsp-fixed { position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 200; box-shadow: 0 10px 20px rgba(0,0,0,0.3); border: 2px solid white; }
-
-  .ticker { background: var(--gold); color: var(--black); font-weight: 800; text-transform: uppercase; font-size: 12px; }
-
 </style>
 </head>
 <body>
@@ -167,9 +201,11 @@
 <nav>
   <a href="#" class="nav-logo">👑 PALACIO STORE<span>.</span></a>
   <div class="nav-links">
-      <a href="#productos" onclick="filterCat('todos')">Inicio</a>
-      <a href="#productos" onclick="filterCat('hombre')">Hombres</a>
-      <a href="#productos" onclick="filterCat('mujer')">Mujeres</a>
+    <a href="#productos" onclick="filterCat('todos')">Inicio</a>
+    <a href="#productos" onclick="filterCat('remeras')">Remeras</a>
+    <a href="#productos" onclick="filterCat('pantalones')">Pantalones</a>
+    <a href="#productos" onclick="filterCat('outerwear')">Outerwear</a>
+    <a href="#productos" onclick="filterCat('accesorios')">Accesorios</a>
   </div>
   <button class="cart-btn" onclick="toggleCart()">
     <svg viewBox="0 0 24 24" width="20" fill="currentColor"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
@@ -178,27 +214,28 @@
 </nav>
 
 <section class="hero">
-  <h1 class="hero-title"> LO MEJOR DEL<br> <em> AÑO</em></h1>
-  <p style="letter-spacing: 5px; color: var(--gold);">DITECTAMENTE DE LA USA</p>
+  <h1 class="hero-title">LO MEJOR DEL<br><em>AÑO</em></h1>
+  <p style="letter-spacing: 5px; color: var(--gold);">DIRECTAMENTE DE USA</p>
 </section>
 
-
 <div class="category-nav">
-    <button class="filter-btn active" onclick="filterCat('todos', this)">Ver Todo</button>
-    <button class="filter-btn" onclick="filterCat('hombre', this)">Hombres</button>
-    <button class="filter-btn" onclick="filterCat('mujer', this)">Mujeres</button>
+  <button class="filter-btn active" onclick="filterCat('todos', this)">Ver Todo</button>
+  <button class="filter-btn" onclick="filterCat('remeras', this)">Remeras</button>
+  <button class="filter-btn" onclick="filterCat('pantalones', this)">Pantalones</button>
+  <button class="filter-btn" onclick="filterCat('outerwear', this)">Outerwear</button>
+  <button class="filter-btn" onclick="filterCat('accesorios', this)">Accesorios</button>
 </div>
 
 <div class="container" id="productos">
   <div class="section-header">
-      <h2>Catálogo <span>Real</span></h2>
-      <div style="width: 50px; height: 2px; background: var(--gold); margin: 15px auto;"></div>
+    <h2>Catálogo <span>Real</span></h2>
+    <div style="width: 50px; height: 2px; background: var(--gold); margin: 15px auto;"></div>
   </div>
   <div class="products" id="productGrid"></div>
 </div>
 
 <footer>
-  <p class="nav-logo" style="color:white; margin-bottom:20px"> PALACIO STORE<span>.</span></p>
+  <p class="nav-logo" style="color:white; margin-bottom:20px">PALACIO STORE<span>.</span></p>
   <p style="font-size:14px; opacity:0.6; max-width: 400px; margin: 0 auto 30px;">Calidad premium garantizada</p>
   <p style="font-size:12px; color: var(--gold)">© 2026 Palacio Store</p>
 </footer>
@@ -207,92 +244,147 @@
   <svg viewBox="0 0 24 24" width="35" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
 </a>
 
+<!-- Live update badge -->
+<div class="live-badge" id="liveBadge">
+  <div class="live-dot"></div>
+  Tienda actualizada
+</div>
+
 <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
-      <h2>TU COFRE</h2>
-      <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:30px; cursor:pointer">×</button>
+    <h2>TU COFRE</h2>
+    <button onclick="toggleCart()" style="background:none; border:none; color:white; font-size:30px; cursor:pointer">×</button>
   </div>
   <div class="cart-items" id="cartItems" style="flex:1; overflow-y:auto; padding:20px;"></div>
   <div style="padding:25px; border-top: 1px solid #eee;" id="cartFooter">
     <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:700; font-size:20px">
-        <span>Total</span>
-        <span id="cartTotal" style="color:var(--gold)">$0</span>
+      <span>Total</span>
+      <span id="cartTotal" style="color:var(--gold)">$0</span>
     </div>
-    <button class="checkout-btn" onclick="checkoutWsp()" style="width:100%; padding:18px; background:var(--black); color:var(--gold); border:1px solid var(--gold); font-weight:800; cursor:pointer; text-transform:uppercase;">Finalizar Pedido Real</button>
+    <button onclick="checkoutWsp()" style="width:100%; padding:18px; background:var(--black); color:var(--gold); border:1px solid var(--gold); font-weight:800; cursor:pointer; text-transform:uppercase; font-family:'Syne',sans-serif;">Finalizar Pedido Real</button>
   </div>
 </div>
 
 <script>
-// Base de datos extendida con categorías
-const PRODUCTS_DB = [
-  { id: 1, name: 'Oversized Tee Gold', price: 29990, category: 'hombre', img: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600' },
-  { id: 2, name: 'Palacio Dress Black', price: 45990, category: 'mujer', img: 'https://images.unsplash.com/photo-1539008835270-3406f528641a?w=600' },
-  { id: 3, name: 'Royal Cargo Pants', price: 54990, category: 'hombre', img: 'https://images.unsplash.com/photo-1552912853-239d5b282a9b?w=600' },
-  { id: 4, name: 'Biker Jacket Queen', price: 89990, category: 'mujer', img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600' },
-  { id: 5, name: 'Hoodie Emperor', price: 49990, category: 'hombre', img: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600' },
-  { id: 6, name: 'Silk Top Palace', price: 34990, category: 'mujer', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600' }
+// ─── CLAVE DE STORAGE (debe ser igual al admin) ───────────────────────────────
+const STORAGE_KEY = 'palacio_products';
+
+// Productos por defecto (igual que el admin) — se usan solo si no hay nada en localStorage
+const DEFAULT_PRODUCTS = [
+  { id:1, name:'Oversized Tee Acid', cat:'remeras', price:24990, oldPrice:34990, emoji:'👕', badge:'sale', img:null },
+  { id:2, name:'Cargo Jogger Negro', cat:'pantalones', price:49990, emoji:'👖', badge:'new', img:null },
+  { id:3, name:'Bomber Coach Jacket', cat:'outerwear', price:79990, emoji:'🧥', badge:'hot', img:null },
+  { id:4, name:'Bucket Hat Logo', cat:'accesorios', price:18990, emoji:'🧢', badge:'new', img:null },
+  { id:5, name:'Vintage Washed Tee', cat:'remeras', price:22990, emoji:'👕', badge:null, img:null },
+  { id:6, name:'Wide Leg Cargo', cat:'pantalones', price:54990, oldPrice:69990, emoji:'👖', badge:'sale', img:null },
+  { id:7, name:'Puffer Jacket Color', cat:'outerwear', price:89990, emoji:'🧥', badge:'new', img:null },
+  { id:8, name:'Crossbody Bag', cat:'accesorios', price:32990, emoji:'👜', badge:null, img:null },
+  { id:9, name:'Graphic Hoodie', cat:'remeras', price:44990, emoji:'👕', badge:'hot', img:null },
+  { id:10, name:'Parachute Pants', cat:'pantalones', price:59990, emoji:'👖', badge:'new', img:null },
+  { id:11, name:'Corduroy Overshirt', cat:'outerwear', price:64990, oldPrice:79990, emoji:'🧥', badge:'sale', img:null },
+  { id:12, name:'Chain Necklace', cat:'accesorios', price:14990, emoji:'📿', badge:null, img:null },
 ];
 
+// ─── ESTADO ───────────────────────────────────────────────────────────────────
+let PRODUCTS_DB = [];
 let cart = [];
 let currentCategory = 'todos';
 
+// ─── CARGAR PRODUCTOS DESDE LOCALSTORAGE ─────────────────────────────────────
+function loadProducts() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    PRODUCTS_DB = stored ? JSON.parse(stored) : [...DEFAULT_PRODUCTS];
+  } catch {
+    PRODUCTS_DB = [...DEFAULT_PRODUCTS];
+  }
+}
+
+// ─── RENDER GRILLA ────────────────────────────────────────────────────────────
 function renderProducts() {
   const grid = document.getElementById('productGrid');
-  const filtered = currentCategory === 'todos' 
-    ? PRODUCTS_DB 
-    : PRODUCTS_DB.filter(p => p.category === currentCategory);
+  const filtered = currentCategory === 'todos'
+    ? PRODUCTS_DB
+    : PRODUCTS_DB.filter(p => p.cat === currentCategory);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <div style="font-size:48px">🛍️</div>
+        <p>No hay productos en esta categoría</p>
+      </div>`;
+    return;
+  }
+
+  const badgeLabels = { new:'Nuevo', sale:'Oferta', hot:'Hot 🔥' };
+  const badgeClass  = { new:'badge-new', sale:'badge-sale', hot:'badge-hot' };
 
   grid.innerHTML = filtered.map(p => `
     <div class="product-card">
       <div class="product-img">
-        <img src="${p.img}" alt="${p.name}">
+        ${p.badge ? `<span class="product-badge ${badgeClass[p.badge]}">${badgeLabels[p.badge]}</span>` : ''}
+        ${p.img
+          ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
+          : `<div class="product-emoji-placeholder">${p.emoji}</div>`
+        }
         <button class="quick-add" onclick="addToCart(${p.id})">Añadir al Trono</button>
       </div>
-      <p style="font-size:10px; color:var(--gold); text-transform:uppercase; letter-spacing:1px">${p.category}</p>
+      <p class="product-cat">${p.cat}</p>
       <p class="product-name">${p.name}</p>
-      <p class="product-price">$${p.price.toLocaleString('es-CL')}</p>
+      <div class="product-price">
+        $${p.price.toLocaleString('es-CL')}
+        ${p.oldPrice ? `<span class="product-old-price">$${p.oldPrice.toLocaleString('es-CL')}</span>` : ''}
+      </div>
     </div>
   `).join('');
 }
 
+// ─── FILTRAR ──────────────────────────────────────────────────────────────────
 function filterCat(cat, btn) {
   currentCategory = cat;
-  if(btn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  if (btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
   }
   renderProducts();
 }
 
+// ─── CARRITO ──────────────────────────────────────────────────────────────────
 function addToCart(id) {
   const p = PRODUCTS_DB.find(x => x.id === id);
+  if (!p) return;
   const existing = cart.find(x => x.id === id);
   if (existing) existing.qty++; else cart.push({...p, qty: 1});
   updateCartUI();
-  toggleCart();
+  if (!document.getElementById('cartDrawer').classList.contains('open')) toggleCart();
 }
 
 function updateCartUI() {
   const count = cart.reduce((a, b) => a + b.qty, 0);
   document.getElementById('cartCount').textContent = count;
   const itemsDiv = document.getElementById('cartItems');
-  
+
   if (cart.length === 0) {
     itemsDiv.innerHTML = '<p style="text-align:center; color:gray; margin-top:40px">El cofre está vacío</p>';
   } else {
     itemsDiv.innerHTML = cart.map(i => `
       <div style="display:flex; gap:15px; margin-bottom:20px; align-items:center;">
-        <img src="${i.img}" style="width:70px; height:90px; object-fit:cover;">
-        <div style="flex:1">
-          <p style="font-weight:700; font-size:14px">${i.name}</p>
-          <p style="color:var(--gold)">${i.qty} x $${i.price.toLocaleString('es-CL')}</p>
+        <div style="width:70px; height:90px; background:#f0ede8; border-radius:4px; overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center;">
+          ${i.img
+            ? `<img src="${i.img}" style="width:100%; height:100%; object-fit:cover;">`
+            : `<span style="font-size:32px">${i.emoji}</span>`
+          }
         </div>
-        <button onclick="removeFromCart(${i.id})" style="border:none; background:none; cursor:pointer; font-size:18px">×</button>
+        <div style="flex:1">
+          <p style="font-weight:700; font-size:14px; margin-bottom:4px">${i.name}</p>
+          <p style="color:var(--gold); font-size:14px">${i.qty} × $${i.price.toLocaleString('es-CL')}</p>
+        </div>
+        <button onclick="removeFromCart(${i.id})" style="border:none; background:none; cursor:pointer; font-size:22px; color:#aaa; padding:4px">×</button>
       </div>
     `).join('');
   }
-  
+
   const total = cart.reduce((a, b) => a + (b.price * b.qty), 0);
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString('es-CL')}`;
 }
@@ -308,14 +400,41 @@ function toggleCart() {
 }
 
 function checkoutWsp() {
-  if(cart.length === 0) return alert("Tu cofre está vacío");
+  if (cart.length === 0) return alert('Tu cofre está vacío');
   const items = cart.map(i => `• ${i.name} (${i.qty})`).join('\n');
-  const total = cart.reduce((a,b) => a + (b.price*b.qty), 0);
+  const total = cart.reduce((a, b) => a + (b.price * b.qty), 0);
   const msg = encodeURIComponent(`👑 ¡Hola Palacio Store! Quiero mi orden:\n\n${items}\n\nTotal: $${total.toLocaleString('es-CL')}`);
   window.open(`https://wa.me/56912345678?text=${msg}`);
 }
 
+// ─── SINCRONIZACIÓN EN TIEMPO REAL ───────────────────────────────────────────
+// Escucha cambios en localStorage desde OTRA pestaña (donde está el admin)
+window.addEventListener('storage', function(e) {
+  if (e.key === STORAGE_KEY) {
+    loadProducts();
+    renderProducts();
+    showLiveBadge();
+  }
+});
+
+// Cuando la pestaña vuelve a estar visible, recarga los productos
+document.addEventListener('visibilitychange', function() {
+  if (!document.hidden) {
+    loadProducts();
+    renderProducts();
+  }
+});
+
+function showLiveBadge() {
+  const badge = document.getElementById('liveBadge');
+  badge.classList.add('show');
+  setTimeout(() => badge.classList.remove('show'), 3000);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+loadProducts();
 renderProducts();
+updateCartUI();
 </script>
 </body>
 </html>
