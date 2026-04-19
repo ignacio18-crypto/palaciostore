@@ -629,7 +629,6 @@
           <h3>Accesos rápidos</h3>
           <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
             <button onclick="showPanel('products',document.querySelector('.nav-item:nth-child(3)'));openModal()" style="background:var(--black);color:white;border:none;padding:12px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:left;">+ Agregar nuevo producto</button>
-            <a href="palacio-store.html" target="_blank" style="display:block;background:#f5f0eb;color:var(--black);padding:12px;border-radius:4px;font-size:13px;font-weight:500;text-decoration:none;">↗ Ver tienda en vivo</a>
           </div>
         </div>
       </div>
@@ -644,13 +643,6 @@
 
       <div class="search-bar">
         <input class="search-input" type="text" placeholder="Buscar producto..." id="searchInput" oninput="renderTable()">
-        <select class="select-filter" id="catFilter" onchange="renderTable()">
-          <option value="">Todas las categorías</option>
-          <option value="remeras">Remeras</option>
-          <option value="pantalones">Pantalones</option>
-          <option value="outerwear">Outerwear</option>
-          <option value="accesorios">Accesorios</option>
-        </select>
       </div>
 
       <div class="table-card">
@@ -659,7 +651,6 @@
             <tr>
               <th>Foto</th>
               <th>Nombre</th>
-              <th>Categoría</th>
               <th>Precio</th>
               <th>Precio anterior</th>
               <th>Badge</th>
@@ -705,35 +696,18 @@
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h2 id="modalTitle">Agregar Producto</h2>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Nombre del producto</label>
-        <input type="text" id="fName" placeholder="Ej: Cargo Jogger Negro">
-      </div>
-      <div class="form-group">
-        <label>Emoji / ícono</label>
-        <input type="text" id="fEmoji" placeholder="👕" maxlength="4">
-      </div>
+    <div class="form-group">
+      <label>Nombre del producto</label>
+      <input type="text" id="fName" placeholder="Ej: Cargo Jogger Negro">
     </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Categoría</label>
-        <select id="fCat">
-          <option value="remeras">Remeras</option>
-          <option value="pantalones">Pantalones</option>
-          <option value="outerwear">Outerwear</option>
-          <option value="accesorios">Accesorios</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Badge</label>
-        <select id="fBadge">
-          <option value="">Sin badge</option>
-          <option value="new">Nuevo</option>
-          <option value="sale">Oferta</option>
-          <option value="hot">Hot 🔥</option>
-        </select>
-      </div>
+    <div class="form-group">
+      <label>Badge</label>
+      <select id="fBadge">
+        <option value="">Sin badge</option>
+        <option value="new">Nuevo</option>
+        <option value="sale">Oferta</option>
+        <option value="hot">Hot 🔥</option>
+      </select>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -909,12 +883,7 @@ function renderDashboard() {
 function renderTable() {
   loadProducts();
   const q = document.getElementById('searchInput')?.value.toLowerCase() || '';
-  const cat = document.getElementById('catFilter')?.value || '';
-  const filtered = products.filter(p => {
-    const matchQ = p.name.toLowerCase().includes(q);
-    const matchC = !cat || p.cat === cat;
-    return matchQ && matchC;
-  });
+  const filtered = products.filter(p => p.name.toLowerCase().includes(q));
 
   const labels = { new:'Nuevo', sale:'Oferta', hot:'Hot 🔥' };
   const pillClass = { new:'pill-new', sale:'pill-sale', hot:'pill-hot' };
@@ -924,11 +893,10 @@ function renderTable() {
       <td>
         ${p.img
           ? `<img class="prod-thumb" src="${p.img}" alt="${p.name}">`
-          : `<div class="prod-thumb-placeholder">${p.emoji}</div>`
+          : `<div class="prod-thumb-placeholder" style="font-size:13px;color:var(--gray);width:48px;height:48px;background:#f0ede8;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid #eee;">IMG</div>`
         }
       </td>
       <td><strong style="font-size:14px">${p.name}</strong></td>
-      <td style="text-transform:capitalize;color:var(--gray)">${p.cat}</td>
       <td><strong>$${p.price.toLocaleString('es-CL')}</strong></td>
       <td style="color:var(--gray)">${p.oldPrice ? '$'+p.oldPrice.toLocaleString('es-CL') : '—'}</td>
       <td>${p.badge ? `<span class="badge-pill ${pillClass[p.badge]}">${labels[p.badge]}</span>` : '<span class="badge-pill pill-none">—</span>'}</td>
@@ -939,7 +907,7 @@ function renderTable() {
         </div>
       </td>
     </tr>
-  `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
+  `).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
 }
 
 // IMAGE TABS
@@ -1000,21 +968,16 @@ function openModal(id) {
   if (id) {
     const p = products.find(x => x.id === id);
     document.getElementById('fName').value = p.name;
-    document.getElementById('fEmoji').value = p.emoji;
-    document.getElementById('fCat').value = p.cat;
     document.getElementById('fBadge').value = p.badge || '';
     document.getElementById('fPrice').value = p.price;
     document.getElementById('fOldPrice').value = p.oldPrice || '';
 
-    // Load existing image
     if (p.img) {
       currentImgData = p.img;
       if (p.img.startsWith('data:')) {
-        // base64 - show in upload area
         document.getElementById('uploadPreview').src = p.img;
         document.getElementById('uploadArea').classList.add('has-image');
       } else {
-        // URL - switch to URL tab
         switchImgTab('url');
         document.getElementById('fImgUrl').value = p.img;
         document.getElementById('urlPreview').src = p.img;
@@ -1023,8 +986,6 @@ function openModal(id) {
     }
   } else {
     document.getElementById('fName').value = '';
-    document.getElementById('fEmoji').value = '👕';
-    document.getElementById('fCat').value = 'remeras';
     document.getElementById('fBadge').value = '';
     document.getElementById('fPrice').value = '';
     document.getElementById('fOldPrice').value = '';
@@ -1039,13 +1000,10 @@ function closeModal() {
 
 function saveProduct() {
   const name = document.getElementById('fName').value.trim();
-  const emoji = document.getElementById('fEmoji').value.trim() || '👕';
-  const cat = document.getElementById('fCat').value;
   const badge = document.getElementById('fBadge').value || null;
   const price = parseInt(document.getElementById('fPrice').value);
   const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
 
-  // Resolve image: check url tab if active
   let img = currentImgData;
   if (currentImgTab === 'url') {
     const urlVal = document.getElementById('fImgUrl').value.trim();
@@ -1056,11 +1014,11 @@ function saveProduct() {
 
   if (editingId) {
     const idx = products.findIndex(x => x.id === editingId);
-    products[idx] = { ...products[idx], name, emoji, cat, badge, price, oldPrice, img: img || products[idx].img || null };
+    products[idx] = { ...products[idx], name, badge, price, oldPrice, img: img || products[idx].img || null };
     showNotif('Producto actualizado correctamente', 'success');
   } else {
     const newId = Math.max(...products.map(p=>p.id), 0) + 1;
-    products.push({ id: newId, name, emoji, cat, badge, price, oldPrice, img: img || null });
+    products.push({ id: newId, name, badge, price, oldPrice, img: img || null });
     showNotif('Producto agregado correctamente', 'success');
   }
 
