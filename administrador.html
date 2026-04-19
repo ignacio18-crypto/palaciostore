@@ -424,7 +424,6 @@
   .image-upload-area.has-image .upload-placeholder { display: none; }
   .image-upload-area.has-image .upload-preview { display: block; }
 
-  /* URL input */
   .img-url-row {
     display: flex; gap: 8px; align-items: center;
     margin-top: 10px;
@@ -564,6 +563,13 @@
 
   .img-tab.active { background: var(--black); color: white; }
   .img-tab:not(:last-child) { border-right: 1.5px solid #e0e0e0; }
+
+  /* CATEGORÍAS */
+  .cat-inline-input {
+    padding: 6px 10px; border: 1.5px solid var(--accent);
+    border-radius: 4px; font-family: inherit; font-size: 14px;
+    outline: none; width: 200px;
+  }
 </style>
 </head>
 <body>
@@ -600,6 +606,9 @@
     </div>
     <div class="nav-item" onclick="showPanel('products', this)">
       <span class="nav-icon">👕</span> Productos
+    </div>
+    <div class="nav-item" onclick="showPanel('categories', this)">
+      <span class="nav-icon">🏷️</span> Categorías
     </div>
     <div class="nav-item" onclick="showPanel('settings', this)">
       <span class="nav-icon">⚙️</span> Configuración
@@ -662,6 +671,26 @@
       </div>
     </div>
 
+    <!-- CATEGORIES PANEL -->
+    <div class="panel" id="panel-categories">
+      <div class="page-header">
+        <h1 class="page-title">Categorías</h1>
+        <button class="add-btn" onclick="openCatModal()">+ Nueva Categoría</button>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Productos</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="catTable"></tbody>
+        </table>
+      </div>
+    </div>
+
     <!-- SETTINGS PANEL -->
     <div class="panel" id="panel-settings">
       <div class="page-header">
@@ -692,13 +721,17 @@
   </main>
 </div>
 
-<!-- MODAL ADD/EDIT -->
+<!-- MODAL ADD/EDIT PRODUCTO -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
     <h2 id="modalTitle">Agregar Producto</h2>
     <div class="form-group">
       <label>Nombre del producto</label>
       <input type="text" id="fName" placeholder="Ej: Cargo Jogger Negro">
+    </div>
+    <div class="form-group">
+      <label>Categoría</label>
+      <select id="fCat"></select>
     </div>
     <div class="form-group">
       <label>Badge</label>
@@ -728,7 +761,6 @@
         <button class="img-tab" onclick="switchImgTab('url')" id="tabUrl">Pegar URL</button>
       </div>
 
-      <!-- Upload tab -->
       <div id="imgTabUpload">
         <div class="image-upload-area" id="uploadArea">
           <input type="file" id="fImgFile" accept="image/*" onchange="handleFileUpload(event)">
@@ -742,7 +774,6 @@
         </div>
       </div>
 
-      <!-- URL tab -->
       <div id="imgTabUrl" style="display:none;">
         <div style="display:flex;gap:8px;align-items:center;">
           <input type="text" id="fImgUrl" placeholder="https://ejemplo.com/foto.jpg" style="flex:1;padding:11px 14px;border:1.5px solid #e0e0e0;border-radius:4px;font-family:inherit;font-size:14px;outline:none;transition:border 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='#e0e0e0'">
@@ -761,302 +792,395 @@
   </div>
 </div>
 
+<!-- MODAL NUEVA/EDITAR CATEGORÍA -->
+<div class="modal-overlay" id="catModalOverlay">
+  <div class="modal" style="max-width:400px;">
+    <h2 id="catModalTitle">Nueva Categoría</h2>
+    <div class="form-group">
+      <label>Nombre de la categoría</label>
+      <input type="text" id="fCatName" placeholder="Ej: Remeras, Accesorios..." onkeydown="if(event.key==='Enter')saveCat()">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeCatModal()">Cancelar</button>
+      <button class="btn-save" onclick="saveCat()">Guardar</button>
+    </div>
+  </div>
+</div>
+
 <!-- NOTIFICATION -->
 <div class="admin-notif" id="adminNotif"></div>
 
-<script>
-const STORAGE_KEY = 'palacio_products';
-const CREDS = { user: 'Nicol123', pass: 'palacio2026' };
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-const DEFAULT_PRODUCTS = [
-  { id:1, name:'Oversized Tee Acid', cat:'remeras', price:24990, oldPrice:34990, emoji:'👕', badge:'sale', img:null },
-  { id:2, name:'Cargo Jogger Negro', cat:'pantalones', price:49990, emoji:'👖', badge:'new', img:null },
-  { id:3, name:'Bomber Coach Jacket', cat:'outerwear', price:79990, emoji:'🧥', badge:'hot', img:null },
-  { id:4, name:'Bucket Hat Logo', cat:'accesorios', price:18990, emoji:'🧢', badge:'new', img:null },
-  { id:5, name:'Vintage Washed Tee', cat:'remeras', price:22990, emoji:'👕', badge:null, img:null },
-  { id:6, name:'Wide Leg Cargo', cat:'pantalones', price:54990, oldPrice:69990, emoji:'👖', badge:'sale', img:null },
-  { id:7, name:'Puffer Jacket Color', cat:'outerwear', price:89990, emoji:'🧥', badge:'new', img:null },
-  { id:8, name:'Crossbody Bag', cat:'accesorios', price:32990, emoji:'👜', badge:null, img:null },
-  { id:9, name:'Graphic Hoodie', cat:'remeras', price:44990, emoji:'👕', badge:'hot', img:null },
-  { id:10, name:'Parachute Pants', cat:'pantalones', price:59990, emoji:'👖', badge:'new', img:null },
-  { id:11, name:'Corduroy Overshirt', cat:'outerwear', price:64990, oldPrice:79990, emoji:'🧥', badge:'sale', img:null },
-  { id:12, name:'Chain Necklace', cat:'accesorios', price:14990, emoji:'📿', badge:null, img:null },
-];
-
-let products = [];
-let editingId = null;
-let currentImgTab = 'upload';
-let currentImgData = null; // base64 or URL string
-
-// LOGIN
-function doLogin() {
-  const u = document.getElementById('loginUser').value.trim();
-  const p = document.getElementById('loginPass').value;
-  if (u === CREDS.user && p === CREDS.pass) {
-    document.getElementById('loginScreen').style.display = 'none';
-    document.getElementById('adminLayout').classList.add('active');
-    document.getElementById('activeUser').textContent = u;
-    loadProducts();
-    renderDashboard();
-    renderTable();
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-  }
-}
-
-function doLogout() {
-  document.getElementById('loginScreen').style.display = 'flex';
-  document.getElementById('adminLayout').classList.remove('active');
-  document.getElementById('loginUser').value = '';
-  document.getElementById('loginPass').value = '';
-  document.getElementById('loginError').style.display = 'none';
-}
-
-// PRODUCTS
-function loadProducts() {
-  try {
-    const s = localStorage.getItem(STORAGE_KEY);
-    products = s ? JSON.parse(s) : [...DEFAULT_PRODUCTS];
-  } catch { products = [...DEFAULT_PRODUCTS]; }
-}
-
-function saveProducts() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-}
-
-// PANELS
-function showPanel(id, el) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('panel-' + id).classList.add('active');
-  if (el) el.classList.add('active');
-  if (id === 'products') renderTable();
-  if (id === 'dashboard') renderDashboard();
-}
-
-// DASHBOARD
-function renderDashboard() {
-  loadProducts();
-  const cats = ['remeras','pantalones','outerwear','accesorios'];
-  const total = products.length;
-  const avgPrice = Math.round(products.reduce((a,b)=>a+b.price,0) / total);
-  const onSale = products.filter(p=>p.badge==='sale').length;
-
-  document.getElementById('statsGrid').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Total productos</div>
-      <div class="stat-value">${total}</div>
-      <div class="stat-sub">↑ en stock</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Precio promedio</div>
-      <div class="stat-value">$${avgPrice.toLocaleString('es-CL')}</div>
-      <div class="stat-sub">CLP</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">En oferta</div>
-      <div class="stat-value">${onSale}</div>
-      <div class="stat-sub">productos con descuento</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Categorías</div>
-      <div class="stat-value">${cats.length}</div>
-      <div class="stat-sub">activas en tienda</div>
-    </div>
-  `;
-
-  const breakdown = document.getElementById('catBreakdown');
-  breakdown.innerHTML = cats.map(cat => {
-    const count = products.filter(p=>p.cat===cat).length;
-    const pct = Math.round((count/total)*100);
-    return `
-      <div class="cat-row">
-        <span style="text-transform:capitalize">${cat}</span>
-        <span class="cat-count">${count} productos</span>
-      </div>
-      <div class="color-bar"><div class="color-bar-fill" style="width:${pct}%"></div></div>
-    `;
-  }).join('');
-}
-
-// TABLE
-function renderTable() {
-  loadProducts();
-  const q = document.getElementById('searchInput')?.value.toLowerCase() || '';
-  const filtered = products.filter(p => p.name.toLowerCase().includes(q));
-
-  const labels = { new:'Nuevo', sale:'Oferta', hot:'Hot 🔥' };
-  const pillClass = { new:'pill-new', sale:'pill-sale', hot:'pill-hot' };
-
-  document.getElementById('productTable').innerHTML = filtered.map(p => `
-    <tr>
-      <td>
-        ${p.img
-          ? `<img class="prod-thumb" src="${p.img}" alt="${p.name}">`
-          : `<div class="prod-thumb-placeholder" style="font-size:13px;color:var(--gray);width:48px;height:48px;background:#f0ede8;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid #eee;">IMG</div>`
-        }
-      </td>
-      <td><strong style="font-size:14px">${p.name}</strong></td>
-      <td><strong>$${p.price.toLocaleString('es-CL')}</strong></td>
-      <td style="color:var(--gray)">${p.oldPrice ? '$'+p.oldPrice.toLocaleString('es-CL') : '—'}</td>
-      <td>${p.badge ? `<span class="badge-pill ${pillClass[p.badge]}">${labels[p.badge]}</span>` : '<span class="badge-pill pill-none">—</span>'}</td>
-      <td>
-        <div class="action-btns">
-          <button class="btn-edit" onclick="openModal(${p.id})">✏ Editar</button>
-          <button class="btn-del" onclick="deleteProduct(${p.id})">🗑 Eliminar</button>
-        </div>
-      </td>
-    </tr>
-  `).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
-}
-
-// IMAGE TABS
-function switchImgTab(tab) {
-  currentImgTab = tab;
-  document.getElementById('tabUpload').classList.toggle('active', tab === 'upload');
-  document.getElementById('tabUrl').classList.toggle('active', tab === 'url');
-  document.getElementById('imgTabUpload').style.display = tab === 'upload' ? 'block' : 'none';
-  document.getElementById('imgTabUrl').style.display = tab === 'url' ? 'block' : 'none';
-}
-
-function handleFileUpload(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 5 * 1024 * 1024) { showNotif('La imagen supera 5MB', 'error'); return; }
-  const reader = new FileReader();
-  reader.onload = function(ev) {
-    currentImgData = ev.target.result;
-    const preview = document.getElementById('uploadPreview');
-    preview.src = currentImgData;
-    document.getElementById('uploadArea').classList.add('has-image');
+  const firebaseConfig = {
+    apiKey: "AIzaSyB_Kgid_oL0wscMQlViW1ZweO9v6z_hsz0",
+    authDomain: "palacio-store.firebaseapp.com",
+    projectId: "palacio-store",
+    storageBucket: "palacio-store.firebasestorage.app",
+    messagingSenderId: "5927823600",
+    appId: "1:5927823600:web:211ffb13596d65c123fa35",
+    measurementId: "G-50MRG59294",
+    databaseURL: "https://palacio-store-default-rtdb.firebaseio.com"
   };
-  reader.readAsDataURL(file);
-}
 
-function resetImage(e) {
-  e.preventDefault(); e.stopPropagation();
-  currentImgData = null;
-  document.getElementById('uploadPreview').src = '';
-  document.getElementById('uploadArea').classList.remove('has-image');
-  document.getElementById('fImgFile').value = '';
-}
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
 
-function previewUrl() {
-  const url = document.getElementById('fImgUrl').value.trim();
-  if (!url) return;
-  const wrap = document.getElementById('urlPreviewWrap');
-  const img = document.getElementById('urlPreview');
-  img.src = url;
-  img.onerror = () => { showNotif('No se pudo cargar la imagen desde esa URL', 'error'); wrap.style.display = 'none'; };
-  img.onload = () => { wrap.style.display = 'block'; currentImgData = url; };
-}
+  const CREDS = { user: 'Nicol123', pass: 'palacio2026' };
 
-// MODAL
-function openModal(id) {
-  editingId = id || null;
-  currentImgData = null;
-  document.getElementById('modalTitle').textContent = id ? 'Editar Producto' : 'Agregar Producto';
+  let products = [];
+  let categories = [];
+  let editingId = null;
+  let editingCatId = null;
+  let currentImgTab = 'upload';
+  let currentImgData = null;
 
-  // Reset image UI
-  document.getElementById('uploadPreview').src = '';
-  document.getElementById('uploadArea').classList.remove('has-image');
-  document.getElementById('fImgFile').value = '';
-  document.getElementById('fImgUrl').value = '';
-  document.getElementById('urlPreviewWrap').style.display = 'none';
-  switchImgTab('upload');
+  // ── FIREBASE LISTENERS ─────────────────────────────────────────
+  onValue(ref(db, 'productos'), (snap) => {
+    const data = snap.val();
+    products = data ? Object.values(data) : [];
+    renderTable();
+    renderDashboard();
+    renderCatTable();
+  });
 
-  if (id) {
-    const p = products.find(x => x.id === id);
-    document.getElementById('fName').value = p.name;
-    document.getElementById('fBadge').value = p.badge || '';
-    document.getElementById('fPrice').value = p.price;
-    document.getElementById('fOldPrice').value = p.oldPrice || '';
+  onValue(ref(db, 'categorias'), (snap) => {
+    const data = snap.val();
+    categories = data ? Object.values(data) : [];
+    renderCatTable();
+    updateCatSelector();
+    renderDashboard();
+  });
 
-    if (p.img) {
-      currentImgData = p.img;
-      if (p.img.startsWith('data:')) {
-        document.getElementById('uploadPreview').src = p.img;
-        document.getElementById('uploadArea').classList.add('has-image');
-      } else {
-        switchImgTab('url');
-        document.getElementById('fImgUrl').value = p.img;
-        document.getElementById('urlPreview').src = p.img;
-        document.getElementById('urlPreviewWrap').style.display = 'block';
-      }
+  // ── LOGIN ──────────────────────────────────────────────────────
+  window.doLogin = () => {
+    const u = document.getElementById('loginUser').value.trim();
+    const p = document.getElementById('loginPass').value;
+    if (u === CREDS.user && p === CREDS.pass) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminLayout').classList.add('active');
+      document.getElementById('activeUser').textContent = u;
+    } else {
+      document.getElementById('loginError').style.display = 'block';
     }
-  } else {
-    document.getElementById('fName').value = '';
-    document.getElementById('fBadge').value = '';
-    document.getElementById('fPrice').value = '';
-    document.getElementById('fOldPrice').value = '';
+  };
+
+  window.doLogout = () => {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminLayout').classList.remove('active');
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+    document.getElementById('loginError').style.display = 'none';
+  };
+
+  // ── PANELS ─────────────────────────────────────────────────────
+  window.showPanel = (id, el) => {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    if (el) el.classList.add('active');
+  };
+
+  // ── DASHBOARD ──────────────────────────────────────────────────
+  function renderDashboard() {
+    const total = products.length;
+    const avgPrice = total ? Math.round(products.reduce((a, b) => a + b.price, 0) / total) : 0;
+    const onSale = products.filter(p => p.badge === 'sale').length;
+
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat-card">
+        <div class="stat-label">Total productos</div>
+        <div class="stat-value">${total}</div>
+        <div class="stat-sub">↑ en stock</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Precio promedio</div>
+        <div class="stat-value">$${avgPrice.toLocaleString('es-CL')}</div>
+        <div class="stat-sub">CLP</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">En oferta</div>
+        <div class="stat-value">${onSale}</div>
+        <div class="stat-sub">productos con descuento</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Categorías</div>
+        <div class="stat-value">${categories.length}</div>
+        <div class="stat-sub">activas en tienda</div>
+      </div>
+    `;
+
+    const breakdown = document.getElementById('catBreakdown');
+    if (!categories.length) {
+      breakdown.innerHTML = '<p style="color:var(--gray);font-size:13px;">Sin categorías aún.</p>';
+      return;
+    }
+    breakdown.innerHTML = categories.map(cat => {
+      const count = products.filter(p => p.cat === cat.id).length;
+      const pct = total ? Math.round((count / total) * 100) : 0;
+      return `
+        <div class="cat-row">
+          <span style="text-transform:capitalize">${cat.name}</span>
+          <span class="cat-count">${count} productos</span>
+        </div>
+        <div class="color-bar"><div class="color-bar-fill" style="width:${pct}%"></div></div>
+      `;
+    }).join('');
   }
 
-  document.getElementById('modalOverlay').classList.add('open');
-}
+  // ── PRODUCTS TABLE ─────────────────────────────────────────────
+  window.renderTable = () => {
+    const q = document.getElementById('searchInput')?.value.toLowerCase() || '';
+    const filtered = products.filter(p => p.name.toLowerCase().includes(q));
+    const labels = { new: 'Nuevo', sale: 'Oferta', hot: 'Hot 🔥' };
+    const pillClass = { new: 'pill-new', sale: 'pill-sale', hot: 'pill-hot' };
 
-function closeModal() {
-  document.getElementById('modalOverlay').classList.remove('open');
-}
+    document.getElementById('productTable').innerHTML = filtered.map(p => `
+      <tr>
+        <td>
+          ${p.img
+            ? `<img class="prod-thumb" src="${p.img}" alt="${p.name}">`
+            : `<div class="prod-thumb-placeholder" style="font-size:13px;color:var(--gray);width:48px;height:48px;background:#f0ede8;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid #eee;">IMG</div>`
+          }
+        </td>
+        <td><strong style="font-size:14px">${p.name}</strong></td>
+        <td><strong>$${p.price.toLocaleString('es-CL')}</strong></td>
+        <td style="color:var(--gray)">${p.oldPrice ? '$' + p.oldPrice.toLocaleString('es-CL') : '—'}</td>
+        <td>${p.badge ? `<span class="badge-pill ${pillClass[p.badge]}">${labels[p.badge]}</span>` : '<span class="badge-pill pill-none">—</span>'}</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn-edit" onclick="openModal('${p.id}')">✏ Editar</button>
+            <button class="btn-del" onclick="deleteProduct('${p.id}')">🗑 Eliminar</button>
+          </div>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
+  };
 
-function saveProduct() {
-  const name = document.getElementById('fName').value.trim();
-  const badge = document.getElementById('fBadge').value || null;
-  const price = parseInt(document.getElementById('fPrice').value);
-  const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
-
-  let img = currentImgData;
-  if (currentImgTab === 'url') {
-    const urlVal = document.getElementById('fImgUrl').value.trim();
-    if (urlVal) img = urlVal;
+  // ── CATEGORIES TABLE ───────────────────────────────────────────
+  function renderCatTable() {
+    const tbody = document.getElementById('catTable');
+    if (!tbody) return;
+    if (!categories.length) {
+      tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--gray);padding:40px">No hay categorías. Crea una con el botón de arriba.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = categories.map(cat => {
+      const count = products.filter(p => p.cat === cat.id).length;
+      return `
+        <tr id="cat-row-${cat.id}">
+          <td id="cat-name-${cat.id}" style="font-weight:500">${cat.name}</td>
+          <td style="color:var(--gray)">${count} producto${count !== 1 ? 's' : ''}</td>
+          <td id="cat-actions-${cat.id}">
+            <div class="action-btns">
+              <button class="btn-edit" onclick="startRename('${cat.id}')">✏ Renombrar</button>
+              <button class="btn-del" onclick="deleteCat('${cat.id}')">🗑 Eliminar</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
   }
 
-  if (!name || !price) { showNotif('Completa nombre y precio', 'error'); return; }
-
-  if (editingId) {
-    const idx = products.findIndex(x => x.id === editingId);
-    products[idx] = { ...products[idx], name, badge, price, oldPrice, img: img || products[idx].img || null };
-    showNotif('Producto actualizado correctamente', 'success');
-  } else {
-    const newId = Math.max(...products.map(p=>p.id), 0) + 1;
-    products.push({ id: newId, name, badge, price, oldPrice, img: img || null });
-    showNotif('Producto agregado correctamente', 'success');
+  function updateCatSelector() {
+    const sel = document.getElementById('fCat');
+    if (!sel) return;
+    const current = sel.value;
+    sel.innerHTML = categories.length
+      ? categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
+      : '<option value="">— Primero crea una categoría —</option>';
+    if (current) sel.value = current;
   }
 
-  saveProducts();
-  closeModal();
-  renderTable();
-  renderDashboard();
-}
+  // ── RENAME INLINE ──────────────────────────────────────────────
+  window.startRename = (id) => {
+    const cat = categories.find(c => c.id === id);
+    if (!cat) return;
+    document.getElementById('cat-name-' + id).innerHTML =
+      `<input class="cat-inline-input" id="rename-${id}" value="${cat.name}" onkeydown="handleRenameKey(event,'${id}')">`;
+    document.getElementById('cat-actions-' + id).innerHTML = `
+      <div class="action-btns">
+        <button class="btn-edit" style="background:var(--accent)" onclick="saveRename('${id}')">✓ Guardar</button>
+        <button class="btn-cancel" style="padding:6px 14px;border-radius:4px;font-size:12px;cursor:pointer;" onclick="renderCatTable()">✕</button>
+      </div>`;
+    document.getElementById('rename-' + id).focus();
+  };
 
-function deleteProduct(id) {
-  if (!confirm('¿Eliminar este producto de la tienda?')) return;
-  products = products.filter(x => x.id !== id);
-  saveProducts();
-  renderTable();
-  renderDashboard();
-  showNotif('Producto eliminado', 'success');
-}
+  window.handleRenameKey = (e, id) => {
+    if (e.key === 'Enter') saveRename(id);
+    if (e.key === 'Escape') renderCatTable();
+  };
 
-// SETTINGS
-function saveSettings() {
-  showNotif('Configuración guardada', 'success');
-}
+  window.saveRename = async (id) => {
+    const input = document.getElementById('rename-' + id);
+    if (!input) return;
+    const name = input.value.trim();
+    if (!name) { showNotif('El nombre no puede estar vacío', 'error'); return; }
+    await set(ref(db, 'categorias/' + id), { id, name });
+    showNotif('Categoría actualizada');
+  };
 
-// NOTIF
-function showNotif(msg, type='success') {
-  const n = document.getElementById('adminNotif');
-  n.textContent = msg;
-  n.className = 'admin-notif ' + type + ' show';
-  setTimeout(() => n.classList.remove('show'), 3000);
-}
+  // ── CAT MODAL ──────────────────────────────────────────────────
+  window.openCatModal = (id = null) => {
+    editingCatId = id;
+    document.getElementById('catModalTitle').textContent = id ? 'Editar Categoría' : 'Nueva Categoría';
+    document.getElementById('fCatName').value = id ? (categories.find(c => c.id === id)?.name || '') : '';
+    document.getElementById('catModalOverlay').classList.add('open');
+    setTimeout(() => document.getElementById('fCatName').focus(), 100);
+  };
 
-// Close modal on overlay click
-document.getElementById('modalOverlay').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+  window.closeCatModal = () => document.getElementById('catModalOverlay').classList.remove('open');
 
-// INIT
-loadProducts();
+  window.saveCat = async () => {
+    const name = document.getElementById('fCatName').value.trim();
+    if (!name) { showNotif('Escribe un nombre', 'error'); return; }
+    const id = editingCatId || ('cat_' + Date.now());
+    await set(ref(db, 'categorias/' + id), { id, name });
+    closeCatModal();
+    showNotif(editingCatId ? 'Categoría actualizada' : 'Categoría creada');
+  };
+
+  window.deleteCat = async (id) => {
+    const count = products.filter(p => p.cat === id).length;
+    let msg = '¿Eliminar esta categoría?';
+    if (count > 0) msg += `\n⚠️ ${count} producto(s) usan esta categoría.`;
+    if (!confirm(msg)) return;
+    await remove(ref(db, 'categorias/' + id));
+    showNotif('Categoría eliminada');
+  };
+
+  // ── PRODUCT MODAL ──────────────────────────────────────────────
+  window.openModal = (id = null) => {
+    editingId = id || null;
+    currentImgData = null;
+    document.getElementById('modalTitle').textContent = id ? 'Editar Producto' : 'Agregar Producto';
+
+    document.getElementById('uploadPreview').src = '';
+    document.getElementById('uploadArea').classList.remove('has-image');
+    document.getElementById('fImgFile').value = '';
+    document.getElementById('fImgUrl').value = '';
+    document.getElementById('urlPreviewWrap').style.display = 'none';
+    switchImgTab('upload');
+
+    if (id) {
+      const p = products.find(x => x.id === id);
+      document.getElementById('fName').value = p.name;
+      document.getElementById('fCat').value = p.cat || '';
+      document.getElementById('fBadge').value = p.badge || '';
+      document.getElementById('fPrice').value = p.price;
+      document.getElementById('fOldPrice').value = p.oldPrice || '';
+
+      if (p.img) {
+        currentImgData = p.img;
+        if (p.img.startsWith('data:')) {
+          document.getElementById('uploadPreview').src = p.img;
+          document.getElementById('uploadArea').classList.add('has-image');
+        } else {
+          switchImgTab('url');
+          document.getElementById('fImgUrl').value = p.img;
+          document.getElementById('urlPreview').src = p.img;
+          document.getElementById('urlPreviewWrap').style.display = 'block';
+        }
+      }
+    } else {
+      document.getElementById('fName').value = '';
+      document.getElementById('fCat').value = categories[0]?.id || '';
+      document.getElementById('fBadge').value = '';
+      document.getElementById('fPrice').value = '';
+      document.getElementById('fOldPrice').value = '';
+    }
+
+    document.getElementById('modalOverlay').classList.add('open');
+  };
+
+  window.closeModal = () => document.getElementById('modalOverlay').classList.remove('open');
+
+  window.saveProduct = async () => {
+    const name = document.getElementById('fName').value.trim();
+    const badge = document.getElementById('fBadge').value || null;
+    const price = parseInt(document.getElementById('fPrice').value);
+    const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
+    const cat = document.getElementById('fCat').value || null;
+
+    let img = currentImgData;
+    if (currentImgTab === 'url') {
+      const urlVal = document.getElementById('fImgUrl').value.trim();
+      if (urlVal) img = urlVal;
+    }
+
+    if (!name || !price) { showNotif('Completa nombre y precio', 'error'); return; }
+
+    const id = editingId || ('prod_' + Date.now());
+    const existing = editingId ? products.find(x => x.id === editingId) : null;
+    const prod = { id, name, cat, badge, price, oldPrice, img: img || (existing?.img || null) };
+
+    await set(ref(db, 'productos/' + id), prod);
+    closeModal();
+    showNotif(editingId ? 'Producto actualizado' : 'Producto agregado');
+  };
+
+  window.deleteProduct = async (id) => {
+    if (!confirm('¿Eliminar este producto de la tienda?')) return;
+    await remove(ref(db, 'productos/' + id));
+    showNotif('Producto eliminado');
+  };
+
+  // ── IMAGE TABS ─────────────────────────────────────────────────
+  window.switchImgTab = (tab) => {
+    currentImgTab = tab;
+    document.getElementById('tabUpload').classList.toggle('active', tab === 'upload');
+    document.getElementById('tabUrl').classList.toggle('active', tab === 'url');
+    document.getElementById('imgTabUpload').style.display = tab === 'upload' ? 'block' : 'none';
+    document.getElementById('imgTabUrl').style.display = tab === 'url' ? 'block' : 'none';
+  };
+
+  window.handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showNotif('La imagen supera 5MB', 'error'); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      currentImgData = ev.target.result;
+      document.getElementById('uploadPreview').src = currentImgData;
+      document.getElementById('uploadArea').classList.add('has-image');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  window.resetImage = (e) => {
+    e.preventDefault(); e.stopPropagation();
+    currentImgData = null;
+    document.getElementById('uploadPreview').src = '';
+    document.getElementById('uploadArea').classList.remove('has-image');
+    document.getElementById('fImgFile').value = '';
+  };
+
+  window.previewUrl = () => {
+    const url = document.getElementById('fImgUrl').value.trim();
+    if (!url) return;
+    const wrap = document.getElementById('urlPreviewWrap');
+    const img = document.getElementById('urlPreview');
+    img.src = url;
+    img.onerror = () => { showNotif('No se pudo cargar la imagen desde esa URL', 'error'); wrap.style.display = 'none'; };
+    img.onload = () => { wrap.style.display = 'block'; currentImgData = url; };
+  };
+
+  // ── SETTINGS ──────────────────────────────────────────────────
+  window.saveSettings = () => showNotif('Configuración guardada', 'success');
+
+  // ── NOTIF ─────────────────────────────────────────────────────
+  function showNotif(msg, type = 'success') {
+    const n = document.getElementById('adminNotif');
+    n.textContent = msg;
+    n.className = 'admin-notif ' + type + ' show';
+    setTimeout(() => n.classList.remove('show'), 3000);
+  }
+
+  // ── CLOSE ON OVERLAY CLICK ────────────────────────────────────
+  document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+  document.getElementById('catModalOverlay').addEventListener('click', function(e) { if (e.target === this) closeCatModal(); });
 </script>
 </body>
 </html>
