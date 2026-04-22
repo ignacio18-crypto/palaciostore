@@ -172,7 +172,7 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-label">★ Nueva colección disponible</div>
-    <h1 class="hero-title">REAL<br><span class="red">DRIP</span><br><span class="stroke">PALACE</span></h1>
+    <h1 class="hero-title">REAL<br><span class="stroke">PALACE</span></h1>
     <p class="hero-sub">Ropa de USA directo a tu puerta &nbsp;·&nbsp; Chile 🇨🇱</p>
     <a href="#catalogo" class="hero-cta">★ VER CATÁLOGO</a>
   </div>
@@ -266,9 +266,14 @@ let PRODUCTS_DB  = [];
 let CATEGORIES   = [];
 let cart         = [];
 let currentCat   = 'todos';
+let wspNumber    = '56912345678'; // default, overridden by Firebase config
 
 // ── FIREBASE LISTENERS ───────────────────────────────────────────
-// Listen to products — fires instantly on any admin change
+// Listen to config — updates WhatsApp number dynamically
+onValue(ref(db, 'config'), snap => {
+  const cfg = snap.val();
+  if (cfg?.wsp) wspNumber = cfg.wsp;
+});
 onValue(ref(db, 'productos'), snap => {
   const data = snap.val();
   PRODUCTS_DB = data ? Object.values(data) : [];
@@ -394,7 +399,7 @@ window.checkoutWsp = () => {
   const items = cart.map(i => `• ${i.name} (x${i.qty})`).join('\n');
   const total = cart.reduce((a,b) => a+(b.price*b.qty), 0);
   const msg = encodeURIComponent(`★ PALACIO STORE ★\n\nHola! Quiero este pedido:\n\n${items}\n\nTOTAL: $${total.toLocaleString('es-CL')}`);
-  window.open(`https://wa.me/56912345678?text=${msg}`);
+  window.open(`https://wa.me/${wspNumber}?text=${msg}`);
 };
 
 // ── LIVE BADGE ────────────────────────────────────────────────────
