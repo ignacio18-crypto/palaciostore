@@ -657,7 +657,31 @@ window.previewUrl = () => {
 };
 
 // ── SETTINGS ─────────────────────────────────────────────────────
-window.saveSettings = () => showNotif('Configuración guardada ✓');
+// Load settings from Firebase on startup
+onValue(ref(db, 'config'), snap => {
+  const cfg = snap.val();
+  if (!cfg) return;
+  if (cfg.wsp)  document.getElementById('cfgWsp').value  = cfg.wsp;
+  if (cfg.name) document.getElementById('cfgName').value = cfg.name;
+  // Update stored password if changed
+  if (cfg.pass) CREDS.pass = cfg.pass;
+});
+
+window.saveSettings = async () => {
+  const wsp  = document.getElementById('cfgWsp').value.trim();
+  const name = document.getElementById('cfgName').value.trim();
+  const pass = document.getElementById('cfgPass').value.trim();
+
+  const cfg = { wsp, name };
+  if (pass) {
+    cfg.pass = pass;
+    CREDS.pass = pass;
+    document.getElementById('cfgPass').value = '';
+  }
+
+  await set(ref(db, 'config'), cfg);
+  showNotif('Configuración guardada ✓');
+};
 
 // ── NOTIF ─────────────────────────────────────────────────────────
 function showNotif(msg, type = 'success') {
