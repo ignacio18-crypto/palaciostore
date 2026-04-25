@@ -702,28 +702,30 @@ function renderOrdersPanel() {
       </div>`).join('') || '—';
 
     // ── ACCIONES SEGÚN ESTADO ────────────────────────────────────
+    // El botón WhatsApp es dinámico: etiqueta y mensaje cambian según estado.
+    // NO envía automáticamente, solo abre WhatsApp con el mensaje prellenado.
     let actions = '';
 
     if (o.status === 'espera') {
       actions = `
         <button class="btn-accept" onclick="confirmOrderAction('${o.id}','aceptar')">✓ Aceptar</button>
         <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Rechazar</button>
-        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💬 Pedir pago</button>`;
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💳 Pedir pago</button>`;
     } else if (o.status === 'aceptado') {
       actions = `
         <button class="btn-ship" onclick="confirmOrderAction('${o.id}','enviar')">🚚 Enviado</button>
         <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Cancelar</button>
-        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💬 Pedir pago</button>`;
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">✅ Pedido aceptado</button>`;
     } else if (o.status === 'enviado') {
       actions = `
         <button class="btn-done" onclick="confirmOrderAction('${o.id}','confirmar')">🎉 Entregado</button>
         <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">📦 Avisar envío</button>`;
     } else if (o.status === 'confirmado') {
       actions = `
-        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💬 WhatsApp</button>`;
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">🎉 Agradecimiento</button>`;
     } else if (o.status === 'cancelado') {
       actions = `
-        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💬 WhatsApp</button>`;
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">❌ Avisar cancelación</button>`;
     }
 
     return `
@@ -759,17 +761,14 @@ function renderOrdersPanel() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  WHATSAPP — MENSAJES SEGÚN ESTADO DEL PEDIDO
+//  WHATSAPP — BOTÓN DINÁMICO (solo abre WhatsApp, NO envía auto)
+//  El mensaje cambia según el estado actual del pedido.
 // ══════════════════════════════════════════════════════════════════
-
-/**
- * Botón WhatsApp genérico: detecta el estado actual del pedido
- * y envía el mensaje correspondiente al cliente.
- */
 window.sendWspByStatus = (orderId) => {
   const o = orders[orderId];
   if (!o) return;
 
+  // Número del cliente (sin caracteres no numéricos excepto el +)
   const clientTel = (o.cliente?.tel || '').replace(/\D/g, '');
 
   const itemLines = o.items?.map(i =>
@@ -778,7 +777,7 @@ window.sendWspByStatus = (orderId) => {
 
   let msg = '';
 
-  // ── EN ESPERA → pedir pago ────────────────────────────────────
+  // ─── ⏳ EN ESPERA → pedir transferencia ──────────────────────
   if (o.status === 'espera') {
     msg =
 `¡Hola ${o.cliente?.nombre}! 👋 Soy de *PALACIO STORE* ⭐
@@ -811,30 +810,26 @@ Una vez confirmado el pago, tu pedido será *ACEPTADO* y ¡prepararemos tu pedid
 
 Gracias por elegir *Palacio Store* 🖤`;
 
-  // ── ACEPTADO → recordatorio de pago ──────────────────────────
+  // ─── ✅ ACEPTADO → aviso de aceptación ───────────────────────
   } else if (o.status === 'aceptado') {
     msg =
 `¡Hola ${o.cliente?.nombre}! 👋 Te escribe *PALACIO STORE* ⭐
 
-Tu pedido *${o.id}* ha sido *ACEPTADO* ✅
+¡Buenas noticias! Tu pedido *${o.id}* ha sido *ACEPTADO* ✅🎉
 
 ━━━━━━━━━━━━━━━━━━━━
-💳 *DATOS PARA TRANSFERENCIA*
-Banco: FALABELLA
-Tipo de cuenta: Cuenta Vista
-N° de cuenta: 000011122233344
-RUT: 21.902.467-3
-Nombre: ignacio calderon
-Email: ignaciocalderon.1805@gmail.com
+🛒 *Productos:*
+${itemLines}
+
+💰 *Total: $${o.total?.toLocaleString('es-CL')} CLP*
 ━━━━━━━━━━━━━━━━━━━━
 
-💰 *TOTAL: $${o.total?.toLocaleString('es-CL')} CLP*
+Estamos preparando tu pedido con mucho cuidado 📦
+Pronto te avisaremos cuando sea despachado 🚚
 
-Si ya realizaste la transferencia, por favor envía el *comprobante* por este chat para procesar tu pedido 📸
+¡Gracias por elegir *Palacio Store*! 🖤`;
 
-¡Gracias! 🖤`;
-
-  // ── ENVIADO → aviso de despacho a empresa de transporte ──────
+  // ─── 🚚 ENVIADO → aviso de despacho a empresa de transporte ──
   } else if (o.status === 'enviado') {
     msg =
 `¡Hola ${o.cliente?.nombre}! 👋 Te escribe *PALACIO STORE* ⭐
@@ -851,9 +846,9 @@ ${itemLines}
 
 ⭐ Cuando recibas tu pedido, *avísame por aquí que llegó correctamente* para confirmar la entrega. ¡Es muy importante para nosotros! 😊
 
-Cualquier consulta no dudes en escribirnos 🖤 *Palacio Store*`;
+Cualquier consulta, escríbenos cuando quieras 🖤 *Palacio Store*`;
 
-  // ── CONFIRMADO → mensaje de cierre / agradecimiento ──────────
+  // ─── 🎉 CONFIRMADO → agradecimiento ──────────────────────────
   } else if (o.status === 'confirmado') {
     msg =
 `¡Hola ${o.cliente?.nombre}! 👋 Soy de *PALACIO STORE* ⭐
@@ -862,21 +857,21 @@ Tu pedido *${o.id}* fue marcado como *ENTREGADO* 🎉✅
 
 Esperamos que estés disfrutando tu compra. Si necesitas algo más o tienes alguna consulta, ¡escríbenos cuando quieras!
 
-Gracias por elegir *Palacio Store* 🖤
-¡Nos vemos en la próxima! ⭐`;
+Gracias por elegirnos 🖤 ¡Nos vemos en la próxima! ⭐`;
 
-  // ── CANCELADO → notificación de cancelación ───────────────────
+  // ─── ❌ CANCELADO → notificación de cancelación ───────────────
   } else if (o.status === 'cancelado') {
     msg =
 `Hola ${o.cliente?.nombre} 👋, te escribe *PALACIO STORE* ⭐
 
 Lamentablemente tu pedido *${o.id}* fue *CANCELADO* ❌
 
-Si deseas más información sobre el motivo o quieres realizar un nuevo pedido, escríbenos aquí mismo y te ayudamos con gusto.
+Si deseas más información o quieres realizar un nuevo pedido, escríbenos aquí mismo y te ayudamos con gusto.
 
 ¡Gracias por contactarte con nosotros! 🖤`;
   }
 
+  // Abre WhatsApp con el mensaje prellenado — el usuario decide si enviar
   window.open(`https://wa.me/${clientTel}?text=${encodeURIComponent(msg)}`, '_blank');
 };
 
