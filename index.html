@@ -16,7 +16,6 @@
     --mid: #555;
     --light: #999;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Barlow', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
   ::-webkit-scrollbar { width: 4px; }
@@ -35,8 +34,9 @@
   .nav-links { display: flex; gap: 4px; }
   .nav-links a { text-decoration: none; color: var(--light); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; padding: 8px 14px; transition: all 0.2s; border: 1px solid transparent; }
   .nav-links a:hover { color: var(--white); border-color: rgba(227,20,20,0.5); background: rgba(227,20,20,0.08); }
+  .nav-links a.active-track { color: var(--red); border-color: var(--red); }
 
-  /* CATEGORY FILTER NAV */
+  /* CATEGORY FILTER */
   .cat-filter-bar { display: flex; gap: 8px; padding: 20px 40px; overflow-x: auto; background: var(--off); border-bottom: 1px solid #1a1a1a; flex-wrap: nowrap; scrollbar-width: none; }
   .cat-filter-bar::-webkit-scrollbar { display: none; }
   .cat-btn { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 8px 20px; background: transparent; color: var(--light); border: 1px solid #2a2a2a; cursor: pointer; transition: all 0.2s; white-space: nowrap; clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%); }
@@ -119,6 +119,7 @@
   .cart-thumb img { width:100%; height:100%; object-fit:cover; }
   .cart-thumb-empty { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#2a2a2a; letter-spacing:2px; }
   .cart-item-name { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px; }
+  .cart-item-size { font-family:'Barlow Condensed',sans-serif; font-size:12px; color:var(--light); letter-spacing:1px; text-transform:uppercase; margin-bottom:4px; }
   .cart-item-price { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--red); }
   .cart-rm { margin-left:auto; background:none; border:none; color:#333; font-size:22px; cursor:pointer; flex-shrink:0; transition:color 0.2s; }
   .cart-rm:hover { color:var(--red); }
@@ -129,13 +130,141 @@
   .checkout-btn { width:100%; background:var(--red); color:var(--white); border:none; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:900; letter-spacing:4px; text-transform:uppercase; padding:18px; clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%); transition:background 0.2s; }
   .checkout-btn:hover { background:var(--red-dark); }
 
+  /* SIZE SELECTOR MODAL */
+  .overlay-bg { position:fixed; inset:0; background:rgba(0,0,0,0.92); opacity:0; pointer-events:none; transition:0.3s; z-index:400; display:flex; align-items:center; justify-content:center; }
+  .overlay-bg.open { opacity:1; pointer-events:all; }
+  .size-modal { background:var(--off); border:2px solid var(--red); width:90%; max-width:440px; padding:36px; }
+  .size-modal h3 { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:4px; margin-bottom:6px; }
+  .size-modal-sub { font-family:'Barlow Condensed',sans-serif; font-size:12px; color:var(--light); letter-spacing:2px; text-transform:uppercase; margin-bottom:24px; }
+  .size-grid { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:24px; }
+  .size-opt { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; padding:12px 18px; border:2px solid #2a2a2a; background:transparent; color:var(--light); cursor:pointer; transition:all 0.2s; }
+  .size-opt:hover { border-color:var(--red); color:var(--white); }
+  .size-opt.selected { border-color:var(--red); background:var(--red); color:var(--white); }
+  .size-opt.no-stock { opacity:0.3; cursor:not-allowed; text-decoration:line-through; }
+  .size-add-btn { width:100%; background:var(--red); color:var(--white); border:none; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:900; letter-spacing:4px; text-transform:uppercase; padding:16px; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition:background 0.2s; }
+  .size-add-btn:hover { background:var(--red-dark); }
+  .size-close-btn { width:100%; margin-top:10px; background:transparent; color:var(--light); border:1px solid #2a2a2a; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:12px; transition:all 0.2s; }
+  .size-close-btn:hover { border-color:var(--red); color:var(--white); }
+
+  /* CHECKOUT FORM MODAL */
+  .checkout-modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.95); opacity:0; pointer-events:none; transition:0.3s; z-index:500; display:flex; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
+  .checkout-modal-bg.open { opacity:1; pointer-events:all; }
+  .checkout-modal { background:var(--off); border:2px solid var(--red); width:100%; max-width:580px; max-height:90vh; overflow-y:auto; padding:40px; position:relative; }
+  .checkout-modal::-webkit-scrollbar { width:3px; }
+  .checkout-modal::-webkit-scrollbar-thumb { background:var(--red); }
+  .cm-header { margin-bottom:28px; }
+  .cm-header h2 { font-family:'Bebas Neue',sans-serif; font-size:38px; letter-spacing:5px; }
+  .cm-header p { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--light); letter-spacing:2px; text-transform:uppercase; margin-top:4px; }
+  .cm-section { margin-bottom:20px; }
+  .cm-section-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin-bottom:12px; padding-bottom:6px; border-bottom:1px solid #1a1a1a; }
+  .cm-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .cm-field { margin-bottom:12px; }
+  .cm-field label { display:block; font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--light); margin-bottom:6px; }
+  .cm-field input { width:100%; padding:12px 14px; background:#0a0a0a; border:1.5px solid #222; color:var(--white); font-family:'Barlow',sans-serif; font-size:14px; outline:none; transition:border 0.2s; }
+  .cm-field input:focus { border-color:var(--red); }
+  .cm-field input.error { border-color:#e31414; background:rgba(227,20,20,0.05); }
+  .cm-field .field-error { font-family:'Barlow Condensed',sans-serif; font-size:11px; color:#e31414; letter-spacing:1px; margin-top:4px; display:none; }
+  .cm-field .field-error.show { display:block; }
+  .cm-field .char-count { font-family:'Barlow Condensed',sans-serif; font-size:10px; color:var(--mid); letter-spacing:1px; margin-top:3px; text-align:right; }
+  .order-summary-box { background:#0a0a0a; border:1px solid #1a1a1a; padding:16px; margin-bottom:20px; }
+  .order-summary-item { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #141414; font-family:'Barlow Condensed',sans-serif; font-size:14px; }
+  .order-summary-item:last-child { border-bottom:none; }
+  .order-summary-total { display:flex; justify-content:space-between; align-items:baseline; margin-top:12px; padding-top:12px; border-top:1px solid #222; }
+  .order-summary-total .label { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--light); }
+  .order-summary-total .val { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--red); }
+  .cm-submit-btn { width:100%; background:var(--red); color:var(--white); border:none; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:900; letter-spacing:5px; text-transform:uppercase; padding:20px; clip-path:polygon(14px 0%,100% 0%,calc(100% - 14px) 100%,0% 100%); transition:background 0.2s; margin-top:8px; }
+  .cm-submit-btn:hover { background:var(--red-dark); }
+  .cm-cancel-btn { width:100%; margin-top:10px; background:transparent; color:var(--light); border:1px solid #2a2a2a; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:14px; transition:all 0.2s; }
+  .cm-cancel-btn:hover { border-color:var(--red); color:var(--white); }
+
+  /* PRE-CONFIRM MODAL */
+  .preconfirm-bg { position:fixed; inset:0; background:rgba(0,0,0,0.97); opacity:0; pointer-events:none; transition:0.3s; z-index:600; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .preconfirm-bg.open { opacity:1; pointer-events:all; }
+  .preconfirm-box { background:var(--off); border:2px solid var(--red); width:100%; max-width:520px; padding:40px; max-height:90vh; overflow-y:auto; }
+  .preconfirm-box::-webkit-scrollbar { width:3px; }
+  .preconfirm-box::-webkit-scrollbar-thumb { background:var(--red); }
+  .preconfirm-box h2 { font-family:'Bebas Neue',sans-serif; font-size:36px; letter-spacing:4px; margin-bottom:6px; }
+  .preconfirm-box .sub { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--light); letter-spacing:2px; text-transform:uppercase; margin-bottom:24px; }
+  .review-block { background:#0a0a0a; border:1px solid #1a1a1a; padding:18px; margin-bottom:14px; }
+  .review-block-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin-bottom:10px; }
+  .review-row { display:flex; justify-content:space-between; padding:4px 0; font-family:'Barlow Condensed',sans-serif; font-size:14px; border-bottom:1px solid #111; }
+  .review-row:last-child { border-bottom:none; }
+  .review-row .key { color:var(--light); }
+  .review-row .val { font-weight:700; text-align:right; }
+  .preconfirm-warning { background:rgba(227,20,20,0.06); border:1px solid rgba(227,20,20,0.3); padding:14px 18px; margin-bottom:20px; font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--light); letter-spacing:1px; line-height:1.6; }
+  .preconfirm-actions { display:flex; gap:12px; }
+  .preconfirm-actions .yes-btn { flex:1; background:var(--red); color:var(--white); border:none; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:900; letter-spacing:3px; text-transform:uppercase; padding:16px; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition:background 0.2s; }
+  .preconfirm-actions .yes-btn:hover { background:var(--red-dark); }
+  .preconfirm-actions .no-btn { flex:1; background:transparent; color:var(--light); border:1px solid #333; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:16px; transition:all 0.2s; }
+  .preconfirm-actions .no-btn:hover { border-color:var(--red); color:var(--white); }
+
+  /* SUCCESS MODAL */
+  .success-bg { position:fixed; inset:0; background:rgba(0,0,0,0.97); opacity:0; pointer-events:none; transition:0.3s; z-index:700; display:flex; align-items:center; justify-content:center; padding:20px; }
+  .success-bg.open { opacity:1; pointer-events:all; }
+  .success-box { background:var(--off); border:2px solid var(--red); width:100%; max-width:480px; padding:48px 40px; text-align:center; }
+  .success-icon { font-size:60px; margin-bottom:16px; }
+  .success-box h2 { font-family:'Bebas Neue',sans-serif; font-size:44px; letter-spacing:5px; color:var(--red); margin-bottom:8px; }
+  .success-box .success-sub { font-family:'Barlow Condensed',sans-serif; font-size:14px; color:var(--light); letter-spacing:2px; text-transform:uppercase; margin-bottom:28px; }
+  .order-number-box { background:#0a0a0a; border:2px solid var(--red); padding:20px; margin-bottom:24px; }
+  .order-number-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--light); margin-bottom:8px; }
+  .order-number-val { font-family:'Bebas Neue',sans-serif; font-size:42px; letter-spacing:8px; color:var(--red); }
+  .order-number-tip { font-family:'Barlow Condensed',sans-serif; font-size:12px; color:var(--mid); letter-spacing:1px; margin-top:6px; }
+  .success-note { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--mid); letter-spacing:1px; line-height:1.7; margin-bottom:28px; }
+  .success-close-btn { background:var(--red); color:var(--white); border:none; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:900; letter-spacing:4px; text-transform:uppercase; padding:16px 40px; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition:background 0.2s; }
+  .success-close-btn:hover { background:var(--red-dark); }
+
+  /* ORDER TRACKING SECTION */
+  .track-section { padding:60px 40px; background:var(--off); border-top:2px solid #181818; border-bottom:2px solid #181818; }
+  .track-inner { max-width:640px; margin:0 auto; }
+  .track-title { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:5px; margin-bottom:6px; }
+  .track-title span { color:var(--red); }
+  .track-sub { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--light); letter-spacing:3px; text-transform:uppercase; margin-bottom:28px; }
+  .track-form { display:flex; gap:0; }
+  .track-input { flex:1; padding:16px 20px; background:#0a0a0a; border:2px solid #222; border-right:none; color:var(--white); font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:3px; text-transform:uppercase; outline:none; transition:border 0.2s; }
+  .track-input:focus { border-color:var(--red); }
+  .track-input::placeholder { color:#333; }
+  .track-search-btn { background:var(--red); color:var(--white); border:none; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:900; letter-spacing:3px; text-transform:uppercase; padding:16px 28px; clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%); transition:background 0.2s; }
+  .track-search-btn:hover { background:var(--red-dark); }
+  .track-result { margin-top:24px; display:none; }
+  .track-result.show { display:block; }
+  .track-card { background:#0a0a0a; border:2px solid #1a1a1a; padding:24px; }
+  .track-card.found { border-color:var(--red); }
+  .track-card.not-found { border-color:#222; text-align:center; padding:40px; }
+  .track-not-found-txt { font-family:'Barlow Condensed',sans-serif; font-size:16px; color:var(--mid); letter-spacing:2px; text-transform:uppercase; }
+  .track-order-num { font-family:'Bebas Neue',sans-serif; font-size:36px; letter-spacing:6px; color:var(--red); margin-bottom:4px; }
+  .track-customer { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--light); letter-spacing:2px; text-transform:uppercase; margin-bottom:20px; }
+  .track-steps { display:flex; flex-direction:column; gap:0; position:relative; }
+  .track-steps::before { content:''; position:absolute; left:14px; top:16px; bottom:16px; width:2px; background:#1a1a1a; z-index:0; }
+  .track-step { display:flex; gap:16px; align-items:flex-start; padding:10px 0; position:relative; z-index:1; }
+  .track-step-dot { width:30px; height:30px; border-radius:50%; border:2px solid #2a2a2a; background:var(--black); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:12px; }
+  .track-step-dot.done { background:var(--red); border-color:var(--red); }
+  .track-step-dot.current { background:var(--off); border-color:var(--red); animation:stepdot 1.5s ease-in-out infinite; }
+  @keyframes stepdot { 0%,100%{box-shadow:0 0 0 0 rgba(227,20,20,0.4)} 50%{box-shadow:0 0 0 6px rgba(227,20,20,0)} }
+  .track-step-info { padding-top:4px; }
+  .track-step-name { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+  .track-step-name.done { color:var(--white); }
+  .track-step-name.current { color:var(--red); }
+  .track-step-name.pending { color:#333; }
+  .track-step-desc { font-family:'Barlow Condensed',sans-serif; font-size:12px; color:var(--mid); letter-spacing:1px; margin-top:2px; }
+  .track-items-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--light); margin:16px 0 8px; }
+  .track-item-row { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--light); padding:4px 0; border-bottom:1px solid #111; display:flex; justify-content:space-between; }
+  .track-cancelled { background:rgba(227,20,20,0.08); border:1px solid rgba(227,20,20,0.3); padding:14px 18px; margin-top:14px; font-family:'Barlow Condensed',sans-serif; font-size:13px; color:#e31414; letter-spacing:1px; }
+
+  /* STATUS PILLS */
+  .status-pill { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:4px 12px; margin-bottom:12px; }
+  .sp-espera { background:rgba(255,165,0,0.15); color:#ffa500; border:1px solid rgba(255,165,0,0.3); }
+  .sp-aceptado { background:rgba(46,189,107,0.15); color:#2ebd6b; border:1px solid rgba(46,189,107,0.3); }
+  .sp-enviado { background:rgba(100,149,237,0.15); color:#6495ed; border:1px solid rgba(100,149,237,0.3); }
+  .sp-confirmado { background:rgba(46,189,107,0.15); color:#2ebd6b; border:1px solid rgba(46,189,107,0.3); }
+  .sp-cancelado { background:rgba(227,20,20,0.15); color:#e31414; border:1px solid rgba(227,20,20,0.3); }
+
   /* LIVE BADGE */
   .live-badge { position:fixed; bottom:116px; right:28px; background:var(--off); color:var(--white); font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; padding:8px 16px; border:1px solid var(--red); z-index:200; display:flex; align-items:center; gap:8px; opacity:0; transform:translateY(10px); transition:all 0.4s; pointer-events:none; }
   .live-badge.show { opacity:1; transform:translateY(0); }
   .live-dot { width:6px; height:6px; background:var(--red); border-radius:50%; animation:ldot 1.2s infinite; }
   @keyframes ldot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
 
-  /* FLOAT */
+  /* FLOAT BTNS */
   .float-btns { position:fixed; bottom:28px; right:28px; display:flex; flex-direction:column; gap:10px; z-index:200; align-items:center; }
   .float-btn { width:56px; height:56px; display:flex; align-items:center; justify-content:center; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); transition:transform 0.2s; box-shadow:0 4px 20px rgba(0,0,0,0.6); }
   .float-btn:hover { transform:scale(1.1); }
@@ -154,6 +283,14 @@
   .foot-bottom p { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--mid); }
   .foot-flags { font-size:18px; display:flex; align-items:center; gap:8px; }
   .foot-flags span { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--mid); }
+
+  @media (max-width:600px) {
+    nav { padding:0 16px; }
+    .hero { padding:60px 20px 60px; }
+    .section-head, .products-wrap, .cat-filter-bar { padding-left:16px; padding-right:16px; }
+    .track-section { padding:40px 20px; }
+    .cm-row { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
@@ -166,6 +303,7 @@
   <a href="#" class="nav-logo"><span class="star">★</span> PALACIO STORE</a>
   <div class="nav-links">
     <a href="#catalogo">CATÁLOGO</a>
+    <a href="#tracking" id="navTrack">SEGUIR PEDIDO</a>
     <a href="https://www.instagram.com/Palacio_store__" target="_blank">INSTAGRAM</a>
   </div>
   <button class="cart-btn" onclick="toggleCart()">
@@ -183,7 +321,6 @@
   </div>
 </section>
 
-<!-- CATEGORY FILTER BAR — populated dynamically -->
 <div class="cat-filter-bar" id="catFilterBar">
   <button class="cat-btn active" onclick="filterCat('todos', this)">VER TODO</button>
 </div>
@@ -200,6 +337,19 @@
     </div>
   </div>
 </div>
+
+<!-- ORDER TRACKING -->
+<section class="track-section" id="tracking">
+  <div class="track-inner">
+    <div class="track-title">SEGUIR <span>PEDIDO</span></div>
+    <p class="track-sub">Ingresa tu código único para ver el estado de tu compra</p>
+    <div class="track-form">
+      <input class="track-input" id="trackInput" type="text" placeholder="TU CÓDIGO DE PEDIDO" maxlength="10" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')trackOrder()">
+      <button class="track-search-btn" onclick="trackOrder()">★ BUSCAR</button>
+    </div>
+    <div class="track-result" id="trackResult"></div>
+  </div>
+</section>
 
 <footer>
   <div class="foot-top">
@@ -231,6 +381,7 @@
 
 <div class="live-badge" id="liveBadge"><div class="live-dot"></div> TIENDA ACTUALIZADA</div>
 
+<!-- CART -->
 <div class="cart-bg" id="cartBg" onclick="toggleCart()"></div>
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-head">
@@ -243,15 +394,145 @@
       <span class="cart-total-label">Total</span>
       <span class="cart-total-val" id="cartTotal">$0</span>
     </div>
-    <button class="checkout-btn" onclick="checkoutWsp()">★ PEDIR POR WHATSAPP</button>
+    <button class="checkout-btn" onclick="openCheckoutForm()">★ FINALIZAR COMPRA</button>
+  </div>
+</div>
+
+<!-- SIZE SELECTOR MODAL -->
+<div class="overlay-bg" id="sizeSelectorBg">
+  <div class="size-modal">
+    <h3 id="sizeModalName">SELECCIONA TU TALLA</h3>
+    <div class="size-modal-sub" id="sizeModalSub">Elige una talla disponible</div>
+    <div class="size-grid" id="sizeGrid"></div>
+    <button class="size-add-btn" id="sizeAddBtn" onclick="confirmSizeAdd()">★ AGREGAR AL CARRITO</button>
+    <button class="size-close-btn" onclick="closeSizeModal()">CANCELAR</button>
+  </div>
+</div>
+
+<!-- CHECKOUT FORM MODAL -->
+<div class="checkout-modal-bg" id="checkoutModalBg">
+  <div class="checkout-modal">
+    <div class="cm-header">
+      <h2>★ DATOS DE ENVÍO</h2>
+      <p>Completa todos los campos para finalizar tu pedido</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <div class="cm-section-title">Tu pedido</div>
+      <div class="order-summary-box" id="cmOrderSummary"></div>
+    </div>
+
+    <div class="cm-section">
+      <div class="cm-section-title">Datos personales</div>
+      <div class="cm-row">
+        <div class="cm-field">
+          <label>Nombre *</label>
+          <input type="text" id="cfNombre" placeholder="Juan" maxlength="40" oninput="updateCharCount(this,'cfNombreCount',40)">
+          <div class="char-count" id="cfNombreCount">0 / 40</div>
+          <div class="field-error" id="errNombre">Ingresa tu nombre</div>
+        </div>
+        <div class="cm-field">
+          <label>Apellido *</label>
+          <input type="text" id="cfApellido" placeholder="González" maxlength="40" oninput="updateCharCount(this,'cfApellidoCount',40)">
+          <div class="char-count" id="cfApellidoCount">0 / 40</div>
+          <div class="field-error" id="errApellido">Ingresa tu apellido</div>
+        </div>
+      </div>
+      <div class="cm-row">
+        <div class="cm-field">
+          <label>RUT *</label>
+          <input type="text" id="cfRut" placeholder="12.345.678-9" maxlength="12" oninput="formatRut(this)">
+          <div class="field-error" id="errRut">Ingresa un RUT válido</div>
+        </div>
+        <div class="cm-field">
+          <label>Correo electrónico *</label>
+          <input type="email" id="cfEmail" placeholder="juan@correo.cl" maxlength="80">
+          <div class="field-error" id="errEmail">Ingresa un correo válido</div>
+        </div>
+      </div>
+      <div class="cm-field">
+        <label>Teléfono * (comenzando con +569)</label>
+        <input type="tel" id="cfTel" placeholder="+56912345678" maxlength="12" oninput="formatTel(this)">
+        <div class="field-error" id="errTel">Debe comenzar con +569 y tener 12 dígitos</div>
+      </div>
+    </div>
+
+    <div class="cm-section">
+      <div class="cm-section-title">Dirección de envío</div>
+      <div class="cm-row">
+        <div class="cm-field">
+          <label>Comuna *</label>
+          <input type="text" id="cfComuna" placeholder="Las Condes" maxlength="50" oninput="updateCharCount(this,'cfComunaCount',50)">
+          <div class="char-count" id="cfComunaCount">0 / 50</div>
+          <div class="field-error" id="errComuna">Ingresa tu comuna</div>
+        </div>
+        <div class="cm-field">
+          <label>Dirección completa *</label>
+          <input type="text" id="cfDireccion" placeholder="Av. Principal 123, Depto 4B" maxlength="100" oninput="updateCharCount(this,'cfDireccionCount',100)">
+          <div class="char-count" id="cfDireccionCount">0 / 100</div>
+          <div class="field-error" id="errDireccion">Ingresa tu dirección</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="cm-submit-btn" onclick="validateAndPreview()">REVISAR MI PEDIDO →</button>
+    <button class="cm-cancel-btn" onclick="closeCheckoutModal()">← VOLVER AL CARRITO</button>
+  </div>
+</div>
+
+<!-- PRE-CONFIRM MODAL -->
+<div class="preconfirm-bg" id="preconfirmBg">
+  <div class="preconfirm-box">
+    <h2>★ REVISA TU PEDIDO</h2>
+    <div class="sub">¿Está todo correcto? Una vez enviado no podrás modificarlo.</div>
+
+    <div class="review-block">
+      <div class="review-block-title">Datos personales</div>
+      <div id="pcPersonal"></div>
+    </div>
+    <div class="review-block">
+      <div class="review-block-title">Dirección de envío</div>
+      <div id="pcDireccion"></div>
+    </div>
+    <div class="review-block">
+      <div class="review-block-title">Productos</div>
+      <div id="pcProductos"></div>
+    </div>
+
+    <div class="preconfirm-warning">
+      ⚠️ Al confirmar, tu pedido quedará en espera hasta que nuestro equipo lo acepte. Recibirás tu código único de seguimiento para rastrear el estado de tu pedido.
+    </div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--white);margin-bottom:14px;">¿Está todo bien? ¿Confirmas tu pedido?</div>
+    <div class="preconfirm-actions">
+      <button class="no-btn" onclick="closePreconfirm()">← NO, EDITAR PEDIDO</button>
+      <button class="yes-btn" onclick="finalSubmitOrder()">✓ SÍ, CONFIRMAR</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="success-bg" id="successBg">
+  <div class="success-box">
+    <div class="success-icon">🎉</div>
+    <h2>¡PEDIDO ENVIADO!</h2>
+    <p class="success-sub">Tu pedido está en espera de confirmación</p>
+    <div class="order-number-box">
+      <div class="order-number-label">TU CÓDIGO DE SEGUIMIENTO</div>
+      <div class="order-number-val" id="successOrderNum">PS000000</div>
+      <div class="order-number-tip">Guárdalo para rastrear el estado de tu pedido</div>
+    </div>
+    <p class="success-note">
+      También hemos enviado el resumen de tu pedido por WhatsApp.<br>
+      Puedes usar el código de arriba en la sección <strong>"SEGUIR PEDIDO"</strong> para ver el estado de tu compra en tiempo real.
+    </p>
+    <button class="success-close-btn" onclick="closeSuccess()">★ VOLVER A LA TIENDA</button>
   </div>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, onValue, set, push } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// ── FIREBASE ─────────────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyB_Kgid_oL0wscMQlViW1ZweO9v6z_hsz0",
   authDomain: "palacio-store.firebaseapp.com",
@@ -259,26 +540,28 @@ const firebaseConfig = {
   storageBucket: "palacio-store.firebasestorage.app",
   messagingSenderId: "5927823600",
   appId: "1:5927823600:web:211ffb13596d65c123fa35",
-  measurementId: "G-50MRG59294",
   databaseURL: "https://palacio-store-default-rtdb.europe-west1.firebasedatabase.app"
 };
 
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-// ── STATE ────────────────────────────────────────────────────────
 let PRODUCTS_DB  = [];
 let CATEGORIES   = [];
+let ORDERS_DB    = {};
 let cart         = [];
 let currentCat   = 'todos';
-let wspNumber    = '56912345678'; // default, overridden by Firebase config
+let wspNumber    = '569728650749';
+let sizeModalProduct = null;
+let sizeModalSelected = null;
+let pendingFormData = null;
 
 // ── FIREBASE LISTENERS ───────────────────────────────────────────
-// Listen to config — updates WhatsApp number dynamically
 onValue(ref(db, 'config'), snap => {
   const cfg = snap.val();
   if (cfg?.wsp) wspNumber = cfg.wsp;
 });
+
 onValue(ref(db, 'productos'), snap => {
   const data = snap.val();
   PRODUCTS_DB = data ? Object.values(data) : [];
@@ -286,15 +569,19 @@ onValue(ref(db, 'productos'), snap => {
   showLiveBadge();
 });
 
-// Listen to categories — updates filter bar automatically
 onValue(ref(db, 'categorias'), snap => {
   const data = snap.val();
   CATEGORIES = data ? Object.values(data) : [];
   renderCatFilterBar();
-  renderProducts(); // re-render in case cat names changed
+  renderProducts();
 });
 
-// ── CATEGORY FILTER BAR ──────────────────────────────────────────
+onValue(ref(db, 'pedidos'), snap => {
+  const data = snap.val();
+  ORDERS_DB = data || {};
+});
+
+// ── CATEGORY FILTER ──────────────────────────────────────────────
 function renderCatFilterBar() {
   const bar = document.getElementById('catFilterBar');
   const allBtn = `<button class="cat-btn ${currentCat==='todos'?'active':''}" onclick="filterCat('todos',this)">VER TODO</button>`;
@@ -315,11 +602,7 @@ window.filterCat = (id, btn) => {
 function renderProducts() {
   const grid = document.getElementById('productGrid');
   const tag  = document.getElementById('sectionTag');
-
-  const filtered = currentCat === 'todos'
-    ? PRODUCTS_DB
-    : PRODUCTS_DB.filter(p => p.cat === currentCat);
-
+  const filtered = currentCat === 'todos' ? PRODUCTS_DB : PRODUCTS_DB.filter(p => p.cat === currentCat);
   tag.textContent = `★ ${filtered.length} producto${filtered.length !== 1 ? 's' : ''}`;
 
   if (!filtered.length) {
@@ -330,23 +613,20 @@ function renderProducts() {
   const bl = { new:'NEW', sale:'SALE', hot:'HOT' };
   const bc = { new:'badge-new', sale:'badge-sale', hot:'badge-hot' };
   const catName = id => CATEGORIES.find(c => c.id === id)?.name || '';
+  const genderMap = { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
 
   grid.innerHTML = filtered.map(p => {
-    const genderMap = { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
     const genderTag = p.gender ? `<span class="gender-tag">${genderMap[p.gender] || ''}</span>` : '';
     const availSizes = p.sizes ? Object.entries(p.sizes).filter(([,q]) => q > 0).map(([sz]) => sz) : [];
-    const sizesHtml = availSizes.length ? `<div class="product-sizes">${availSizes.map(sz => `<span class="size-chip">${sz}</span>`).join('')}</div>` : '';
+    const sizesHtml = availSizes.length ? `<div class="product-sizes">${availSizes.map(sz => `<span class="size-chip">${sz}</span>`).join('')}</div>` : '<div style="font-family:\'Barlow Condensed\',sans-serif;font-size:11px;color:#333;letter-spacing:1px;text-transform:uppercase;margin-top:8px;">SIN STOCK</div>';
 
     return `
     <div class="product-card">
       <div class="product-img">
         ${p.badge ? `<span class="product-badge ${bc[p.badge]}">${bl[p.badge]}</span>` : ''}
-        ${p.img
-          ? `<img src="${p.img}" alt="${p.name}" loading="lazy">`
-          : `<div class="product-no-img"><span>PS</span></div>`
-        }
+        ${p.img ? `<img src="${p.img}" alt="${p.name}" loading="lazy">` : `<div class="product-no-img"><span>PS</span></div>`}
         <div class="product-hover">
-          <button class="quick-add" onclick="addToCart('${p.id}')">★ AGREGAR AL CARRITO</button>
+          <button class="quick-add" onclick="openSizeModal('${p.id}')">★ SELECCIONAR TALLA</button>
         </div>
       </div>
       <div class="product-info">
@@ -361,60 +641,346 @@ function renderProducts() {
         </div>
         ${sizesHtml}
       </div>
-    </div>
-  `}).join('');
+    </div>`
+  }).join('');
 }
 
-// ── CART ─────────────────────────────────────────────────────────
-window.addToCart = (id) => {
+// ── SIZE MODAL ───────────────────────────────────────────────────
+window.openSizeModal = (id) => {
   const p = PRODUCTS_DB.find(x => x.id === id);
   if (!p) return;
-  const ex = cart.find(x => x.id === id);
-  if (ex) ex.qty++; else cart.push({...p, qty:1});
-  updateCartUI();
-  if (!document.getElementById('cartDrawer').classList.contains('open')) toggleCart();
+  sizeModalProduct = p;
+  sizeModalSelected = null;
+  document.getElementById('sizeModalName').textContent = p.name.toUpperCase();
+  document.getElementById('sizeModalSub').textContent = `$${p.price.toLocaleString('es-CL')} · Elige una talla`;
+
+  const sizes = p.sizes ? Object.entries(p.sizes) : [];
+  if (!sizes.length) { alert('Este producto no tiene stock disponible.'); return; }
+
+  document.getElementById('sizeGrid').innerHTML = sizes.map(([sz, stock]) =>
+    stock > 0
+      ? `<button class="size-opt" onclick="selectSize('${sz}',this)">${sz}</button>`
+      : `<button class="size-opt no-stock" disabled>${sz}</button>`
+  ).join('');
+
+  document.getElementById('sizeSelectorBg').classList.add('open');
 };
 
+window.selectSize = (sz, btn) => {
+  sizeModalSelected = sz;
+  document.querySelectorAll('.size-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+};
+
+window.closeSizeModal = () => {
+  document.getElementById('sizeSelectorBg').classList.remove('open');
+  sizeModalProduct = null;
+  sizeModalSelected = null;
+};
+
+window.confirmSizeAdd = () => {
+  if (!sizeModalSelected) { alert('Selecciona una talla para continuar.'); return; }
+  const p = sizeModalProduct;
+  const ex = cart.find(x => x.id === p.id && x.selectedSize === sizeModalSelected);
+  if (ex) { ex.qty++; }
+  else { cart.push({...p, selectedSize: sizeModalSelected, qty: 1}); }
+  closeSizeModal();
+  updateCartUI();
+  toggleCart();
+};
+
+// ── CART ─────────────────────────────────────────────────────────
 function updateCartUI() {
   const count = cart.reduce((a,b) => a+b.qty, 0);
   document.getElementById('cartCount').textContent = count;
-
   const el = document.getElementById('cartItems');
+
   if (!cart.length) {
     el.innerHTML = `<p style="text-align:center;color:var(--mid);margin-top:60px;font-family:'Barlow Condensed',sans-serif;letter-spacing:2px;text-transform:uppercase;font-size:14px;">Carrito vacío</p>`;
   } else {
-    el.innerHTML = cart.map(i => `
+    el.innerHTML = cart.map((i, idx) => `
       <div class="cart-item">
         <div class="cart-thumb">
           ${i.img ? `<img src="${i.img}" alt="${i.name}">` : `<div class="cart-thumb-empty">PS</div>`}
         </div>
         <div style="flex:1">
           <div class="cart-item-name">${i.name}</div>
+          <div class="cart-item-size">Talla: ${i.selectedSize}</div>
           <div class="cart-item-price">${i.qty}× $${i.price.toLocaleString('es-CL')}</div>
         </div>
-        <button class="cart-rm" onclick="removeFromCart('${i.id}')">×</button>
+        <button class="cart-rm" onclick="removeFromCart(${idx})">×</button>
       </div>`).join('');
   }
   const total = cart.reduce((a,b) => a+(b.price*b.qty), 0);
   document.getElementById('cartTotal').textContent = `$${total.toLocaleString('es-CL')}`;
 }
 
-window.removeFromCart = (id) => {
-  cart = cart.filter(x => x.id !== id);
-  updateCartUI();
-};
-
+window.removeFromCart = (idx) => { cart.splice(idx, 1); updateCartUI(); };
 window.toggleCart = () => {
   document.getElementById('cartDrawer').classList.toggle('open');
   document.getElementById('cartBg').classList.toggle('open');
 };
 
-window.checkoutWsp = () => {
+// ── CHECKOUT FORM ─────────────────────────────────────────────────
+window.openCheckoutForm = () => {
   if (!cart.length) return;
-  const items = cart.map(i => `• ${i.name} (x${i.qty})`).join('\n');
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartBg').classList.remove('open');
+
+  // Render order summary inside form
   const total = cart.reduce((a,b) => a+(b.price*b.qty), 0);
-  const msg = encodeURIComponent(`★ PALACIO STORE ★\n\nHola! Quiero este pedido:\n\n${items}\n\nTOTAL: $${total.toLocaleString('es-CL')}`);
-  window.open(`https://wa.me/${wspNumber}?text=${msg}`);
+  document.getElementById('cmOrderSummary').innerHTML = `
+    ${cart.map(i => `
+      <div class="order-summary-item">
+        <span>${i.name} <span style="color:var(--red);font-weight:700;">· ${i.selectedSize}</span> × ${i.qty}</span>
+        <span>$${(i.price*i.qty).toLocaleString('es-CL')}</span>
+      </div>`).join('')}
+    <div class="order-summary-total">
+      <span class="label">Total</span>
+      <span class="val">$${total.toLocaleString('es-CL')}</span>
+    </div>`;
+
+  document.getElementById('checkoutModalBg').classList.add('open');
+};
+
+window.closeCheckoutModal = () => {
+  document.getElementById('checkoutModalBg').classList.remove('open');
+};
+
+// ── FIELD HELPERS ─────────────────────────────────────────────────
+window.updateCharCount = (input, countId, max) => {
+  document.getElementById(countId).textContent = `${input.value.length} / ${max}`;
+};
+
+window.formatRut = (input) => {
+  let v = input.value.replace(/[^0-9kK]/g, '').toUpperCase();
+  if (v.length > 1) {
+    const body = v.slice(0, -1).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    v = body + '-' + v.slice(-1);
+  }
+  input.value = v;
+};
+
+window.formatTel = (input) => {
+  let v = input.value;
+  if (!v.startsWith('+')) v = '+' + v;
+  v = '+' + v.replace(/\D/g, '');
+  if (v.length > 13) v = v.slice(0, 13);
+  input.value = v;
+};
+
+function showFieldError(id, errId, show) {
+  const input = document.getElementById(id);
+  const err   = document.getElementById(errId);
+  if (show) { input.classList.add('error'); err.classList.add('show'); }
+  else      { input.classList.remove('error'); err.classList.remove('show'); }
+}
+
+// ── VALIDATE & PREVIEW ────────────────────────────────────────────
+window.validateAndPreview = () => {
+  const nombre    = document.getElementById('cfNombre').value.trim();
+  const apellido  = document.getElementById('cfApellido').value.trim();
+  const rut       = document.getElementById('cfRut').value.trim();
+  const email     = document.getElementById('cfEmail').value.trim();
+  const tel       = document.getElementById('cfTel').value.trim();
+  const comuna    = document.getElementById('cfComuna').value.trim();
+  const direccion = document.getElementById('cfDireccion').value.trim();
+
+  let valid = true;
+
+  if (!nombre)   { showFieldError('cfNombre','errNombre',true); valid=false; } else showFieldError('cfNombre','errNombre',false);
+  if (!apellido) { showFieldError('cfApellido','errApellido',true); valid=false; } else showFieldError('cfApellido','errApellido',false);
+  if (!rut || rut.length < 8) { showFieldError('cfRut','errRut',true); valid=false; } else showFieldError('cfRut','errRut',false);
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if (!emailOk)  { showFieldError('cfEmail','errEmail',true); valid=false; } else showFieldError('cfEmail','errEmail',false);
+  const telOk = /^\+569\d{8}$/.test(tel);
+  if (!telOk)    { showFieldError('cfTel','errTel',true); valid=false; } else showFieldError('cfTel','errTel',false);
+  if (!comuna)   { showFieldError('cfComuna','errComuna',true); valid=false; } else showFieldError('cfComuna','errComuna',false);
+  if (!direccion){ showFieldError('cfDireccion','errDireccion',true); valid=false; } else showFieldError('cfDireccion','errDireccion',false);
+
+  if (!valid) return;
+
+  pendingFormData = { nombre, apellido, rut, email, tel, comuna, direccion };
+  openPreconfirm();
+};
+
+// ── PRE-CONFIRM ───────────────────────────────────────────────────
+function openPreconfirm() {
+  const d = pendingFormData;
+  const total = cart.reduce((a,b) => a+(b.price*b.qty), 0);
+
+  document.getElementById('pcPersonal').innerHTML = `
+    <div class="review-row"><span class="key">Nombre completo</span><span class="val">${d.nombre} ${d.apellido}</span></div>
+    <div class="review-row"><span class="key">RUT</span><span class="val">${d.rut}</span></div>
+    <div class="review-row"><span class="key">Email</span><span class="val">${d.email}</span></div>
+    <div class="review-row"><span class="key">Teléfono</span><span class="val">${d.tel}</span></div>`;
+
+  document.getElementById('pcDireccion').innerHTML = `
+    <div class="review-row"><span class="key">Comuna</span><span class="val">${d.comuna}</span></div>
+    <div class="review-row"><span class="key">Dirección</span><span class="val">${d.direccion}</span></div>`;
+
+  document.getElementById('pcProductos').innerHTML = `
+    ${cart.map(i => `<div class="review-row"><span class="key">${i.name} · ${i.selectedSize} × ${i.qty}</span><span class="val">$${(i.price*i.qty).toLocaleString('es-CL')}</span></div>`).join('')}
+    <div class="review-row" style="border-top:1px solid #222;margin-top:6px;padding-top:6px;"><span class="key" style="font-weight:700;color:var(--white);">TOTAL</span><span class="val" style="font-size:18px;color:var(--red);">$${total.toLocaleString('es-CL')}</span></div>`;
+
+  document.getElementById('preconfirmBg').classList.add('open');
+}
+
+window.closePreconfirm = () => {
+  document.getElementById('preconfirmBg').classList.remove('open');
+};
+
+// ── GENERATE ORDER NUMBER ─────────────────────────────────────────
+function generateOrderNumber() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = 'PS';
+  for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  // Check uniqueness
+  if (ORDERS_DB[code]) return generateOrderNumber();
+  return code;
+}
+
+// ── FINAL SUBMIT ──────────────────────────────────────────────────
+window.finalSubmitOrder = async () => {
+  document.getElementById('preconfirmBg').classList.remove('open');
+  const d = pendingFormData;
+  const orderNum = generateOrderNumber();
+  const total    = cart.reduce((a,b) => a+(b.price*b.qty), 0);
+  const ts       = Date.now();
+
+  const order = {
+    id:        orderNum,
+    status:    'espera',
+    timestamp: ts,
+    cliente: {
+      nombre:    d.nombre,
+      apellido:  d.apellido,
+      rut:       d.rut,
+      email:     d.email,
+      tel:       d.tel,
+      comuna:    d.comuna,
+      direccion: d.direccion
+    },
+    items: cart.map(i => ({
+      productId:    i.id,
+      productName:  i.name,
+      selectedSize: i.selectedSize,
+      qty:          i.qty,
+      price:        i.price
+    })),
+    total
+  };
+
+  await set(ref(db, 'pedidos/' + orderNum), order);
+
+  // WhatsApp message
+  const itemLines = cart.map(i => `• ${i.name} (Talla: ${i.selectedSize}) x${i.qty} = $${(i.price*i.qty).toLocaleString('es-CL')}`).join('\n');
+  const wspMsg = encodeURIComponent(
+`★ PALACIO STORE ★ — NUEVO PEDIDO
+━━━━━━━━━━━━━━━━━━━━
+📦 CÓDIGO DE PEDIDO: ${orderNum}
+━━━━━━━━━━━━━━━━━━━━
+
+👤 DATOS DEL CLIENTE
+Nombre: ${d.nombre} ${d.apellido}
+RUT: ${d.rut}
+Email: ${d.email}
+Teléfono: ${d.tel}
+
+📍 DIRECCIÓN DE ENVÍO
+Comuna: ${d.comuna}
+Dirección: ${d.direccion}
+
+🛒 PRODUCTOS
+${itemLines}
+
+━━━━━━━━━━━━━━━━━━━━
+💰 TOTAL: $${total.toLocaleString('es-CL')}
+━━━━━━━━━━━━━━━━━━━━
+Guarda tu código ${orderNum} para rastrear tu pedido en palaciostore.cl`
+  );
+
+  window.open(`https://wa.me/${wspNumber}?text=${wspMsg}`, '_blank');
+
+  // Reset
+  cart = [];
+  updateCartUI();
+  document.getElementById('checkoutModalBg').classList.remove('open');
+  document.getElementById('successOrderNum').textContent = orderNum;
+  document.getElementById('successBg').classList.add('open');
+};
+
+window.closeSuccess = () => {
+  document.getElementById('successBg').classList.remove('open');
+};
+
+// ── ORDER TRACKING ─────────────────────────────────────────────────
+window.trackOrder = () => {
+  const code = document.getElementById('trackInput').value.trim().toUpperCase();
+  const result = document.getElementById('trackResult');
+
+  if (!code) { result.innerHTML=''; result.classList.remove('show'); return; }
+
+  const order = ORDERS_DB[code];
+  result.classList.add('show');
+
+  if (!order) {
+    result.innerHTML = `<div class="track-card not-found"><div class="track-not-found-txt">❌ No encontramos ningún pedido con el código <strong>${code}</strong><br><br>Verifica que esté escrito correctamente.</div></div>`;
+    return;
+  }
+
+  const statusMap = {
+    espera:      { label:'En espera', pill:'sp-espera',     desc:'Tu pedido fue recibido y está siendo revisado por nuestro equipo.' },
+    aceptado:    { label:'Aceptado', pill:'sp-aceptado',    desc:'¡Tu pedido fue aceptado! Pronto lo prepararemos para enviarlo.' },
+    enviado:     { label:'Enviado', pill:'sp-enviado',      desc:'Tu paquete está en camino. ¡Confirma que lo recibiste cuando llegue!' },
+    confirmado:  { label:'Recibido', pill:'sp-confirmado',  desc:'¡Listo! El cliente confirmó la recepción del pedido.' },
+    cancelado:   { label:'Cancelado', pill:'sp-cancelado',  desc:'Tu pedido fue cancelado. Contáctanos para más información.' }
+  };
+
+  const steps = [
+    { key:'espera',     name:'Pedido recibido',         desc:'Tu pedido fue registrado correctamente.' },
+    { key:'aceptado',   name:'Pedido aceptado',         desc:'Nuestro equipo aceptó tu pedido.' },
+    { key:'enviado',    name:'En camino',               desc:'Tu paquete fue despachado.' },
+    { key:'confirmado', name:'Entregado y confirmado',  desc:'Recibiste tu pedido.' }
+  ];
+
+  const stepOrder = ['espera','aceptado','enviado','confirmado'];
+  const currentIdx = order.status === 'cancelado' ? -1 : stepOrder.indexOf(order.status);
+  const s = statusMap[order.status] || statusMap['espera'];
+  const date = new Date(order.timestamp).toLocaleDateString('es-CL', { day:'2-digit', month:'2-digit', year:'numeric' });
+
+  let stepsHtml = '';
+  if (order.status !== 'cancelado') {
+    stepsHtml = `<div class="track-steps">${steps.map((step, i) => {
+      const done    = i < currentIdx;
+      const current = i === currentIdx;
+      const pending = i > currentIdx;
+      return `<div class="track-step">
+        <div class="track-step-dot ${done?'done':current?'current':''}">${done?'✓':current?'●':''}</div>
+        <div class="track-step-info">
+          <div class="track-step-name ${done?'done':current?'current':'pending'}">${step.name}</div>
+          <div class="track-step-desc">${done||current ? step.desc : 'Pendiente'}</div>
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  const itemsHtml = order.items ? order.items.map(i =>
+    `<div class="track-item-row"><span>${i.productName} · ${i.selectedSize} × ${i.qty}</span><span>$${(i.price*i.qty).toLocaleString('es-CL')}</span></div>`
+  ).join('') : '';
+
+  result.innerHTML = `
+    <div class="track-card found">
+      <div class="track-order-num">${order.id}</div>
+      <div class="track-customer">${order.cliente?.nombre} ${order.cliente?.apellido} · ${date}</div>
+      <span class="status-pill ${s.pill}">${s.label}</span>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--light);letter-spacing:1px;margin-bottom:16px;">${s.desc}</p>
+      ${stepsHtml}
+      ${order.status === 'cancelado' ? `<div class="track-cancelled">❌ Tu pedido fue cancelado. Si tienes dudas, contáctanos vía WhatsApp.</div>` : ''}
+      <div class="track-items-title">Productos del pedido</div>
+      ${itemsHtml}
+      <div class="track-item-row" style="font-weight:700;color:var(--white);margin-top:4px;"><span>TOTAL</span><span style="color:var(--red);">$${order.total?.toLocaleString('es-CL')}</span></div>
+    </div>`;
 };
 
 // ── LIVE BADGE ────────────────────────────────────────────────────
@@ -424,7 +990,6 @@ function showLiveBadge() {
   setTimeout(() => b.classList.remove('show'), 3000);
 }
 
-// Init cart UI
 updateCartUI();
 </script>
 </body>
