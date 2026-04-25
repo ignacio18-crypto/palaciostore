@@ -148,6 +148,50 @@
   /* LOADING */
   .fb-loading { text-align: center; padding: 60px; color: var(--gray); font-size: 14px; }
   .fb-loading::before { content: '⏳ '; }
+
+  /* SIZES & GENDER */
+  .gender-selector { display: flex; gap: 10px; }
+  .gender-opt { flex: 1; }
+  .gender-opt input[type="radio"] { display: none; }
+  .gender-opt label { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 8px; border: 1.5px solid #e0e0e0; border-radius: 4px; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: var(--gray); text-align: center; }
+  .gender-opt input:checked + label { border-color: var(--black); background: var(--black); color: white; }
+  .gender-opt label:hover { border-color: var(--accent); color: var(--black); }
+
+  .sizes-manager { border: 1.5px solid #e0e0e0; border-radius: 6px; overflow: hidden; }
+  .sizes-add-row { display: flex; gap: 8px; padding: 12px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
+  .sizes-add-row input { padding: 8px 12px; border: 1.5px solid #e0e0e0; border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; transition: border 0.2s; }
+  .sizes-add-row input:focus { border-color: var(--accent); }
+  .size-name-input { width: 80px; text-transform: uppercase; }
+  .size-stock-input { width: 80px; }
+  .btn-add-size { padding: 8px 16px; background: var(--black); color: white; border: none; border-radius: 4px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+  .btn-add-size:hover { background: var(--accent); color: var(--black); }
+  .sizes-list { padding: 8px 12px; min-height: 60px; display: flex; flex-direction: column; gap: 6px; }
+  .size-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: #f8f8f8; border-radius: 4px; border: 1px solid #eee; }
+  .size-item-label { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; min-width: 36px; }
+  .size-item-stock { font-size: 13px; color: var(--gray); flex: 1; }
+  .size-item-stock span { font-weight: 700; color: var(--black); }
+  .size-stock-btns { display: flex; gap: 4px; align-items: center; }
+  .btn-sz { width: 28px; height: 28px; border: 1.5px solid #e0e0e0; border-radius: 4px; background: white; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; line-height: 1; transition: all 0.15s; font-family: inherit; color: var(--black); }
+  .btn-sz:hover { background: var(--accent); border-color: var(--accent); }
+  .btn-sz.del { border-color: #fde8e6; color: var(--red); background: #fde8e6; }
+  .btn-sz.del:hover { background: var(--red); color: white; border-color: var(--red); }
+  .sizes-empty { color: var(--gray); font-size: 13px; text-align: center; padding: 12px 0; font-style: italic; }
+  .size-item.low-stock .size-item-stock span { color: var(--red); }
+
+  /* STOCK COLUMN IN TABLE */
+  .sizes-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+  .sz-pill { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #f0ede8; color: var(--black); border: 1px solid #ddd; white-space: nowrap; }
+  .sz-pill.low { background: #fde8e6; color: var(--red); border-color: #f5c0bb; }
+
+  /* CONFIRM OVERLAY */
+  .confirm-overlay { position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .confirm-overlay.open { opacity: 1; pointer-events: all; }
+  .confirm-box { background: white; border-radius: 12px; padding: 32px; max-width: 480px; width: 90%; }
+  .confirm-box h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .confirm-box p { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
+  .confirm-summary { background: #f8f8f8; border-radius: 6px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; line-height: 1.7; border: 1px solid #eee; }
+  .confirm-summary strong { font-weight: 700; }
+  .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
 </style>
 </head>
 <body>
@@ -219,8 +263,8 @@
       </div>
       <div class="table-card">
         <table>
-          <thead><tr><th>Foto</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Anterior</th><th>Badge</th><th>Acciones</th></tr></thead>
-          <tbody id="productTable"><tr><td colspan="7" class="fb-loading">Conectando...</td></tr></tbody>
+          <thead><tr><th>Foto</th><th>Nombre</th><th>Categoría</th><th>Género</th><th>Tallas / Stock</th><th>Precio</th><th>Badge</th><th>Acciones</th></tr></thead>
+          <tbody id="productTable"><tr><td colspan="8" class="fb-loading">Conectando...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -256,12 +300,12 @@
 
 <!-- MODAL PRODUCTO -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
+  <div class="modal" style="width:580px;">
     <h2 id="modalTitle">Agregar Producto</h2>
-    <div class="form-group"><label>Nombre del producto</label><input type="text" id="fName" placeholder="Ej: Cargo Jogger Negro"></div>
+    <div class="form-group"><label>Nombre del producto *</label><input type="text" id="fName" placeholder="Ej: Cargo Jogger Negro"></div>
     <div class="form-row">
       <div class="form-group">
-        <label>Categoría</label>
+        <label>Categoría *</label>
         <select id="fCat"><option value="">Sin categoría</option></select>
       </div>
       <div class="form-group">
@@ -274,8 +318,44 @@
         </select>
       </div>
     </div>
+
+    <!-- GÉNERO -->
+    <div class="form-group">
+      <label>Género *</label>
+      <div class="gender-selector">
+        <div class="gender-opt">
+          <input type="radio" name="fGender" id="gHombre" value="hombre">
+          <label for="gHombre">👕 Hombre</label>
+        </div>
+        <div class="gender-opt">
+          <input type="radio" name="fGender" id="gMujer" value="mujer">
+          <label for="gMujer">👗 Mujer</label>
+        </div>
+        <div class="gender-opt">
+          <input type="radio" name="fGender" id="gUnisex" value="unisex">
+          <label for="gUnisex">✨ Unisex</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- TALLAS Y STOCK -->
+    <div class="form-group">
+      <label>Tallas y Stock *</label>
+      <div class="sizes-manager">
+        <div class="sizes-add-row">
+          <input class="size-name-input" type="text" id="newSizeName" placeholder="Talla" maxlength="6" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter'){event.preventDefault();addSize()}">
+          <input class="size-stock-input" type="number" id="newSizeStock" placeholder="Unidades" min="1" max="9999" onkeydown="if(event.key==='Enter'){event.preventDefault();addSize()}">
+          <button class="btn-add-size" onclick="addSize()">+ Agregar talla</button>
+        </div>
+        <div class="sizes-list" id="sizesList">
+          <div class="sizes-empty">Agrega al menos una talla con su stock</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--gray);margin-top:6px;">Puedes usar: XS, S, M, L, XL, XXL, 28, 30, 32... o lo que necesites</div>
+    </div>
+
     <div class="form-row">
-      <div class="form-group"><label>Precio actual ($)</label><input type="number" id="fPrice" placeholder="24990"></div>
+      <div class="form-group"><label>Precio actual ($) *</label><input type="number" id="fPrice" placeholder="24990"></div>
       <div class="form-group"><label>Precio anterior ($) — opcional</label><input type="number" id="fOldPrice" placeholder="34990"></div>
     </div>
     <div class="form-group">
@@ -308,7 +388,20 @@
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
-      <button class="btn-save" onclick="saveProduct()">Guardar producto</button>
+      <button class="btn-save" onclick="requestSaveConfirm()">Revisar y guardar →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3>⚠️ Verificar antes de confirmar</h3>
+    <p>Revisa que todos los datos estén correctos antes de guardar.</p>
+    <div class="confirm-summary" id="confirmSummary"></div>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="closeConfirm()">← Volver a editar</button>
+      <button class="btn-save" onclick="confirmSaveProduct()">✓ Todo está bien, guardar</button>
     </div>
   </div>
 </div>
@@ -357,6 +450,7 @@ let editingId     = null;
 let editingCatId  = null;
 let currentImgTab = 'upload';
 let currentImgData = null;
+let sizesData = {}; // { 'S': 5, 'M': 10, ... }
 
 // ── REALTIME LISTENERS ───────────────────────────────────────────
 onValue(ref(db, 'productos'), snap => {
@@ -432,23 +526,32 @@ window.renderTable = () => {
   const filtered = products.filter(p => p.name.toLowerCase().includes(q));
   const lbl = { new:'Nuevo', sale:'Oferta', hot:'Hot 🔥' };
   const cls = { new:'pill-new', sale:'pill-sale', hot:'pill-hot' };
+  const genderLabel = { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
 
   const catName = id => categories.find(c => c.id === id)?.name || id || '—';
+
+  const renderSizesPills = (sizes) => {
+    if (!sizes || !Object.keys(sizes).length) return '<span style="color:var(--gray);font-size:12px;">Sin tallas</span>';
+    return '<div class="sizes-pills">' + Object.entries(sizes).map(([sz, stock]) =>
+      `<span class="sz-pill ${stock <= 2 ? 'low' : ''}">${sz}: ${stock}</span>`
+    ).join('') + '</div>';
+  };
 
   document.getElementById('productTable').innerHTML = filtered.length ? filtered.map(p => `
     <tr>
       <td>${p.img ? `<img class="prod-thumb" src="${p.img}" alt="${p.name}">` : `<div style="width:48px;height:48px;background:#f0ede8;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid #eee;font-size:11px;color:var(--gray);">IMG</div>`}</td>
       <td><strong>${p.name}</strong></td>
       <td style="color:var(--gray);font-size:13px;">${catName(p.cat)}</td>
-      <td><strong>$${p.price.toLocaleString('es-CL')}</strong></td>
-      <td style="color:var(--gray)">${p.oldPrice ? '$'+p.oldPrice.toLocaleString('es-CL') : '—'}</td>
+      <td style="font-size:13px;">${genderLabel[p.gender] || '—'}</td>
+      <td>${renderSizesPills(p.sizes)}</td>
+      <td><strong>$${p.price.toLocaleString('es-CL')}</strong>${p.oldPrice ? `<br><span style="color:var(--gray);font-size:12px;text-decoration:line-through;">$${p.oldPrice.toLocaleString('es-CL')}</span>` : ''}</td>
       <td>${p.badge ? `<span class="badge-pill ${cls[p.badge]}">${lbl[p.badge]}</span>` : '<span class="badge-pill pill-none">—</span>'}</td>
       <td><div class="action-btns">
         <button class="btn-edit" onclick="openModal('${p.id}')">✏ Editar</button>
         <button class="btn-del" onclick="deleteProduct('${p.id}')">🗑 Eliminar</button>
       </div></td>
     </tr>`).join('')
-  : '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
+  : '<tr><td colspan="8" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
 };
 
 // ── CATEGORIES TABLE ─────────────────────────────────────────────
@@ -546,6 +649,7 @@ window.deleteCat = async (id) => {
 window.openModal = (id = null) => {
   editingId = id || null;
   currentImgData = null;
+  sizesData = {};
   document.getElementById('modalTitle').textContent = id ? 'Editar Producto' : 'Agregar Producto';
   document.getElementById('uploadPreview').src = '';
   document.getElementById('uploadArea').classList.remove('has-image');
@@ -553,6 +657,9 @@ window.openModal = (id = null) => {
   document.getElementById('fImgUrl').value = '';
   document.getElementById('urlPreviewWrap').style.display = 'none';
   switchImgTab('upload');
+
+  // Reset gender
+  document.querySelectorAll('input[name="fGender"]').forEach(r => r.checked = false);
 
   if (id) {
     const p = products.find(x => x.id === id);
@@ -562,6 +669,16 @@ window.openModal = (id = null) => {
     document.getElementById('fBadge').value = p.badge || '';
     document.getElementById('fPrice').value = p.price;
     document.getElementById('fOldPrice').value = p.oldPrice || '';
+
+    // Gender
+    if (p.gender) {
+      const r = document.getElementById('g' + p.gender.charAt(0).toUpperCase() + p.gender.slice(1));
+      if (r) r.checked = true;
+    }
+
+    // Sizes
+    sizesData = p.sizes ? { ...p.sizes } : {};
+
     if (p.img) {
       currentImgData = p.img;
       if (p.img.startsWith('data:')) {
@@ -581,17 +698,115 @@ window.openModal = (id = null) => {
     document.getElementById('fPrice').value = '';
     document.getElementById('fOldPrice').value = '';
   }
+
+  renderSizesList();
   document.getElementById('modalOverlay').classList.add('open');
 };
 
 window.closeModal = () => document.getElementById('modalOverlay').classList.remove('open');
 
-window.saveProduct = async () => {
+// ── SIZES MANAGEMENT ──────────────────────────────────────────────
+function renderSizesList() {
+  const list = document.getElementById('sizesList');
+  const entries = Object.entries(sizesData);
+  if (!entries.length) {
+    list.innerHTML = '<div class="sizes-empty">Agrega al menos una talla con su stock</div>';
+    return;
+  }
+  list.innerHTML = entries.map(([sz, stock]) => `
+    <div class="size-item ${stock <= 2 ? 'low-stock' : ''}" id="szitem-${sz}">
+      <div class="size-item-label">${sz}</div>
+      <div class="size-item-stock">Stock: <span>${stock}</span> unidades${stock <= 2 ? ' ⚠️ bajo' : ''}</div>
+      <div class="size-stock-btns">
+        <button class="btn-sz" onclick="changeSzStock('${sz}', -1)" title="Quitar 1 unidad">−</button>
+        <button class="btn-sz" onclick="changeSzStock('${sz}', 1)" title="Agregar 1 unidad">+</button>
+        <button class="btn-sz del" onclick="removeSize('${sz}')" title="Eliminar talla">🗑</button>
+      </div>
+    </div>`).join('');
+}
+
+window.addSize = () => {
+  const nameEl  = document.getElementById('newSizeName');
+  const stockEl = document.getElementById('newSizeStock');
+  const name  = nameEl.value.trim().toUpperCase();
+  const stock = parseInt(stockEl.value);
+  if (!name) { showNotif('Escribe el nombre de la talla (ej: S, M, XL)', 'error'); nameEl.focus(); return; }
+  if (!stock || stock < 1) { showNotif('Ingresa la cantidad de unidades (mínimo 1)', 'error'); stockEl.focus(); return; }
+  if (sizesData[name] !== undefined) { showNotif(`La talla "${name}" ya existe`, 'error'); return; }
+  sizesData[name] = stock;
+  nameEl.value = '';
+  stockEl.value = '';
+  renderSizesList();
+  nameEl.focus();
+};
+
+window.removeSize = (sz) => {
+  if (!confirm(`¿Eliminar la talla "${sz}"? Se quitará del stock.`)) return;
+  delete sizesData[sz];
+  renderSizesList();
+};
+
+window.changeSzStock = (sz, delta) => {
+  if (sizesData[sz] === undefined) return;
+  const newVal = sizesData[sz] + delta;
+  if (newVal < 0) { showNotif('El stock no puede ser negativo', 'error'); return; }
+  if (newVal === 0 && delta < 0) {
+    if (!confirm(`¿El stock de la talla "${sz}" llegó a 0. ¿Quieres eliminarla de la lista de tallas disponibles?`)) {
+      sizesData[sz] = 0;
+      renderSizesList();
+      return;
+    }
+    delete sizesData[sz];
+  } else {
+    sizesData[sz] = newVal;
+  }
+  renderSizesList();
+};
+
+// ── CONFIRM BEFORE SAVE ───────────────────────────────────────────
+window.requestSaveConfirm = () => {
+  const name    = document.getElementById('fName').value.trim();
+  const cat     = document.getElementById('fCat').value;
+  const price   = parseInt(document.getElementById('fPrice').value);
+  const gender  = document.querySelector('input[name="fGender"]:checked')?.value;
+  const catName = categories.find(c => c.id === cat)?.name || '(sin categoría)';
+  const genderLabel = { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
+  const sizeEntries = Object.entries(sizesData);
+
+  // VALIDATIONS
+  if (!name)   { showNotif('El nombre del producto no puede estar vacío', 'error'); document.getElementById('fName').focus(); return; }
+  if (!price || price < 1) { showNotif('Ingresa un precio válido', 'error'); document.getElementById('fPrice').focus(); return; }
+  if (!gender) { showNotif('Selecciona el género (Hombre, Mujer o Unisex)', 'error'); return; }
+  if (!sizeEntries.length) { showNotif('Agrega al menos una talla con su stock', 'error'); document.getElementById('newSizeName').focus(); return; }
+
+  // Build summary
+  const sizesText = sizeEntries.map(([s, q]) => `<strong>${s}</strong>: ${q} ud.`).join(' &nbsp;·&nbsp; ');
+  const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
+
+  document.getElementById('confirmSummary').innerHTML = `
+    <div><strong>Nombre:</strong> ${name}</div>
+    <div><strong>Categoría:</strong> ${catName}</div>
+    <div><strong>Género:</strong> ${genderLabel[gender]}</div>
+    <div><strong>Precio:</strong> $${price.toLocaleString('es-CL')}${oldPrice ? ` <span style="text-decoration:line-through;color:var(--gray);font-size:12px;">$${oldPrice.toLocaleString('es-CL')}</span>` : ''}</div>
+    <div style="margin-top:6px;"><strong>Tallas y stock:</strong><br>${sizesText}</div>
+  `;
+  document.getElementById('confirmOverlay').classList.add('open');
+};
+
+window.closeConfirm = () => document.getElementById('confirmOverlay').classList.remove('open');
+
+window.confirmSaveProduct = async () => {
+  closeConfirm();
+  await doSaveProduct();
+};
+
+async function doSaveProduct() {
   const name     = document.getElementById('fName').value.trim();
   const cat      = document.getElementById('fCat').value || null;
   const badge    = document.getElementById('fBadge').value || null;
   const price    = parseInt(document.getElementById('fPrice').value);
   const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
+  const gender   = document.querySelector('input[name="fGender"]:checked')?.value;
 
   let img = currentImgData;
   if (currentImgTab === 'url') {
@@ -599,16 +814,16 @@ window.saveProduct = async () => {
     if (urlVal) img = urlVal;
   }
 
-  if (!name || !price) { showNotif('Completa nombre y precio', 'error'); return; }
-
   const id       = editingId || ('prod_' + Date.now());
   const existing = editingId ? products.find(x => x.id === editingId) : null;
-  const prod     = { id, name, cat, badge, price, oldPrice, img: img || existing?.img || null };
+  const prod     = { id, name, cat, badge, price, oldPrice, gender, sizes: sizesData, img: img || existing?.img || null };
 
   await set(ref(db, 'productos/' + id), prod);
   closeModal();
   showNotif(editingId ? 'Producto actualizado ✓' : 'Producto agregado ✓');
-};
+}
+
+window.saveProduct = async () => { requestSaveConfirm(); };
 
 window.deleteProduct = async (id) => {
   if (!confirm('¿Eliminar este producto de la tienda?')) return;
@@ -694,6 +909,7 @@ function showNotif(msg, type = 'success') {
 // ── MODAL CLOSE ON OVERLAY ────────────────────────────────────────
 document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target===this) closeModal(); });
 document.getElementById('catModalOverlay').addEventListener('click', function(e) { if (e.target===this) closeCatModal(); });
+document.getElementById('confirmOverlay').addEventListener('click', function(e) { if (e.target===this) closeConfirm(); });
 
 // expose renderTable globally for search input
 window.renderTable = window.renderTable;
