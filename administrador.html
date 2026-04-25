@@ -72,8 +72,8 @@
   .add-btn { display: flex; align-items: center; gap: 8px; background: var(--black); color: var(--white); border: none; cursor: pointer; padding: 10px 20px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; border-radius: 4px; transition: background 0.2s; }
   .add-btn:hover { background: var(--accent); color: var(--black); }
   table { width: 100%; border-collapse: collapse; }
-  th { padding: 12px 20px; text-align: left; font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
-  td { padding: 14px 20px; font-size: 14px; border-bottom: 1px solid #f8f8f8; vertical-align: middle; }
+  th { padding: 12px 16px; text-align: left; font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
+  td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid #f8f8f8; vertical-align: middle; }
   tr:hover td { background: #fcfcfc; }
   tr:last-child td { border-bottom: none; }
   .prod-thumb { width: 48px; height: 48px; border-radius: 6px; object-fit: cover; border: 1px solid #eee; }
@@ -95,6 +95,8 @@
   .btn-ship:hover { background: var(--blue); color: white; }
   .btn-done { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; background: #e8f5f0; color: #1a8a5a; transition: all 0.2s; }
   .btn-done:hover { background: var(--green); color: white; }
+  .btn-wsp { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; background: #e6f9ee; color: #25D366; transition: all 0.2s; display: flex; align-items: center; gap: 5px; }
+  .btn-wsp:hover { background: #25D366; color: white; }
 
   /* SEARCH */
   .search-bar { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
@@ -117,6 +119,24 @@
   .sp-enviado   { background: #eaf0fd; color: var(--blue); }
   .sp-confirmado{ background: #e8f5f0; color: #1a8a5a; }
   .sp-cancelado { background: #fde8e6; color: var(--red); }
+
+  /* CLIENT DATA BLOCK - NEW */
+  .client-data-block { display: flex; flex-direction: column; gap: 2px; }
+  .client-name { font-weight: 700; font-size: 14px; color: var(--black); }
+  .client-detail { font-size: 12px; color: var(--gray); display: flex; align-items: center; gap: 4px; }
+  .client-detail strong { color: #555; font-weight: 500; }
+  .client-rut { font-size: 11px; background: #f5f0eb; color: #666; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 2px; font-family: monospace; letter-spacing: 0.5px; }
+  .client-address-block { font-size: 12px; color: var(--gray); border-left: 2px solid #e8e2da; padding-left: 8px; margin-top: 4px; line-height: 1.5; }
+
+  /* ORDER CODE HIGHLIGHT */
+  .order-code-badge { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 1px; color: var(--black); display: flex; align-items: center; gap: 6px; }
+  .order-code-chip { background: var(--black); color: var(--accent); font-family: monospace; font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 4px; letter-spacing: 2px; }
+  .order-date-small { font-size: 11px; color: var(--gray); margin-top: 4px; }
+  .order-total-big { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--black); }
+  .order-items-compact { font-size: 12px; color: #555; line-height: 1.7; }
+  .order-items-compact .item-line { display: flex; align-items: center; gap: 6px; padding: 2px 0; border-bottom: 1px solid #f5f5f5; }
+  .order-items-compact .item-line:last-child { border-bottom: none; }
+  .item-size-badge { background: #f0ede8; color: var(--black); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.5px; }
 
   /* ORDER DETAIL */
   .order-detail-block { background: #f8f8f8; border-radius: 6px; padding: 12px 16px; margin-bottom: 8px; font-size: 13px; line-height: 1.7; }
@@ -214,11 +234,40 @@
   /* CONFIRM OVERLAY */
   .confirm-overlay { position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
   .confirm-overlay.open { opacity: 1; pointer-events: all; }
-  .confirm-box { background: white; border-radius: 12px; padding: 32px; max-width: 480px; width: 90%; }
+  .confirm-box { background: white; border-radius: 12px; padding: 32px; max-width: 540px; width: 90%; max-height: 90vh; overflow-y: auto; }
   .confirm-box h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .confirm-box p { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
   .confirm-summary { background: #f8f8f8; border-radius: 6px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; line-height: 1.7; border: 1px solid #eee; }
   .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ORDER CONFIRM - FULL CLIENT DATA */
+  .order-confirm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .order-confirm-section { background: #f8f8f8; border-radius: 8px; padding: 14px 16px; border: 1px solid #eee; }
+  .order-confirm-section-title { font-size: 10px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
+  .order-confirm-row { font-size: 13px; padding: 4px 0; border-bottom: 1px solid #f0f0f0; display: flex; flex-direction: column; }
+  .order-confirm-row:last-child { border-bottom: none; }
+  .order-confirm-label { font-size: 10px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+  .order-confirm-value { font-weight: 600; color: var(--black); word-break: break-all; }
+
+  /* ORDER CODE DISPLAY IN CONFIRM */
+  .order-code-display { background: var(--black); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+  .order-code-display-label { font-size: 11px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1.5px; }
+  .order-code-display-value { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: var(--accent); letter-spacing: 3px; }
+  .order-code-display-total { text-align: right; }
+  .order-code-display-total-label { font-size: 10px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
+  .order-code-display-total-val { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--white); }
+
+  /* PRODUCTS IN CONFIRM */
+  .order-confirm-products { background: #f8f8f8; border-radius: 8px; padding: 14px 16px; border: 1px solid #eee; margin-bottom: 16px; }
+  .order-confirm-product-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  .order-confirm-product-row:last-child { border-bottom: none; }
+  .order-confirm-product-name { font-weight: 500; }
+  .order-confirm-product-size { background: #e8e2da; color: var(--black); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; margin-left: 6px; letter-spacing: 0.5px; }
+  .order-confirm-product-price { font-weight: 700; color: var(--black); }
+  
+  /* WSP notice */
+  .wsp-notice { background: #e6f9ee; border: 1px solid #b3ecd0; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #1a6637; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .wsp-icon { font-size: 16px; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -288,7 +337,7 @@
         <div style="font-size:13px;color:var(--gray)" id="ordersCount">—</div>
       </div>
       <div class="search-bar">
-        <input class="search-input" type="text" placeholder="Buscar por código, nombre o email..." id="orderSearchInput" oninput="renderOrdersPanel()">
+        <input class="search-input" type="text" placeholder="Buscar por código, nombre, email, RUT..." id="orderSearchInput" oninput="renderOrdersPanel()">
       </div>
       <div class="order-tabs">
         <button class="order-tab active" onclick="switchOrderTab('espera',this)">⏳ En espera <span class="order-tab-badge" id="tab-badge-espera">0</span></button>
@@ -297,11 +346,17 @@
         <button class="order-tab" onclick="switchOrderTab('confirmado',this)">🎉 Listos <span class="order-tab-badge" id="tab-badge-confirmado">0</span></button>
         <button class="order-tab" onclick="switchOrderTab('cancelado',this)">❌ Cancelados <span class="order-tab-badge" id="tab-badge-cancelado">0</span></button>
       </div>
-      <div class="table-card">
-        <table>
+      <div class="table-card" style="overflow-x:auto;">
+        <table style="min-width:900px;">
           <thead>
-            <tr id="ordersTableHead">
-              <th>Código</th><th>Cliente</th><th>Productos</th><th>Total</th><th>Fecha</th><th>Estado</th><th>Acciones</th>
+            <tr>
+              <th>Código / Fecha</th>
+              <th>Cliente completo</th>
+              <th>Dirección envío</th>
+              <th>Productos</th>
+              <th>Total</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody id="ordersTable"><tr><td colspan="7" class="fb-loading">Conectando...</td></tr></tbody>
@@ -447,12 +502,36 @@
   </div>
 </div>
 
-<!-- ORDER ACTION CONFIRM -->
+<!-- ORDER ACTION CONFIRM — FULL CLIENT DATA -->
 <div class="confirm-overlay" id="orderConfirmOverlay">
-  <div class="confirm-box">
+  <div class="confirm-box" style="max-width:600px;">
     <h3 id="orderConfirmTitle">Confirmar acción</h3>
     <p id="orderConfirmDesc">¿Estás segura de continuar?</p>
-    <div class="confirm-summary" id="orderConfirmSummary"></div>
+
+    <!-- Código de pedido destacado -->
+    <div class="order-code-display" id="orderCodeDisplay">
+      <div>
+        <div class="order-code-display-label">Código de seguimiento</div>
+        <div class="order-code-display-value" id="orderCodeDisplayVal">—</div>
+      </div>
+      <div class="order-code-display-total">
+        <div class="order-code-display-total-label">Total</div>
+        <div class="order-code-display-total-val" id="orderCodeDisplayTotal">—</div>
+      </div>
+    </div>
+
+    <!-- Datos cliente + dirección -->
+    <div class="order-confirm-grid" id="orderConfirmClientGrid"></div>
+
+    <!-- Productos -->
+    <div class="order-confirm-products" id="orderConfirmProducts"></div>
+
+    <!-- WhatsApp notice -->
+    <div class="wsp-notice" id="wspNotice" style="display:none">
+      <span class="wsp-icon">💬</span>
+      <span id="wspNoticeText">Se abrirá WhatsApp con el mensaje listo para enviar al cliente.</span>
+    </div>
+
     <div class="confirm-actions">
       <button class="btn-cancel" onclick="closeOrderConfirm()">← Cancelar</button>
       <button class="btn-save" id="orderConfirmBtn" onclick="">Confirmar</button>
@@ -504,6 +583,7 @@ let currentImgTab = 'upload';
 let currentImgData = null;
 let sizesData = {};
 let currentOrderTab = 'espera';
+let wspNumber = '569728650749';
 
 // ── LISTENERS ────────────────────────────────────────────────────
 onValue(ref(db, 'productos'), snap => {
@@ -518,6 +598,13 @@ onValue(ref(db, 'pedidos'), snap => {
   orders = snap.val() || {};
   renderOrdersPanel();
   updateOrderBadges();
+});
+onValue(ref(db, 'config'), snap => {
+  const cfg = snap.val();
+  if (!cfg) return;
+  if (cfg.wsp)  { document.getElementById('cfgWsp').value = cfg.wsp; wspNumber = cfg.wsp; }
+  if (cfg.name) document.getElementById('cfgName').value = cfg.name;
+  if (cfg.pass) CREDS.pass = cfg.pass;
 });
 
 // ── LOGIN ────────────────────────────────────────────────────────
@@ -588,14 +675,18 @@ window.switchOrderTab = (tab, btn) => {
   renderOrdersPanel();
 };
 
+// ── RENDER ORDERS TABLE — FULL CLIENT DATA ─────────────────────
 function renderOrdersPanel() {
   const q = (document.getElementById('orderSearchInput')?.value || '').toLowerCase();
   const allOrders = Object.values(orders);
   const filtered = allOrders
     .filter(o => o.status === currentOrderTab)
-    .filter(o => !q || o.id?.toLowerCase().includes(q)
-      || `${o.cliente?.nombre} ${o.cliente?.apellido}`.toLowerCase().includes(q)
-      || o.cliente?.email?.toLowerCase().includes(q));
+    .filter(o => !q ||
+      o.id?.toLowerCase().includes(q) ||
+      `${o.cliente?.nombre} ${o.cliente?.apellido}`.toLowerCase().includes(q) ||
+      o.cliente?.email?.toLowerCase().includes(q) ||
+      o.cliente?.rut?.toLowerCase().includes(q) ||
+      o.cliente?.tel?.toLowerCase().includes(q));
 
   document.getElementById('ordersCount').textContent = `${filtered.length} pedido${filtered.length !== 1 ? 's' : ''}`;
 
@@ -610,35 +701,146 @@ function renderOrdersPanel() {
   }
 
   tbody.innerHTML = filtered.sort((a,b) => b.timestamp - a.timestamp).map(o => {
-    const date = new Date(o.timestamp).toLocaleDateString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
-    const items = o.items?.map(i => `<div>${i.productName} · <strong>${i.selectedSize}</strong> × ${i.qty}</div>`).join('') || '—';
+    const date = new Date(o.timestamp).toLocaleDateString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric'});
+    const time = new Date(o.timestamp).toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
+    
+    // Items compactos
+    const itemsHtml = o.items?.map(i => `
+      <div class="item-line">
+        <span>${i.productName}</span>
+        <span class="item-size-badge">${i.selectedSize}</span>
+        <span style="color:var(--gray)">×${i.qty}</span>
+      </div>`).join('') || '—';
+
+    // Acciones según estado
     let actions = '';
     if (o.status === 'espera') {
-      actions = `<button class="btn-accept" onclick="confirmOrderAction('${o.id}','aceptar')">✓ Aceptar</button>
-                 <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Rechazar</button>`;
+      actions = `
+        <button class="btn-accept" onclick="confirmOrderAction('${o.id}','aceptar')">✓ Aceptar</button>
+        <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Rechazar</button>
+        <button class="btn-wsp" onclick="sendWspManual('${o.id}')">💳 Pedir pago</button>`;
     } else if (o.status === 'aceptado') {
-      actions = `<button class="btn-ship" onclick="confirmOrderAction('${o.id}','enviar')">🚚 Marcar enviado</button>
-                 <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Cancelar</button>`;
+      actions = `
+        <button class="btn-ship" onclick="confirmOrderAction('${o.id}','enviar')">🚚 Enviado</button>
+        <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Cancelar</button>
+        <button class="btn-wsp" onclick="sendWspManual('${o.id}')">💳 Pedir pago</button>`;
     } else if (o.status === 'enviado') {
-      actions = `<button class="btn-done" onclick="confirmOrderAction('${o.id}','confirmar')">🎉 Confirmar entrega</button>`;
+      actions = `
+        <button class="btn-done" onclick="confirmOrderAction('${o.id}','confirmar')">🎉 Entregado</button>
+        <button class="btn-wsp" onclick="sendWspManual('${o.id}')">📦 Avisar envío</button>`;
     } else {
-      actions = '<span style="font-size:12px;color:var(--gray);">—</span>';
+      actions = `<button class="btn-wsp" onclick="sendWspManual('${o.id}')">💬 WhatsApp</button>`;
     }
+
     return `
       <tr>
-        <td><strong style="font-family:'Syne',sans-serif;font-size:13px;">${o.id}</strong><br><span style="font-size:11px;color:var(--gray)">${date}</span></td>
         <td>
-          <strong>${o.cliente?.nombre} ${o.cliente?.apellido}</strong><br>
-          <span style="font-size:12px;color:var(--gray)">${o.cliente?.email}</span><br>
-          <span style="font-size:12px;color:var(--gray)">${o.cliente?.tel}</span>
+          <div style="margin-bottom:4px;"><span class="order-code-chip">${o.id}</span></div>
+          <div class="order-date-small">${date} · ${time}</div>
         </td>
-        <td><div class="order-items-list" style="font-size:12px;color:var(--gray)">${items}</div></td>
-        <td><strong>$${o.total?.toLocaleString('es-CL')}</strong></td>
-        <td style="font-size:12px;color:var(--gray)">${date}</td>
+        <td>
+          <div class="client-data-block">
+            <div class="client-name">${o.cliente?.nombre || '—'} ${o.cliente?.apellido || ''}</div>
+            <div class="client-detail">📧 <strong>Email:</strong> ${o.cliente?.email || '—'}</div>
+            <div class="client-detail">📱 <strong>Tel:</strong> ${o.cliente?.tel || '—'}</div>
+            <div class="client-rut">RUT: ${o.cliente?.rut || '—'}</div>
+          </div>
+        </td>
+        <td>
+          <div class="client-address-block">
+            <div><strong style="font-size:12px;color:#444;">🏙 ${o.cliente?.comuna || '—'}</strong></div>
+            <div style="font-size:12px;">${o.cliente?.direccion || '—'}</div>
+          </div>
+        </td>
+        <td>
+          <div class="order-items-compact">${itemsHtml}</div>
+        </td>
+        <td>
+          <div class="order-total-big">$${o.total?.toLocaleString('es-CL')}</div>
+        </td>
         <td><span class="status-pill ${statusCls[o.status]}">${statusLabels[o.status]}</span></td>
-        <td><div class="action-btns">${actions}</div></td>
+        <td><div class="action-btns" style="flex-direction:column;gap:6px;">${actions}</div></td>
       </tr>`;
   }).join('');
+}
+
+// ── MANUAL WSP SEND — va al teléfono del CLIENTE para pedir pago ──
+window.sendWspManual = (orderId) => {
+  const o = orders[orderId];
+  if (!o) return;
+  openWspWindow(o, 'cobro');
+};
+
+function openWspWindow(o, action) {
+  // Número del CLIENTE — el que ingresó en el formulario
+  const clientTel = (o.cliente?.tel || '').replace(/\D/g, ''); // ej: 56912345678
+
+  const itemLines = o.items?.map(i =>
+    `  • ${i.productName} | Talla: ${i.selectedSize} | Cant: ${i.qty} → $${(i.price * i.qty).toLocaleString('es-CL')}`
+  ).join('\n') || '—';
+
+  let msg = '';
+
+  if (action === 'cobro' || action === 'aceptar') {
+    // Mensaje principal: cobro al cliente con datos de transferencia
+    msg =
+`¡Hola ${o.cliente?.nombre}! 👋 Soy de *PALACIO STORE* ⭐
+
+Tu pedido fue *ACEPTADO* y está listo para prepararse 🎉
+
+━━━━━━━━━━━━━━━━━━━━
+📦 *TU CÓDIGO DE PEDIDO*
+➡️  *${o.id}*
+━━━━━━━━━━━━━━━━━━━━
+
+🛒 *Resumen de tu compra:*
+${itemLines}
+
+💰 *TOTAL A PAGAR: $${o.total?.toLocaleString('es-CL')} CLP*
+
+━━━━━━━━━━━━━━━━━━━━
+💳 *DATOS PARA TRANSFERENCIA*
+Banco: [Tu banco]
+Tipo de cuenta: [Cuenta corriente / Vista]
+N° de cuenta: [Tu número de cuenta]
+RUT: [Tu RUT]
+Nombre: [Tu nombre]
+Email: [Tu email de registro]
+━━━━━━━━━━━━━━━━━━━━
+
+📸 Por favor envíame el *comprobante de transferencia* por este mismo chat.
+
+Una vez confirmado el pago, ¡preparamos tu pedido y te avisamos cuando esté en camino! 🚚
+
+Gracias por elegir *Palacio Store* 🖤`;
+  } else if (action === 'rechazar') {
+    msg =
+`Hola ${o.cliente?.nombre} 👋, te escribimos de *PALACIO STORE* ⭐
+
+Lamentablemente tu pedido *${o.id}* fue *CANCELADO* ❌
+
+Si tienes dudas o quieres hacer un nuevo pedido, escríbenos aquí mismo.
+
+¡Gracias por contactarte con nosotros! 🖤`;
+  } else if (action === 'enviar') {
+    msg =
+`¡Hola ${o.cliente?.nombre}! 👋 Soy de *PALACIO STORE* ⭐
+
+Tu pedido *${o.id}* ya está *EN CAMINO* 🚚📦
+
+━━━━━━━━━━━━━━━━━━━━
+📍 Dirección de entrega:
+${o.cliente?.comuna} — ${o.cliente?.direccion}
+━━━━━━━━━━━━━━━━━━━━
+
+🛒 Productos:
+${itemLines}
+
+¡Pronto lo recibirás! Cualquier consulta escríbenos aquí 🖤`;
+  }
+
+  // Abre WhatsApp apuntando al número del CLIENTE
+  window.open(`https://wa.me/${clientTel}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 // ── ORDER ACTION CONFIRM ──────────────────────────────────────────
@@ -649,25 +851,99 @@ window.confirmOrderAction = (orderId, action) => {
   if (!o) return;
   pendingOrderAction = { orderId, action };
 
-  const actionLabels = { aceptar:'✅ Aceptar pedido', rechazar:'❌ Rechazar / Cancelar pedido', enviar:'🚚 Marcar como enviado', confirmar:'🎉 Confirmar entrega' };
-  const actionDescs  = {
-    aceptar: '¿Estás segura de ACEPTAR este pedido? El stock de los productos seleccionados será descontado automáticamente.',
-    rechazar: '¿Estás segura de RECHAZAR/CANCELAR este pedido? NO se descontará stock y el pedido quedará en cancelados.',
-    enviar: '¿Estás segura de marcar este pedido como ENVIADO? El cliente verá que su paquete está en camino.',
-    confirmar: '¿Estás segura de confirmar que el cliente RECIBIÓ el pedido? El pedido quedará como "Listo".'
+  const actionLabels = {
+    aceptar:'✅ Aceptar pedido',
+    rechazar:'❌ Rechazar / Cancelar pedido',
+    enviar:'🚚 Marcar como enviado',
+    confirmar:'🎉 Confirmar entrega'
   };
+  const actionDescs = {
+    aceptar: 'Acepta el pedido. Se descontará el stock automáticamente y se abrirá WhatsApp con el mensaje para el cliente.',
+    rechazar: '¿Cancelar este pedido? El stock se RESTAURARÁ automáticamente y se abrirá WhatsApp para notificar al cliente.',
+    enviar: 'Marca el pedido como enviado. Se abrirá WhatsApp para notificar al cliente.',
+    confirmar: 'Confirma que el cliente recibió el pedido.'
+  };
+
+  const showWsp = ['aceptar','rechazar','enviar'].includes(action);
 
   document.getElementById('orderConfirmTitle').textContent = actionLabels[action] || 'Confirmar';
   document.getElementById('orderConfirmDesc').textContent = actionDescs[action] || '¿Continuar?';
-  document.getElementById('orderConfirmSummary').innerHTML = `
-    <strong>Código:</strong> ${o.id}<br>
-    <strong>Cliente:</strong> ${o.cliente?.nombre} ${o.cliente?.apellido}<br>
-    <strong>Email:</strong> ${o.cliente?.email}<br>
-    <strong>Productos:</strong> ${o.items?.map(i => `${i.productName} (${i.selectedSize}) ×${i.qty}`).join(', ')}<br>
-    <strong>Total:</strong> $${o.total?.toLocaleString('es-CL')}`;
+
+  // Código destacado
+  document.getElementById('orderCodeDisplayVal').textContent = o.id;
+  document.getElementById('orderCodeDisplayTotal').textContent = `$${o.total?.toLocaleString('es-CL')}`;
+
+  // Datos cliente en grid
+  document.getElementById('orderConfirmClientGrid').innerHTML = `
+    <div class="order-confirm-section">
+      <div class="order-confirm-section-title">👤 Datos personales</div>
+      <div class="order-confirm-row">
+        <span class="order-confirm-label">Nombre completo</span>
+        <span class="order-confirm-value">${o.cliente?.nombre} ${o.cliente?.apellido}</span>
+      </div>
+      <div class="order-confirm-row">
+        <span class="order-confirm-label">RUT</span>
+        <span class="order-confirm-value">${o.cliente?.rut || '—'}</span>
+      </div>
+      <div class="order-confirm-row">
+        <span class="order-confirm-label">Email</span>
+        <span class="order-confirm-value">${o.cliente?.email || '—'}</span>
+      </div>
+      <div class="order-confirm-row">
+        <span class="order-confirm-label">Teléfono</span>
+        <span class="order-confirm-value">${o.cliente?.tel || '—'}</span>
+      </div>
+    </div>
+    <div class="order-confirm-section">
+      <div class="order-confirm-section-title">📍 Dirección de envío</div>
+      <div class="order-confirm-row">
+        <span class="order-confirm-label">Comuna</span>
+        <span class="order-confirm-value">${o.cliente?.comuna || '—'}</span>
+      </div>
+      <div class="order-confirm-row">
+        <span class="order-confirm-label">Dirección</span>
+        <span class="order-confirm-value">${o.cliente?.direccion || '—'}</span>
+      </div>
+    </div>`;
+
+  // Productos
+  const itemsHtml = o.items?.map(i => `
+    <div class="order-confirm-product-row">
+      <span>
+        <span class="order-confirm-product-name">${i.productName}</span>
+        <span class="order-confirm-product-size">${i.selectedSize}</span>
+        <span style="color:var(--gray);font-size:12px;margin-left:4px;">×${i.qty}</span>
+      </span>
+      <span class="order-confirm-product-price">$${(i.price * i.qty).toLocaleString('es-CL')}</span>
+    </div>`).join('') || '';
+
+  document.getElementById('orderConfirmProducts').innerHTML = `
+    <div class="order-confirm-section-title">🛒 Productos del pedido</div>
+    ${itemsHtml}
+    <div class="order-confirm-product-row" style="border-top:1.5px solid #e0e0e0;margin-top:8px;padding-top:8px;">
+      <strong>TOTAL</strong>
+      <strong style="font-size:15px;">$${o.total?.toLocaleString('es-CL')}</strong>
+    </div>`;
+
+  // WSP notice
+  const wspNotice = document.getElementById('wspNotice');
+  const wspText = document.getElementById('wspNoticeText');
+  if (showWsp) {
+    wspNotice.style.display = 'flex';
+    if (action === 'rechazar') wspText.textContent = 'Se abrirá WhatsApp al número del CLIENTE para notificarle la cancelación. El stock se restaurará automáticamente.';
+    else if (action === 'aceptar') wspText.textContent = 'Se abrirá WhatsApp al número del CLIENTE con el resumen del pedido y los datos para que realice la transferencia. El stock se descontará.';
+    else wspText.textContent = 'Se abrirá WhatsApp al número del CLIENTE para notificarle que su pedido está en camino.';
+  } else {
+    wspNotice.style.display = 'none';
+  }
 
   const btn = document.getElementById('orderConfirmBtn');
-  const colorMap = { aceptar:'background:var(--green);color:white', rechazar:'background:var(--red);color:white', enviar:'background:var(--blue);color:white', confirmar:'background:var(--green);color:white' };
+  const colorMap = {
+    aceptar:'background:var(--green);color:white',
+    rechazar:'background:var(--red);color:white',
+    enviar:'background:var(--blue);color:white',
+    confirmar:'background:var(--green);color:white'
+  };
   btn.setAttribute('style', colorMap[action] || '');
   btn.textContent = actionLabels[action];
   btn.onclick = () => executeOrderAction();
@@ -687,7 +963,7 @@ window.executeOrderAction = async () => {
   closeOrderConfirm();
 
   if (action === 'aceptar') {
-    // Deduct stock
+    // Descontar stock
     if (o.items) {
       for (const item of o.items) {
         const prod = products.find(p => p.id === item.productId);
@@ -699,12 +975,36 @@ window.executeOrderAction = async () => {
     }
     await set(ref(db, `pedidos/${orderId}/status`), 'aceptado');
     showNotif(`Pedido ${orderId} ACEPTADO ✓ — Stock descontado automáticamente`);
+    // Abrir WhatsApp automáticamente
+    setTimeout(() => openWspWindow({...o, status:'aceptado'}, 'aceptar'), 400);
+
   } else if (action === 'rechazar') {
+    // ── RESTAURAR STOCK si el pedido estaba aceptado ──────────────
+    if (o.status === 'aceptado' && o.items) {
+      for (const item of o.items) {
+        const prod = products.find(p => p.id === item.productId);
+        if (prod && prod.sizes && prod.sizes[item.selectedSize] !== undefined) {
+          const newStock = (prod.sizes[item.selectedSize] || 0) + item.qty;
+          await set(ref(db, `productos/${prod.id}/sizes/${item.selectedSize}`), newStock);
+        } else if (prod && prod.sizes) {
+          // Si la talla no existe (fue eliminada), la recreamos
+          await set(ref(db, `productos/${prod.id}/sizes/${item.selectedSize}`), item.qty);
+        }
+      }
+      showNotif(`Pedido ${orderId} cancelado — Stock restaurado automáticamente ♻️`);
+    } else {
+      showNotif(`Pedido ${orderId} rechazado`);
+    }
     await set(ref(db, `pedidos/${orderId}/status`), 'cancelado');
-    showNotif(`Pedido ${orderId} cancelado`);
+    // Abrir WhatsApp automáticamente
+    setTimeout(() => openWspWindow({...o, status:'cancelado'}, 'rechazar'), 400);
+
   } else if (action === 'enviar') {
     await set(ref(db, `pedidos/${orderId}/status`), 'enviado');
     showNotif(`Pedido ${orderId} marcado como enviado 🚚`);
+    // Abrir WhatsApp automáticamente
+    setTimeout(() => openWspWindow({...o, status:'enviado'}, 'enviar'), 400);
+
   } else if (action === 'confirmar') {
     await set(ref(db, `pedidos/${orderId}/status`), 'confirmado');
     showNotif(`Pedido ${orderId} confirmado como entregado 🎉`);
@@ -978,19 +1278,13 @@ window.previewUrl = () => {
 };
 
 // ── SETTINGS ─────────────────────────────────────────────────────
-onValue(ref(db, 'config'), snap => {
-  const cfg = snap.val();
-  if (!cfg) return;
-  if (cfg.wsp)  document.getElementById('cfgWsp').value  = cfg.wsp;
-  if (cfg.name) document.getElementById('cfgName').value = cfg.name;
-  if (cfg.pass) CREDS.pass = cfg.pass;
-});
 window.saveSettings = async () => {
   const wsp  = document.getElementById('cfgWsp').value.trim();
   const name = document.getElementById('cfgName').value.trim();
   const pass = document.getElementById('cfgPass').value.trim();
   const cfg  = { wsp, name };
   if (pass) { cfg.pass = pass; CREDS.pass = pass; document.getElementById('cfgPass').value = ''; }
+  wspNumber = wsp;
   await set(ref(db, 'config'), cfg);
   showNotif('Configuración guardada ✓');
 };
