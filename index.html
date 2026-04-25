@@ -90,6 +90,11 @@
   .product-pricing { display:flex; align-items:center; gap:10px; }
   .product-price { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; color:var(--red); }
   .product-old { font-family:'Barlow Condensed',sans-serif; font-size:14px; color:var(--mid); text-decoration:line-through; }
+  .product-meta { display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+  .gender-tag { font-family:'Barlow Condensed',sans-serif; font-size:10px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; padding:3px 8px; border:1px solid #2a2a2a; color:var(--light); white-space:nowrap; }
+  .product-sizes { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
+  .size-chip { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:3px 9px; border:1px solid #2a2a2a; color:var(--light); background:transparent; transition:all 0.2s; }
+  .size-chip:hover { border-color:var(--red); color:var(--white); }
 
   /* LOADING / EMPTY */
   .store-loading { grid-column:1/-1; text-align:center; padding:100px 20px; }
@@ -326,7 +331,13 @@ function renderProducts() {
   const bc = { new:'badge-new', sale:'badge-sale', hot:'badge-hot' };
   const catName = id => CATEGORIES.find(c => c.id === id)?.name || '';
 
-  grid.innerHTML = filtered.map(p => `
+  grid.innerHTML = filtered.map(p => {
+    const genderMap = { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
+    const genderTag = p.gender ? `<span class="gender-tag">${genderMap[p.gender] || ''}</span>` : '';
+    const availSizes = p.sizes ? Object.entries(p.sizes).filter(([,q]) => q > 0).map(([sz]) => sz) : [];
+    const sizesHtml = availSizes.length ? `<div class="product-sizes">${availSizes.map(sz => `<span class="size-chip">${sz}</span>`).join('')}</div>` : '';
+
+    return `
     <div class="product-card">
       <div class="product-img">
         ${p.badge ? `<span class="product-badge ${bc[p.badge]}">${bl[p.badge]}</span>` : ''}
@@ -339,15 +350,19 @@ function renderProducts() {
         </div>
       </div>
       <div class="product-info">
-        ${p.cat && catName(p.cat) ? `<div class="product-cat-label">${catName(p.cat)}</div>` : ''}
+        <div class="product-meta">
+          ${p.cat && catName(p.cat) ? `<div class="product-cat-label">${catName(p.cat)}</div>` : ''}
+          ${genderTag}
+        </div>
         <div class="product-name">${p.name}</div>
         <div class="product-pricing">
           <span class="product-price">$${p.price.toLocaleString('es-CL')}</span>
           ${p.oldPrice ? `<span class="product-old">$${p.oldPrice.toLocaleString('es-CL')}</span>` : ''}
         </div>
+        ${sizesHtml}
       </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 // ── CART ─────────────────────────────────────────────────────────
