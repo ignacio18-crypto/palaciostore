@@ -120,7 +120,7 @@
   .sp-confirmado{ background: #e8f5f0; color: #1a8a5a; }
   .sp-cancelado { background: #fde8e6; color: var(--red); }
 
-  /* CLIENT DATA BLOCK - NEW */
+  /* CLIENT DATA BLOCK */
   .client-data-block { display: flex; flex-direction: column; gap: 2px; }
   .client-name { font-weight: 700; font-size: 14px; color: var(--black); }
   .client-detail { font-size: 12px; color: var(--gray); display: flex; align-items: center; gap: 4px; }
@@ -128,7 +128,7 @@
   .client-rut { font-size: 11px; background: #f5f0eb; color: #666; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-top: 2px; font-family: monospace; letter-spacing: 0.5px; }
   .client-address-block { font-size: 12px; color: var(--gray); border-left: 2px solid #e8e2da; padding-left: 8px; margin-top: 4px; line-height: 1.5; }
 
-  /* ORDER CODE HIGHLIGHT */
+  /* ORDER CODE */
   .order-code-badge { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 800; letter-spacing: 1px; color: var(--black); display: flex; align-items: center; gap: 6px; }
   .order-code-chip { background: var(--black); color: var(--accent); font-family: monospace; font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 4px; letter-spacing: 2px; }
   .order-date-small { font-size: 11px; color: var(--gray); margin-top: 4px; }
@@ -137,11 +137,6 @@
   .order-items-compact .item-line { display: flex; align-items: center; gap: 6px; padding: 2px 0; border-bottom: 1px solid #f5f5f5; }
   .order-items-compact .item-line:last-child { border-bottom: none; }
   .item-size-badge { background: #f0ede8; color: var(--black); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 3px; letter-spacing: 0.5px; }
-
-  /* ORDER DETAIL */
-  .order-detail-block { background: #f8f8f8; border-radius: 6px; padding: 12px 16px; margin-bottom: 8px; font-size: 13px; line-height: 1.7; }
-  .order-items-list { font-size: 13px; color: #555; }
-  .order-items-list span { font-weight: 700; color: var(--black); }
 
   /* DASHBOARD */
   .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -240,7 +235,7 @@
   .confirm-summary { background: #f8f8f8; border-radius: 6px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; line-height: 1.7; border: 1px solid #eee; }
   .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
 
-  /* ORDER CONFIRM - FULL CLIENT DATA */
+  /* ORDER CONFIRM */
   .order-confirm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
   .order-confirm-section { background: #f8f8f8; border-radius: 8px; padding: 14px 16px; border: 1px solid #eee; }
   .order-confirm-section-title { font-size: 10px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 10px; }
@@ -264,7 +259,7 @@
   .order-confirm-product-name { font-weight: 500; }
   .order-confirm-product-size { background: #e8e2da; color: var(--black); font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 3px; margin-left: 6px; letter-spacing: 0.5px; }
   .order-confirm-product-price { font-weight: 700; color: var(--black); }
-  
+
   /* WSP notice */
   .wsp-notice { background: #e6f9ee; border: 1px solid #b3ecd0; border-radius: 6px; padding: 10px 14px; font-size: 12px; color: #1a6637; display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
   .wsp-icon { font-size: 16px; flex-shrink: 0; }
@@ -502,13 +497,12 @@
   </div>
 </div>
 
-<!-- ORDER ACTION CONFIRM — FULL CLIENT DATA -->
+<!-- ORDER ACTION CONFIRM -->
 <div class="confirm-overlay" id="orderConfirmOverlay">
   <div class="confirm-box" style="max-width:600px;">
     <h3 id="orderConfirmTitle">Confirmar acción</h3>
     <p id="orderConfirmDesc">¿Estás segura de continuar?</p>
 
-    <!-- Código de pedido destacado -->
     <div class="order-code-display" id="orderCodeDisplay">
       <div>
         <div class="order-code-display-label">Código de seguimiento</div>
@@ -520,13 +514,9 @@
       </div>
     </div>
 
-    <!-- Datos cliente + dirección -->
     <div class="order-confirm-grid" id="orderConfirmClientGrid"></div>
-
-    <!-- Productos -->
     <div class="order-confirm-products" id="orderConfirmProducts"></div>
 
-    <!-- WhatsApp notice -->
     <div class="wsp-notice" id="wspNotice" style="display:none">
       <span class="wsp-icon">💬</span>
       <span id="wspNoticeText">Se abrirá WhatsApp con el mensaje listo para enviar al cliente.</span>
@@ -675,7 +665,7 @@ window.switchOrderTab = (tab, btn) => {
   renderOrdersPanel();
 };
 
-// ── RENDER ORDERS TABLE — FULL CLIENT DATA ─────────────────────
+// ── RENDER ORDERS TABLE ─────────────────────────────────────────
 function renderOrdersPanel() {
   const q = (document.getElementById('orderSearchInput')?.value || '').toLowerCase();
   const allOrders = Object.values(orders);
@@ -703,8 +693,7 @@ function renderOrdersPanel() {
   tbody.innerHTML = filtered.sort((a,b) => b.timestamp - a.timestamp).map(o => {
     const date = new Date(o.timestamp).toLocaleDateString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric'});
     const time = new Date(o.timestamp).toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
-    
-    // Items compactos
+
     const itemsHtml = o.items?.map(i => `
       <div class="item-line">
         <span>${i.productName}</span>
@@ -712,24 +701,29 @@ function renderOrdersPanel() {
         <span style="color:var(--gray)">×${i.qty}</span>
       </div>`).join('') || '—';
 
-    // Acciones según estado
+    // ── ACCIONES SEGÚN ESTADO ────────────────────────────────────
     let actions = '';
+
     if (o.status === 'espera') {
       actions = `
         <button class="btn-accept" onclick="confirmOrderAction('${o.id}','aceptar')">✓ Aceptar</button>
         <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Rechazar</button>
-        <button class="btn-wsp" onclick="sendWspManual('${o.id}')">💳 Pedir pago</button>`;
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💬 Pedir pago</button>`;
     } else if (o.status === 'aceptado') {
       actions = `
         <button class="btn-ship" onclick="confirmOrderAction('${o.id}','enviar')">🚚 Enviado</button>
         <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Cancelar</button>
-        <button class="btn-wsp" onclick="sendWspManual('${o.id}')">💳 Pedir pago</button>`;
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💬 Pedir pago</button>`;
     } else if (o.status === 'enviado') {
       actions = `
         <button class="btn-done" onclick="confirmOrderAction('${o.id}','confirmar')">🎉 Entregado</button>
-        <button class="btn-wsp" onclick="sendWspManual('${o.id}')">📦 Avisar envío</button>`;
-    } else {
-      actions = `<button class="btn-wsp" onclick="sendWspManual('${o.id}')">💬 WhatsApp</button>`;
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">📦 Avisar envío</button>`;
+    } else if (o.status === 'confirmado') {
+      actions = `
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💬 WhatsApp</button>`;
+    } else if (o.status === 'cancelado') {
+      actions = `
+        <button class="btn-wsp" onclick="sendWspByStatus('${o.id}')">💬 WhatsApp</button>`;
     }
 
     return `
@@ -764,16 +758,19 @@ function renderOrdersPanel() {
   }).join('');
 }
 
-// ── MANUAL WSP SEND — va al teléfono del CLIENTE para pedir pago ──
-window.sendWspManual = (orderId) => {
+// ══════════════════════════════════════════════════════════════════
+//  WHATSAPP — MENSAJES SEGÚN ESTADO DEL PEDIDO
+// ══════════════════════════════════════════════════════════════════
+
+/**
+ * Botón WhatsApp genérico: detecta el estado actual del pedido
+ * y envía el mensaje correspondiente al cliente.
+ */
+window.sendWspByStatus = (orderId) => {
   const o = orders[orderId];
   if (!o) return;
-  openWspWindow(o, 'cobro');
-};
 
-function openWspWindow(o, action) {
-  // Número del CLIENTE — el que ingresó en el formulario
-  const clientTel = (o.cliente?.tel || '').replace(/\D/g, ''); // ej: 56912345678
+  const clientTel = (o.cliente?.tel || '').replace(/\D/g, '');
 
   const itemLines = o.items?.map(i =>
     `  • ${i.productName} | Talla: ${i.selectedSize} | Cant: ${i.qty} → $${(i.price * i.qty).toLocaleString('es-CL')}`
@@ -781,12 +778,12 @@ function openWspWindow(o, action) {
 
   let msg = '';
 
-  if (action === 'cobro' || action === 'aceptar') {
-    // Mensaje principal: cobro al cliente con datos de transferencia
+  // ── EN ESPERA → pedir pago ────────────────────────────────────
+  if (o.status === 'espera') {
     msg =
 `¡Hola ${o.cliente?.nombre}! 👋 Soy de *PALACIO STORE* ⭐
 
-Tu pedido esta en *ESPERA* y está listo para prepararse 🎉
+Tu pedido está en *ESPERA* y está listo para prepararse 🎉
 
 ━━━━━━━━━━━━━━━━━━━━
 📦 *TU CÓDIGO DE PEDIDO*
@@ -810,24 +807,39 @@ Email: ignaciocalderon.1805@gmail.com
 
 📸 Por favor envíame el *comprobante de transferencia* por este mismo chat.
 
-Una vez confirmado el pago,Tu pedido sera *ACEPTADO* y ¡prepararemos tu pedido! 🚚
-puedes ir revisando el estado de tu pedido en nuestra pagina con tu codigo
+Una vez confirmado el pago, tu pedido será *ACEPTADO* y ¡prepararemos tu pedido! 🚚
 
 Gracias por elegir *Palacio Store* 🖤`;
-  } else if (action === 'rechazar') {
+
+  // ── ACEPTADO → recordatorio de pago ──────────────────────────
+  } else if (o.status === 'aceptado') {
     msg =
-`Hola ${o.cliente?.nombre} 👋, te escribimos de *PALACIO STORE* ⭐
+`¡Hola ${o.cliente?.nombre}! 👋 Te escribe *PALACIO STORE* ⭐
 
-Lamentablemente tu pedido *${o.id}* fue *CANCELADO* ❌
+Tu pedido *${o.id}* ha sido *ACEPTADO* ✅
 
-Si tienes dudas o quieres hacer un nuevo pedido, escríbenos aquí mismo.
+━━━━━━━━━━━━━━━━━━━━
+💳 *DATOS PARA TRANSFERENCIA*
+Banco: FALABELLA
+Tipo de cuenta: Cuenta Vista
+N° de cuenta: 000011122233344
+RUT: 21.902.467-3
+Nombre: ignacio calderon
+Email: ignaciocalderon.1805@gmail.com
+━━━━━━━━━━━━━━━━━━━━
 
-¡Gracias por contactarte con nosotros! 🖤`;
-  } else if (action === 'enviar') {
+💰 *TOTAL: $${o.total?.toLocaleString('es-CL')} CLP*
+
+Si ya realizaste la transferencia, por favor envía el *comprobante* por este chat para procesar tu pedido 📸
+
+¡Gracias! 🖤`;
+
+  // ── ENVIADO → aviso de despacho a empresa de transporte ──────
+  } else if (o.status === 'enviado') {
     msg =
-`¡Hola ${o.cliente?.nombre}! 👋 Soy de *PALACIO STORE* ⭐
+`¡Hola ${o.cliente?.nombre}! 👋 Te escribe *PALACIO STORE* ⭐
 
-Tu pedido *${o.id}* ya está *EN CAMINO* 🚚📦
+🚚 Tu pedido *${o.id}* fue *ENTREGADO A LA EMPRESA DE TRANSPORTE* y está en camino hacia ti 📦
 
 ━━━━━━━━━━━━━━━━━━━━
 📍 Dirección de entrega:
@@ -837,10 +849,108 @@ ${o.cliente?.comuna} — ${o.cliente?.direccion}
 🛒 Productos:
 ${itemLines}
 
-¡Pronto lo recibirás! Cualquier consulta escríbenos aquí 🖤`;
+⭐ Cuando recibas tu pedido, *avísame por aquí que llegó correctamente* para confirmar la entrega. ¡Es muy importante para nosotros! 😊
+
+Cualquier consulta no dudes en escribirnos 🖤 *Palacio Store*`;
+
+  // ── CONFIRMADO → mensaje de cierre / agradecimiento ──────────
+  } else if (o.status === 'confirmado') {
+    msg =
+`¡Hola ${o.cliente?.nombre}! 👋 Soy de *PALACIO STORE* ⭐
+
+Tu pedido *${o.id}* fue marcado como *ENTREGADO* 🎉✅
+
+Esperamos que estés disfrutando tu compra. Si necesitas algo más o tienes alguna consulta, ¡escríbenos cuando quieras!
+
+Gracias por elegir *Palacio Store* 🖤
+¡Nos vemos en la próxima! ⭐`;
+
+  // ── CANCELADO → notificación de cancelación ───────────────────
+  } else if (o.status === 'cancelado') {
+    msg =
+`Hola ${o.cliente?.nombre} 👋, te escribe *PALACIO STORE* ⭐
+
+Lamentablemente tu pedido *${o.id}* fue *CANCELADO* ❌
+
+Si deseas más información sobre el motivo o quieres realizar un nuevo pedido, escríbenos aquí mismo y te ayudamos con gusto.
+
+¡Gracias por contactarte con nosotros! 🖤`;
   }
 
-  // Abre WhatsApp apuntando al número del CLIENTE
+  window.open(`https://wa.me/${clientTel}?text=${encodeURIComponent(msg)}`, '_blank');
+};
+
+// ── FUNCIÓN INTERNA — abre WhatsApp en acciones automáticas ─────
+function openWspWindow(o, action) {
+  const clientTel = (o.cliente?.tel || '').replace(/\D/g, '');
+
+  const itemLines = o.items?.map(i =>
+    `  • ${i.productName} | Talla: ${i.selectedSize} | Cant: ${i.qty} → $${(i.price * i.qty).toLocaleString('es-CL')}`
+  ).join('\n') || '—';
+
+  let msg = '';
+
+  if (action === 'aceptar') {
+    msg =
+`¡Hola ${o.cliente?.nombre}! 👋 Soy de *PALACIO STORE* ⭐
+
+Tu pedido está en *ESPERA* y está listo para prepararse 🎉
+
+━━━━━━━━━━━━━━━━━━━━
+📦 *TU CÓDIGO DE PEDIDO*
+➡️  *${o.id}*
+━━━━━━━━━━━━━━━━━━━━
+
+🛒 *Resumen de tu compra:*
+${itemLines}
+
+💰 *TOTAL A PAGAR: $${o.total?.toLocaleString('es-CL')} CLP*
+
+━━━━━━━━━━━━━━━━━━━━
+💳 *DATOS PARA TRANSFERENCIA*
+Banco: FALABELLA
+Tipo de cuenta: Cuenta Vista
+N° de cuenta: 000011122233344
+RUT: 21.902.467-3
+Nombre: ignacio calderon
+Email: ignaciocalderon.1805@gmail.com
+━━━━━━━━━━━━━━━━━━━━
+
+📸 Por favor envíame el *comprobante de transferencia* por este mismo chat.
+
+Una vez confirmado el pago, tu pedido será *ACEPTADO* y ¡prepararemos tu pedido! 🚚
+
+Gracias por elegir *Palacio Store* 🖤`;
+
+  } else if (action === 'rechazar') {
+    msg =
+`Hola ${o.cliente?.nombre} 👋, te escribe *PALACIO STORE* ⭐
+
+Lamentablemente tu pedido *${o.id}* fue *CANCELADO* ❌
+
+Si deseas más información o quieres realizar un nuevo pedido, escríbenos aquí mismo.
+
+¡Gracias por contactarte con nosotros! 🖤`;
+
+  } else if (action === 'enviar') {
+    msg =
+`¡Hola ${o.cliente?.nombre}! 👋 Te escribe *PALACIO STORE* ⭐
+
+🚚 Tu pedido *${o.id}* fue *ENTREGADO A LA EMPRESA DE TRANSPORTE* y está en camino hacia ti 📦
+
+━━━━━━━━━━━━━━━━━━━━
+📍 Dirección de entrega:
+${o.cliente?.comuna} — ${o.cliente?.direccion}
+━━━━━━━━━━━━━━━━━━━━
+
+🛒 Productos:
+${itemLines}
+
+⭐ Cuando recibas tu pedido, *avísame por aquí que llegó correctamente* para confirmar la entrega. ¡Es muy importante para nosotros! 😊
+
+Cualquier consulta no dudes en escribirnos 🖤 *Palacio Store*`;
+  }
+
   window.open(`https://wa.me/${clientTel}?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -859,9 +969,9 @@ window.confirmOrderAction = (orderId, action) => {
     confirmar:'🎉 Confirmar entrega'
   };
   const actionDescs = {
-    aceptar: 'Acepta el pedido. Se descontará el stock automáticamente y se abrirá WhatsApp con el mensaje para el cliente.',
+    aceptar: 'Acepta el pedido. El stock se descontará automáticamente y se abrirá WhatsApp con los datos de pago para el cliente.',
     rechazar: '¿Cancelar este pedido? El stock se RESTAURARÁ automáticamente y se abrirá WhatsApp para notificar al cliente.',
-    enviar: 'Marca el pedido como enviado. Se abrirá WhatsApp para notificar al cliente.',
+    enviar: 'Marca el pedido como enviado. Se abrirá WhatsApp informando al cliente que su pedido fue entregado a la empresa de transporte.',
     confirmar: 'Confirma que el cliente recibió el pedido.'
   };
 
@@ -870,11 +980,9 @@ window.confirmOrderAction = (orderId, action) => {
   document.getElementById('orderConfirmTitle').textContent = actionLabels[action] || 'Confirmar';
   document.getElementById('orderConfirmDesc').textContent = actionDescs[action] || '¿Continuar?';
 
-  // Código destacado
   document.getElementById('orderCodeDisplayVal').textContent = o.id;
   document.getElementById('orderCodeDisplayTotal').textContent = `$${o.total?.toLocaleString('es-CL')}`;
 
-  // Datos cliente en grid
   document.getElementById('orderConfirmClientGrid').innerHTML = `
     <div class="order-confirm-section">
       <div class="order-confirm-section-title">👤 Datos personales</div>
@@ -907,7 +1015,6 @@ window.confirmOrderAction = (orderId, action) => {
       </div>
     </div>`;
 
-  // Productos
   const itemsHtml = o.items?.map(i => `
     <div class="order-confirm-product-row">
       <span>
@@ -926,14 +1033,16 @@ window.confirmOrderAction = (orderId, action) => {
       <strong style="font-size:15px;">$${o.total?.toLocaleString('es-CL')}</strong>
     </div>`;
 
-  // WSP notice
   const wspNotice = document.getElementById('wspNotice');
-  const wspText = document.getElementById('wspNoticeText');
+  const wspText   = document.getElementById('wspNoticeText');
   if (showWsp) {
     wspNotice.style.display = 'flex';
-    if (action === 'rechazar') wspText.textContent = 'Se abrirá WhatsApp al número del CLIENTE para notificarle la cancelación. El stock se restaurará automáticamente.';
-    else if (action === 'aceptar') wspText.textContent = 'Se abrirá WhatsApp al número del CLIENTE con el resumen del pedido y los datos para que realice la transferencia. El stock se descontará.';
-    else wspText.textContent = 'Se abrirá WhatsApp al número del CLIENTE para notificarle que su pedido está en camino.';
+    if (action === 'rechazar')
+      wspText.textContent = 'Se abrirá WhatsApp al cliente notificando la cancelación. El stock se restaurará automáticamente.';
+    else if (action === 'aceptar')
+      wspText.textContent = 'Se abrirá WhatsApp al cliente con los datos de transferencia para que realice el pago. El stock se descontará.';
+    else if (action === 'enviar')
+      wspText.textContent = 'Se abrirá WhatsApp al cliente informando que su pedido fue entregado a la empresa de transporte y pidiéndole que confirme la recepción.';
   } else {
     wspNotice.style.display = 'none';
   }
@@ -964,7 +1073,6 @@ window.executeOrderAction = async () => {
   closeOrderConfirm();
 
   if (action === 'aceptar') {
-    // Descontar stock
     if (o.items) {
       for (const item of o.items) {
         const prod = products.find(p => p.id === item.productId);
@@ -976,11 +1084,9 @@ window.executeOrderAction = async () => {
     }
     await set(ref(db, `pedidos/${orderId}/status`), 'aceptado');
     showNotif(`Pedido ${orderId} ACEPTADO ✓ — Stock descontado automáticamente`);
-    // Abrir WhatsApp automáticamente
     setTimeout(() => openWspWindow({...o, status:'aceptado'}, 'aceptar'), 400);
 
   } else if (action === 'rechazar') {
-    // ── RESTAURAR STOCK si el pedido estaba aceptado ──────────────
     if (o.status === 'aceptado' && o.items) {
       for (const item of o.items) {
         const prod = products.find(p => p.id === item.productId);
@@ -988,7 +1094,6 @@ window.executeOrderAction = async () => {
           const newStock = (prod.sizes[item.selectedSize] || 0) + item.qty;
           await set(ref(db, `productos/${prod.id}/sizes/${item.selectedSize}`), newStock);
         } else if (prod && prod.sizes) {
-          // Si la talla no existe (fue eliminada), la recreamos
           await set(ref(db, `productos/${prod.id}/sizes/${item.selectedSize}`), item.qty);
         }
       }
@@ -997,13 +1102,11 @@ window.executeOrderAction = async () => {
       showNotif(`Pedido ${orderId} rechazado`);
     }
     await set(ref(db, `pedidos/${orderId}/status`), 'cancelado');
-    // Abrir WhatsApp automáticamente
     setTimeout(() => openWspWindow({...o, status:'cancelado'}, 'rechazar'), 400);
 
   } else if (action === 'enviar') {
     await set(ref(db, `pedidos/${orderId}/status`), 'enviado');
     showNotif(`Pedido ${orderId} marcado como enviado 🚚`);
-    // Abrir WhatsApp automáticamente
     setTimeout(() => openWspWindow({...o, status:'enviado'}, 'enviar'), 400);
 
   } else if (action === 'confirmar') {
