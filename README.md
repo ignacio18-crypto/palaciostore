@@ -1,30 +1,15 @@
-# palaciostore
+# palaciostore TAREAS POR REALIZAR
 
-1__quiero que al agregar un producto pueda agregar también las tallas que tengo 
-por ejemplo S,M,L,X,L ETC  y pueda agregar cuantas unidades tengo de cada talla
- eso lo puedo ver solo yio en la pagina admin donde luego de agregar también puedo ir eliminando
-unidades de las tallas para tener un control de stock  lo que los clientes podrán ver es solamente las tallas que tengo 
-hasta que yio elimine una de las tallass por no tener stock o poder volver agregarla hasta que me vuelva a llegar stock o en caso de que me equivoque al agregar el stock recordar verificar bien lo puesto antes de volver a confirmar que todo esta bien 
+1__quiero que el boton avisar envio mande el mensaje: tu pedido fue entregado a la empresa de transporte cuando te llegue tu pedido avisame que tu pedido fue entregado coorectamente y el boton quiero que el boton de whatsap cumpla la funcion dependiendo en que estado se encuentra el producto por ejemplo si el producto fue cancelado que al apretar el boton de whatsap le envie un mensaje que el pedido ha sido cancelado y etc
 
-también agregar si es de hombre o mujer la prenda o para ambos sexos ósea unisex ninguno de estos campos puede quedar vacio a la hora de agregar un producto ningún campo debe estar vacio 
+2__quiero en el formulario que llena el cliente incluyas solo las comunas que existen en chile y las regiones que existen en chile, quiero que incluyas un boton en la barra para buscar el pedido que al apretarlo te busque el pedido, que los pedidos listos y cancelados duren 24 horas y luego pasen a un historial de pedidos cancelados y listos que puedas buscar tambien en otra pestaña que se llame historial de todos los pedidos,quitarle la opcion de cambiar el nombre de la tienda
 
 
-2__quiero que al momento de mandar el mensaje a whatsap para realizar la compra el cliente deba llenar un formulario con su nombre,apellido,rut,comuna y direecion donde llegara tu pedido,numero de teléfono comenzando con +569, y correo electrónico (verificando de cada uno de estos campos este lleno osino no podrá avanzar) todo esto se envie junto con el pedido que realiza el cliente con las tallas junto con esto dándole un numero de orden que será único he irrepetible para nosotros poder ingresar a la pantalla de administración y buscar el pedido del cliente y nosotros ver si lo aceptamos o lo rechazamo si lo aceptamos el descuento de stock de las cosas que el cliente pidió se hará automáticamente guardando el pedido por enviar si el pedido no ha sido aceptado saldrá pedido en lista de espera si el pedido es rechazado no se hará el descuento de stock y quedara en la pestaña de pedidos cancelados            
-abra una pestaña de pedidos en espera,pedidos cancelados, pedidos por enviar, pedido enviado esperando la confirmación que le llego al cliente y pedido listo (siempre volver a pregunta como estas seguro de confirmar,estas seguro de rechazar)
-también habrá una pestaña donde será "consultael estado tu pedido" donde prodras ver en que estado se encuentra tu pedido con el código único que se te entrego
- cada vez que su pedido avance se visulizara  al cliente podrá visualizarlo en la pestaña de consulta el estado de tu envio como tu pedido paso a espera de envió o a espera de tu confirmación , poner en todo un max de carácter lo que es en numero nombre apellido dirección que también le llegue al cliente tienes todo lo que quires antes de confirmar el pedido ? y si pone si se hace todo lo que viene si pone que no es por que algo mas quiere añadir o elimar dejarlo libre al cliente 
-
-
-3__poner una pestaña dando la siguiente informacio
-una vez me mandes el boucher de transferencia tu pedido será aceptado
-llegándote un mensaje que tu pedido ha sido aceptado si no tu pedido aun no será
-considerado para envió en caso de tener alguna falla tu pedido ponte en contacto con
-nosotros y no se hacen devoluciones 
+3__ que en unidades de la prenda pueda poner "solo a pedido " y poder desactivar un producto tambien para que no aparezca en la pantalla principal pero quede gaurdado
 
 
 
-
-4__que se pueda cambiar clave y nombre de usuario
+4__que se pueda cambiar el nombre de usuario para ingresar a la pantalla de adminitracion
 y cambiale el nombre a la pagina y a todo y ponle " venta pronto" asi puedo ofrecer esta pagina web a distintas empresas y venderla
 que los gatalogos no aparezcan en fila hacia el costado sino que halla 3 rayitas hacia la derecha donde aparezcan todas las categorías y una lupa para buscar mas rápido tu categoría y en la pagina inicial aparezcan todos los productos donde aparezcan los filtros como hombre,mujer o unisex un botón debajo de cada producto de agregar al carrito 
 
