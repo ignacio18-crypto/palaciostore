@@ -11,7 +11,8 @@
 
 4__que se pueda cambiar el nombre de usuario para ingresar a la pantalla de adminitracion
 y cambiale el nombre a la pagina y a todo y ponle " proyect venta" asi puedo ofrecer esta pagina web a distintas empresas y venderla
-que los gatalogos no aparezcan en fila hacia el costado sino que halla 3 rayitas hacia la derecha donde aparezcan todas las categorías y una lupa para buscar mas rápido tu categoría y en la pagina inicial aparezcan todos los productos donde aparezcan los filtros como hombre,mujer o unisex un botón debajo de cada producto de agregar al carrito 
+que los catalogos no aparezcan en fila hacia el costado sino que halla 3 rayitas en la  izquierda que al precionar  aparezcan todas las categorías y una lupa para buscar mas rápido tu categoría y en la pagina inicial aparezcan todos los productos donde aparezcan los filtros como hombre,mujer o unisex un botón debajo de cada producto de 
+"agregar al carrito" 
 
 
 
