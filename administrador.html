@@ -14,6 +14,8 @@
     --gray: #888;
     --red: #d94f3d;
     --green: #2ebd6b;
+    --orange: #f5a623;
+    --blue: #6495ed;
     --sidebar-w: 260px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,6 +48,7 @@
   .nav-item:hover { color: var(--white); background: rgba(255,255,255,0.04); }
   .nav-item.active { color: var(--accent); background: rgba(200,169,126,0.08); border-left-color: var(--accent); }
   .nav-icon { font-size: 16px; }
+  .nav-badge { margin-left: auto; background: var(--red); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px; min-width: 20px; text-align: center; }
   .sidebar-footer { margin-top: auto; padding: 20px 28px; border-top: 1px solid rgba(255,255,255,0.08); }
   .logout-btn { width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); padding: 10px; border-radius: 4px; font-family: inherit; font-size: 13px; cursor: pointer; transition: all 0.2s; }
   .logout-btn:hover { background: rgba(217,79,61,0.2); color: var(--red); border-color: var(--red); }
@@ -79,16 +82,46 @@
   .pill-sale { background: #fde8e6; color: var(--red); }
   .pill-hot { background: #fdf2e6; color: #b07820; }
   .pill-none { background: #f0f0f0; color: var(--gray); }
-  .action-btns { display: flex; gap: 8px; }
+  .action-btns { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn-edit { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; font-family: inherit; background: #f0f0f0; color: var(--black); transition: all 0.2s; }
   .btn-edit:hover { background: var(--accent); }
   .btn-del { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; font-family: inherit; background: #fde8e6; color: var(--red); transition: all 0.2s; }
   .btn-del:hover { background: var(--red); color: white; }
+  .btn-accept { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; background: #e8f5f0; color: #1a8a5a; transition: all 0.2s; }
+  .btn-accept:hover { background: var(--green); color: white; }
+  .btn-reject { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; background: #fde8e6; color: var(--red); transition: all 0.2s; }
+  .btn-reject:hover { background: var(--red); color: white; }
+  .btn-ship { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; background: #eaf0fd; color: var(--blue); transition: all 0.2s; }
+  .btn-ship:hover { background: var(--blue); color: white; }
+  .btn-done { padding: 6px 14px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; background: #e8f5f0; color: #1a8a5a; transition: all 0.2s; }
+  .btn-done:hover { background: var(--green); color: white; }
 
   /* SEARCH */
   .search-bar { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
   .search-input { flex: 1; padding: 10px 16px; border: 1.5px solid #e0e0e0; border-radius: 4px; font-family: inherit; font-size: 14px; outline: none; transition: border 0.2s; }
   .search-input:focus { border-color: var(--accent); }
+
+  /* ORDER TABS */
+  .order-tabs { display: flex; gap: 0; margin-bottom: 20px; background: var(--white); border-radius: 8px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); }
+  .order-tab { flex: 1; padding: 12px 8px; background: transparent; border: none; font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--gray); text-align: center; border-right: 1px solid #f0f0f0; position: relative; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .order-tab:last-child { border-right: none; }
+  .order-tab:hover { background: #fafafa; color: var(--black); }
+  .order-tab.active { background: var(--black); color: white; }
+  .order-tab-badge { background: var(--red); color: white; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 999px; min-width: 18px; text-align: center; }
+  .order-tab.active .order-tab-badge { background: var(--accent); color: var(--black); }
+
+  /* ORDER STATUS PILLS */
+  .status-pill { display: inline-block; padding: 3px 10px; font-size: 11px; font-weight: 600; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sp-espera    { background: #fdf2e6; color: #b07820; }
+  .sp-aceptado  { background: #e8f5f0; color: #1a8a5a; }
+  .sp-enviado   { background: #eaf0fd; color: var(--blue); }
+  .sp-confirmado{ background: #e8f5f0; color: #1a8a5a; }
+  .sp-cancelado { background: #fde8e6; color: var(--red); }
+
+  /* ORDER DETAIL */
+  .order-detail-block { background: #f8f8f8; border-radius: 6px; padding: 12px 16px; margin-bottom: 8px; font-size: 13px; line-height: 1.7; }
+  .order-items-list { font-size: 13px; color: #555; }
+  .order-items-list span { font-weight: 700; color: var(--black); }
 
   /* DASHBOARD */
   .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
@@ -137,7 +170,7 @@
   .image-upload-area.has-image .upload-preview { display: block; }
 
   /* NOTIF */
-  .admin-notif { position: fixed; top: 24px; right: 24px; z-index: 500; background: var(--black); color: var(--white); padding: 14px 22px; font-size: 13px; font-weight: 500; border-radius: 6px; transform: translateY(-10px); opacity: 0; transition: all 0.3s; pointer-events: none; }
+  .admin-notif { position: fixed; top: 24px; right: 24px; z-index: 9999; background: var(--black); color: var(--white); padding: 14px 22px; font-size: 13px; font-weight: 500; border-radius: 6px; transform: translateY(-10px); opacity: 0; transition: all 0.3s; pointer-events: none; max-width: 340px; }
   .admin-notif.show { transform: translateY(0); opacity: 1; }
   .admin-notif.success::before { content: '✓ '; color: var(--green); }
   .admin-notif.error::before { content: '✕ '; color: var(--red); }
@@ -147,16 +180,13 @@
 
   /* LOADING */
   .fb-loading { text-align: center; padding: 60px; color: var(--gray); font-size: 14px; }
-  .fb-loading::before { content: '⏳ '; }
 
-  /* SIZES & GENDER */
+  /* SIZES */
   .gender-selector { display: flex; gap: 10px; }
   .gender-opt { flex: 1; }
   .gender-opt input[type="radio"] { display: none; }
   .gender-opt label { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 8px; border: 1.5px solid #e0e0e0; border-radius: 4px; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; color: var(--gray); text-align: center; }
   .gender-opt input:checked + label { border-color: var(--black); background: var(--black); color: white; }
-  .gender-opt label:hover { border-color: var(--accent); color: var(--black); }
-
   .sizes-manager { border: 1.5px solid #e0e0e0; border-radius: 6px; overflow: hidden; }
   .sizes-add-row { display: flex; gap: 8px; padding: 12px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
   .sizes-add-row input { padding: 8px 12px; border: 1.5px solid #e0e0e0; border-radius: 4px; font-family: inherit; font-size: 13px; outline: none; transition: border 0.2s; }
@@ -177,8 +207,6 @@
   .btn-sz.del:hover { background: var(--red); color: white; border-color: var(--red); }
   .sizes-empty { color: var(--gray); font-size: 13px; text-align: center; padding: 12px 0; font-style: italic; }
   .size-item.low-stock .size-item-stock span { color: var(--red); }
-
-  /* STOCK COLUMN IN TABLE */
   .sizes-pills { display: flex; flex-wrap: wrap; gap: 4px; }
   .sz-pill { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #f0ede8; color: var(--black); border: 1px solid #ddd; white-space: nowrap; }
   .sz-pill.low { background: #fde8e6; color: var(--red); border-color: #f5c0bb; }
@@ -190,7 +218,6 @@
   .confirm-box h3 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .confirm-box p { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
   .confirm-summary { background: #f8f8f8; border-radius: 6px; padding: 14px 16px; margin-bottom: 20px; font-size: 13px; line-height: 1.7; border: 1px solid #eee; }
-  .confirm-summary strong { font-weight: 700; }
   .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
 </style>
 </head>
@@ -219,6 +246,7 @@
   <aside class="sidebar">
     <div class="sidebar-logo">PALACIO <span>STORE</span><small>Panel Admin</small></div>
     <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</div>
+    <div class="nav-item" onclick="showPanel('orders',this)"><span class="nav-icon">📦</span> Pedidos <span class="nav-badge" id="sidebarOrderBadge" style="display:none">0</span></div>
     <div class="nav-item" onclick="showPanel('products',this)"><span class="nav-icon">👕</span> Productos</div>
     <div class="nav-item" onclick="showPanel('categories',this)"><span class="nav-icon">🏷️</span> Categorías</div>
     <div class="nav-item" onclick="showPanel('settings',this)"><span class="nav-icon">⚙️</span> Configuración</div>
@@ -245,10 +273,39 @@
         <div class="info-card">
           <h3>Accesos rápidos</h3>
           <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
-            <button onclick="showPanel('products',document.querySelectorAll('.nav-item')[1]);openModal()" style="background:var(--black);color:white;border:none;padding:12px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:left;">+ Agregar nuevo producto</button>
-            <button onclick="showPanel('categories',document.querySelectorAll('.nav-item')[2]);openCatModal()" style="background:#f5f0eb;color:var(--black);border:none;padding:12px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:left;">+ Nueva categoría</button>
+            <button onclick="showPanel('orders',document.querySelectorAll('.nav-item')[1])" style="background:#fdf2e6;color:#b07820;border:none;padding:12px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:left;">📦 Ver pedidos en espera</button>
+            <button onclick="showPanel('products',document.querySelectorAll('.nav-item')[2]);openModal()" style="background:var(--black);color:white;border:none;padding:12px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:left;">+ Agregar nuevo producto</button>
+            <button onclick="showPanel('categories',document.querySelectorAll('.nav-item')[3]);openCatModal()" style="background:#f5f0eb;color:var(--black);border:none;padding:12px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;text-align:left;">+ Nueva categoría</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div class="panel" id="panel-orders">
+      <div class="page-header">
+        <h1 class="page-title">Pedidos</h1>
+        <div style="font-size:13px;color:var(--gray)" id="ordersCount">—</div>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" type="text" placeholder="Buscar por código, nombre o email..." id="orderSearchInput" oninput="renderOrdersPanel()">
+      </div>
+      <div class="order-tabs">
+        <button class="order-tab active" onclick="switchOrderTab('espera',this)">⏳ En espera <span class="order-tab-badge" id="tab-badge-espera">0</span></button>
+        <button class="order-tab" onclick="switchOrderTab('aceptado',this)">✅ Aceptados <span class="order-tab-badge" id="tab-badge-aceptado">0</span></button>
+        <button class="order-tab" onclick="switchOrderTab('enviado',this)">🚚 Enviados <span class="order-tab-badge" id="tab-badge-enviado">0</span></button>
+        <button class="order-tab" onclick="switchOrderTab('confirmado',this)">🎉 Listos <span class="order-tab-badge" id="tab-badge-confirmado">0</span></button>
+        <button class="order-tab" onclick="switchOrderTab('cancelado',this)">❌ Cancelados <span class="order-tab-badge" id="tab-badge-cancelado">0</span></button>
+      </div>
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr id="ordersTableHead">
+              <th>Código</th><th>Cliente</th><th>Productos</th><th>Total</th><th>Fecha</th><th>Estado</th><th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTable"><tr><td colspan="7" class="fb-loading">Conectando...</td></tr></tbody>
+        </table>
       </div>
     </div>
 
@@ -288,7 +345,7 @@
       <div class="page-header"><h1 class="page-title">Configuración</h1></div>
       <div class="table-card" style="padding:32px;max-width:600px;">
         <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:24px;">Configuración de la tienda</h3>
-        <div class="form-group"><label>Número de WhatsApp</label><input type="text" id="cfgWsp" value="56912345678"></div>
+        <div class="form-group"><label>Número de WhatsApp</label><input type="text" id="cfgWsp" value="569728650749"></div>
         <div class="form-group"><label>Nombre de la tienda</label><input type="text" id="cfgName" value="Palacio Store"></div>
         <div class="form-group"><label>Cambiar contraseña admin</label><input type="password" id="cfgPass" placeholder="Nueva contraseña"></div>
         <button class="btn-save" onclick="saveSettings()" style="margin-top:8px;">Guardar cambios</button>
@@ -318,27 +375,14 @@
         </select>
       </div>
     </div>
-
-    <!-- GÉNERO -->
     <div class="form-group">
       <label>Género *</label>
       <div class="gender-selector">
-        <div class="gender-opt">
-          <input type="radio" name="fGender" id="gHombre" value="hombre">
-          <label for="gHombre">👕 Hombre</label>
-        </div>
-        <div class="gender-opt">
-          <input type="radio" name="fGender" id="gMujer" value="mujer">
-          <label for="gMujer">👗 Mujer</label>
-        </div>
-        <div class="gender-opt">
-          <input type="radio" name="fGender" id="gUnisex" value="unisex">
-          <label for="gUnisex">✨ Unisex</label>
-        </div>
+        <div class="gender-opt"><input type="radio" name="fGender" id="gHombre" value="hombre"><label for="gHombre">👕 Hombre</label></div>
+        <div class="gender-opt"><input type="radio" name="fGender" id="gMujer" value="mujer"><label for="gMujer">👗 Mujer</label></div>
+        <div class="gender-opt"><input type="radio" name="fGender" id="gUnisex" value="unisex"><label for="gUnisex">✨ Unisex</label></div>
       </div>
     </div>
-
-    <!-- TALLAS Y STOCK -->
     <div class="form-group">
       <label>Tallas y Stock *</label>
       <div class="sizes-manager">
@@ -347,13 +391,10 @@
           <input class="size-stock-input" type="number" id="newSizeStock" placeholder="Unidades" min="1" max="9999" onkeydown="if(event.key==='Enter'){event.preventDefault();addSize()}">
           <button class="btn-add-size" onclick="addSize()">+ Agregar talla</button>
         </div>
-        <div class="sizes-list" id="sizesList">
-          <div class="sizes-empty">Agrega al menos una talla con su stock</div>
-        </div>
+        <div class="sizes-list" id="sizesList"><div class="sizes-empty">Agrega al menos una talla con su stock</div></div>
       </div>
-      <div style="font-size:11px;color:var(--gray);margin-top:6px;">Puedes usar: XS, S, M, L, XL, XXL, 28, 30, 32... o lo que necesites</div>
+      <div style="font-size:11px;color:var(--gray);margin-top:6px;">Puedes usar: XS, S, M, L, XL, XXL, 28, 30, 32...</div>
     </div>
-
     <div class="form-row">
       <div class="form-group"><label>Precio actual ($) *</label><input type="number" id="fPrice" placeholder="24990"></div>
       <div class="form-group"><label>Precio anterior ($) — opcional</label><input type="number" id="fOldPrice" placeholder="34990"></div>
@@ -393,7 +434,7 @@
   </div>
 </div>
 
-<!-- CONFIRM MODAL -->
+<!-- CONFIRM MODAL PRODUCT -->
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
     <h3>⚠️ Verificar antes de confirmar</h3>
@@ -402,6 +443,19 @@
     <div class="confirm-actions">
       <button class="btn-cancel" onclick="closeConfirm()">← Volver a editar</button>
       <button class="btn-save" onclick="confirmSaveProduct()">✓ Todo está bien, guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER ACTION CONFIRM -->
+<div class="confirm-overlay" id="orderConfirmOverlay">
+  <div class="confirm-box">
+    <h3 id="orderConfirmTitle">Confirmar acción</h3>
+    <p id="orderConfirmDesc">¿Estás segura de continuar?</p>
+    <div class="confirm-summary" id="orderConfirmSummary"></div>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="closeOrderConfirm()">← Cancelar</button>
+      <button class="btn-save" id="orderConfirmBtn" onclick="">Confirmar</button>
     </div>
   </div>
 </div>
@@ -425,9 +479,8 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, set, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, set, onValue, remove, update, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// ── FIREBASE CONFIG ──────────────────────────────────────────────
 const firebaseConfig = {
   apiKey: "AIzaSyB_Kgid_oL0wscMQlViW1ZweO9v6z_hsz0",
   authDomain: "palacio-store.firebaseapp.com",
@@ -435,37 +488,36 @@ const firebaseConfig = {
   storageBucket: "palacio-store.firebasestorage.app",
   messagingSenderId: "5927823600",
   appId: "1:5927823600:web:211ffb13596d65c123fa35",
-  measurementId: "G-50MRG59294",
   databaseURL: "https://palacio-store-default-rtdb.europe-west1.firebasedatabase.app"
 };
 
 const app = initializeApp(firebaseConfig);
 const db  = getDatabase(app);
 
-// ── AUTH ─────────────────────────────────────────────────────────
 const CREDS = { user: 'Nicol123', pass: 'palacio2026' };
 let products   = [];
 let categories = [];
+let orders     = {};
 let editingId     = null;
 let editingCatId  = null;
 let currentImgTab = 'upload';
 let currentImgData = null;
-let sizesData = {}; // { 'S': 5, 'M': 10, ... }
+let sizesData = {};
+let currentOrderTab = 'espera';
 
-// ── REALTIME LISTENERS ───────────────────────────────────────────
+// ── LISTENERS ────────────────────────────────────────────────────
 onValue(ref(db, 'productos'), snap => {
-  const data = snap.val();
-  products = data ? Object.values(data) : [];
-  renderTable();
-  renderDashboard();
+  products = snap.val() ? Object.values(snap.val()) : [];
+  renderTable(); renderDashboard();
 });
-
 onValue(ref(db, 'categorias'), snap => {
-  const data = snap.val();
-  categories = data ? Object.values(data) : [];
-  renderCatTable();
-  updateCatSelector();
-  renderDashboard();
+  categories = snap.val() ? Object.values(snap.val()) : [];
+  renderCatTable(); updateCatSelector(); renderDashboard();
+});
+onValue(ref(db, 'pedidos'), snap => {
+  orders = snap.val() || {};
+  renderOrdersPanel();
+  updateOrderBadges();
 });
 
 // ── LOGIN ────────────────────────────────────────────────────────
@@ -480,13 +532,11 @@ window.doLogin = () => {
     document.getElementById('loginError').style.display = 'block';
   }
 };
-
 window.doLogout = () => {
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('adminLayout').classList.remove('active');
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
-  document.getElementById('loginError').style.display = 'none';
 };
 
 // ── PANELS ───────────────────────────────────────────────────────
@@ -501,14 +551,12 @@ window.showPanel = (id, el) => {
 function renderDashboard() {
   const total = products.length;
   const avg   = total ? Math.round(products.reduce((a,b) => a + b.price, 0) / total) : 0;
-  const sale  = products.filter(p => p.badge === 'sale').length;
-
+  const espera = Object.values(orders).filter(o => o.status === 'espera').length;
   document.getElementById('statsGrid').innerHTML = `
     <div class="stat-card"><div class="stat-label">Total productos</div><div class="stat-value">${total}</div><div class="stat-sub">↑ en stock</div></div>
     <div class="stat-card"><div class="stat-label">Precio promedio</div><div class="stat-value">$${avg.toLocaleString('es-CL')}</div><div class="stat-sub">CLP</div></div>
-    <div class="stat-card"><div class="stat-label">En oferta</div><div class="stat-value">${sale}</div><div class="stat-sub">con descuento</div></div>
-    <div class="stat-card"><div class="stat-label">Categorías</div><div class="stat-value">${categories.length}</div><div class="stat-sub">activas</div></div>
-  `;
+    <div class="stat-card"><div class="stat-label">Pedidos en espera</div><div class="stat-value" style="color:var(--orange)">${espera}</div><div class="stat-sub" style="color:var(--orange)">requieren atención</div></div>
+    <div class="stat-card"><div class="stat-label">Categorías</div><div class="stat-value">${categories.length}</div><div class="stat-sub">activas</div></div>`;
 
   const bd = document.getElementById('catBreakdown');
   if (!categories.length) { bd.innerHTML = '<p style="color:var(--gray);font-size:13px;">Sin categorías aún.</p>'; return; }
@@ -520,23 +568,162 @@ function renderDashboard() {
   }).join('');
 }
 
-// ── PRODUCTS TABLE ───────────────────────────────────────────────
+// ── ORDER TABS ────────────────────────────────────────────────────
+function updateOrderBadges() {
+  const tabs = ['espera','aceptado','enviado','confirmado','cancelado'];
+  tabs.forEach(t => {
+    const count = Object.values(orders).filter(o => o.status === t).length;
+    const el = document.getElementById('tab-badge-' + t);
+    if (el) el.textContent = count;
+  });
+  const esperaCount = Object.values(orders).filter(o => o.status === 'espera').length;
+  const badge = document.getElementById('sidebarOrderBadge');
+  if (badge) { badge.textContent = esperaCount; badge.style.display = esperaCount > 0 ? 'inline' : 'none'; }
+}
+
+window.switchOrderTab = (tab, btn) => {
+  currentOrderTab = tab;
+  document.querySelectorAll('.order-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderOrdersPanel();
+};
+
+function renderOrdersPanel() {
+  const q = (document.getElementById('orderSearchInput')?.value || '').toLowerCase();
+  const allOrders = Object.values(orders);
+  const filtered = allOrders
+    .filter(o => o.status === currentOrderTab)
+    .filter(o => !q || o.id?.toLowerCase().includes(q)
+      || `${o.cliente?.nombre} ${o.cliente?.apellido}`.toLowerCase().includes(q)
+      || o.cliente?.email?.toLowerCase().includes(q));
+
+  document.getElementById('ordersCount').textContent = `${filtered.length} pedido${filtered.length !== 1 ? 's' : ''}`;
+
+  const statusLabels = { espera:'⏳ En espera', aceptado:'✅ Aceptado', enviado:'🚚 Enviado', confirmado:'🎉 Listo', cancelado:'❌ Cancelado' };
+  const statusCls    = { espera:'sp-espera', aceptado:'sp-aceptado', enviado:'sp-enviado', confirmado:'sp-confirmado', cancelado:'sp-cancelado' };
+
+  const tbody = document.getElementById('ordersTable');
+
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:40px">Sin pedidos en esta categoría</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.sort((a,b) => b.timestamp - a.timestamp).map(o => {
+    const date = new Date(o.timestamp).toLocaleDateString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const items = o.items?.map(i => `<div>${i.productName} · <strong>${i.selectedSize}</strong> × ${i.qty}</div>`).join('') || '—';
+    let actions = '';
+    if (o.status === 'espera') {
+      actions = `<button class="btn-accept" onclick="confirmOrderAction('${o.id}','aceptar')">✓ Aceptar</button>
+                 <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Rechazar</button>`;
+    } else if (o.status === 'aceptado') {
+      actions = `<button class="btn-ship" onclick="confirmOrderAction('${o.id}','enviar')">🚚 Marcar enviado</button>
+                 <button class="btn-reject" onclick="confirmOrderAction('${o.id}','rechazar')">✕ Cancelar</button>`;
+    } else if (o.status === 'enviado') {
+      actions = `<button class="btn-done" onclick="confirmOrderAction('${o.id}','confirmar')">🎉 Confirmar entrega</button>`;
+    } else {
+      actions = '<span style="font-size:12px;color:var(--gray);">—</span>';
+    }
+    return `
+      <tr>
+        <td><strong style="font-family:'Syne',sans-serif;font-size:13px;">${o.id}</strong><br><span style="font-size:11px;color:var(--gray)">${date}</span></td>
+        <td>
+          <strong>${o.cliente?.nombre} ${o.cliente?.apellido}</strong><br>
+          <span style="font-size:12px;color:var(--gray)">${o.cliente?.email}</span><br>
+          <span style="font-size:12px;color:var(--gray)">${o.cliente?.tel}</span>
+        </td>
+        <td><div class="order-items-list" style="font-size:12px;color:var(--gray)">${items}</div></td>
+        <td><strong>$${o.total?.toLocaleString('es-CL')}</strong></td>
+        <td style="font-size:12px;color:var(--gray)">${date}</td>
+        <td><span class="status-pill ${statusCls[o.status]}">${statusLabels[o.status]}</span></td>
+        <td><div class="action-btns">${actions}</div></td>
+      </tr>`;
+  }).join('');
+}
+
+// ── ORDER ACTION CONFIRM ──────────────────────────────────────────
+let pendingOrderAction = null;
+
+window.confirmOrderAction = (orderId, action) => {
+  const o = orders[orderId];
+  if (!o) return;
+  pendingOrderAction = { orderId, action };
+
+  const actionLabels = { aceptar:'✅ Aceptar pedido', rechazar:'❌ Rechazar / Cancelar pedido', enviar:'🚚 Marcar como enviado', confirmar:'🎉 Confirmar entrega' };
+  const actionDescs  = {
+    aceptar: '¿Estás segura de ACEPTAR este pedido? El stock de los productos seleccionados será descontado automáticamente.',
+    rechazar: '¿Estás segura de RECHAZAR/CANCELAR este pedido? NO se descontará stock y el pedido quedará en cancelados.',
+    enviar: '¿Estás segura de marcar este pedido como ENVIADO? El cliente verá que su paquete está en camino.',
+    confirmar: '¿Estás segura de confirmar que el cliente RECIBIÓ el pedido? El pedido quedará como "Listo".'
+  };
+
+  document.getElementById('orderConfirmTitle').textContent = actionLabels[action] || 'Confirmar';
+  document.getElementById('orderConfirmDesc').textContent = actionDescs[action] || '¿Continuar?';
+  document.getElementById('orderConfirmSummary').innerHTML = `
+    <strong>Código:</strong> ${o.id}<br>
+    <strong>Cliente:</strong> ${o.cliente?.nombre} ${o.cliente?.apellido}<br>
+    <strong>Email:</strong> ${o.cliente?.email}<br>
+    <strong>Productos:</strong> ${o.items?.map(i => `${i.productName} (${i.selectedSize}) ×${i.qty}`).join(', ')}<br>
+    <strong>Total:</strong> $${o.total?.toLocaleString('es-CL')}`;
+
+  const btn = document.getElementById('orderConfirmBtn');
+  const colorMap = { aceptar:'background:var(--green);color:white', rechazar:'background:var(--red);color:white', enviar:'background:var(--blue);color:white', confirmar:'background:var(--green);color:white' };
+  btn.setAttribute('style', colorMap[action] || '');
+  btn.textContent = actionLabels[action];
+  btn.onclick = () => executeOrderAction();
+
+  document.getElementById('orderConfirmOverlay').classList.add('open');
+};
+
+window.closeOrderConfirm = () => {
+  document.getElementById('orderConfirmOverlay').classList.remove('open');
+  pendingOrderAction = null;
+};
+
+window.executeOrderAction = async () => {
+  if (!pendingOrderAction) return;
+  const { orderId, action } = pendingOrderAction;
+  const o = orders[orderId];
+  closeOrderConfirm();
+
+  if (action === 'aceptar') {
+    // Deduct stock
+    if (o.items) {
+      for (const item of o.items) {
+        const prod = products.find(p => p.id === item.productId);
+        if (prod && prod.sizes && prod.sizes[item.selectedSize] !== undefined) {
+          const newStock = Math.max(0, prod.sizes[item.selectedSize] - item.qty);
+          await set(ref(db, `productos/${prod.id}/sizes/${item.selectedSize}`), newStock);
+        }
+      }
+    }
+    await set(ref(db, `pedidos/${orderId}/status`), 'aceptado');
+    showNotif(`Pedido ${orderId} ACEPTADO ✓ — Stock descontado automáticamente`);
+  } else if (action === 'rechazar') {
+    await set(ref(db, `pedidos/${orderId}/status`), 'cancelado');
+    showNotif(`Pedido ${orderId} cancelado`);
+  } else if (action === 'enviar') {
+    await set(ref(db, `pedidos/${orderId}/status`), 'enviado');
+    showNotif(`Pedido ${orderId} marcado como enviado 🚚`);
+  } else if (action === 'confirmar') {
+    await set(ref(db, `pedidos/${orderId}/status`), 'confirmado');
+    showNotif(`Pedido ${orderId} confirmado como entregado 🎉`);
+  }
+};
+
+// ── PRODUCTS TABLE ────────────────────────────────────────────────
 window.renderTable = () => {
   const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
   const filtered = products.filter(p => p.name.toLowerCase().includes(q));
   const lbl = { new:'Nuevo', sale:'Oferta', hot:'Hot 🔥' };
   const cls = { new:'pill-new', sale:'pill-sale', hot:'pill-hot' };
   const genderLabel = { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
-
   const catName = id => categories.find(c => c.id === id)?.name || id || '—';
-
-  const renderSizesPills = (sizes) => {
+  const renderSizesPills = sizes => {
     if (!sizes || !Object.keys(sizes).length) return '<span style="color:var(--gray);font-size:12px;">Sin tallas</span>';
     return '<div class="sizes-pills">' + Object.entries(sizes).map(([sz, stock]) =>
-      `<span class="sz-pill ${stock <= 2 ? 'low' : ''}">${sz}: ${stock}</span>`
-    ).join('') + '</div>';
+      `<span class="sz-pill ${stock <= 2 ? 'low' : ''}">${sz}: ${stock}</span>`).join('') + '</div>';
   };
-
   document.getElementById('productTable').innerHTML = filtered.length ? filtered.map(p => `
     <tr>
       <td>${p.img ? `<img class="prod-thumb" src="${p.img}" alt="${p.name}">` : `<div style="width:48px;height:48px;background:#f0ede8;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid #eee;font-size:11px;color:var(--gray);">IMG</div>`}</td>
@@ -554,27 +741,23 @@ window.renderTable = () => {
   : '<tr><td colspan="8" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
 };
 
-// ── CATEGORIES TABLE ─────────────────────────────────────────────
+// ── CATEGORIES TABLE ──────────────────────────────────────────────
 function renderCatTable() {
   const tbody = document.getElementById('catTable');
   if (!tbody) return;
-  if (!categories.length) {
-    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--gray);padding:40px">Sin categorías. Crea la primera con el botón de arriba.</td></tr>';
-    return;
-  }
+  if (!categories.length) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--gray);padding:40px">Sin categorías. Crea la primera con el botón de arriba.</td></tr>'; return; }
   tbody.innerHTML = categories.map(cat => {
     const count = products.filter(p => p.cat === cat.id).length;
-    return `
-      <tr>
-        <td id="cat-name-${cat.id}" style="font-weight:500">${cat.name}</td>
-        <td style="color:var(--gray)">${count} producto${count !== 1 ? 's' : ''}</td>
-        <td id="cat-actions-${cat.id}">
-          <div class="action-btns">
-            <button class="btn-edit" onclick="startRename('${cat.id}')">✏ Renombrar</button>
-            <button class="btn-del" onclick="deleteCat('${cat.id}')">🗑 Eliminar</button>
-          </div>
-        </td>
-      </tr>`;
+    return `<tr>
+      <td id="cat-name-${cat.id}" style="font-weight:500">${cat.name}</td>
+      <td style="color:var(--gray)">${count} producto${count !== 1 ? 's' : ''}</td>
+      <td id="cat-actions-${cat.id}">
+        <div class="action-btns">
+          <button class="btn-edit" onclick="startRename('${cat.id}')">✏ Renombrar</button>
+          <button class="btn-del" onclick="deleteCat('${cat.id}')">🗑 Eliminar</button>
+        </div>
+      </td>
+    </tr>`;
   }).join('');
 }
 
@@ -582,9 +765,7 @@ function updateCatSelector() {
   const sel = document.getElementById('fCat');
   if (!sel) return;
   const cur = sel.value;
-  sel.innerHTML = categories.length
-    ? `<option value="">Sin categoría</option>` + categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('')
-    : '<option value="">— Crea una categoría primero —</option>';
+  sel.innerHTML = categories.length ? `<option value="">Sin categoría</option>` + categories.map(c => `<option value="${c.id}">${c.name}</option>`).join('') : '<option value="">— Crea una categoría primero —</option>';
   if (cur) sel.value = cur;
 }
 
@@ -592,8 +773,7 @@ function updateCatSelector() {
 window.startRename = (id) => {
   const cat = categories.find(c => c.id === id);
   if (!cat) return;
-  document.getElementById('cat-name-' + id).innerHTML =
-    `<input class="cat-inline-input" id="rename-${id}" value="${cat.name}" onkeydown="handleRenameKey(event,'${id}')">`;
+  document.getElementById('cat-name-' + id).innerHTML = `<input class="cat-inline-input" id="rename-${id}" value="${cat.name}" onkeydown="handleRenameKey(event,'${id}')">`;
   document.getElementById('cat-actions-' + id).innerHTML = `
     <div class="action-btns">
       <button class="btn-edit" style="background:var(--accent)" onclick="saveRename('${id}')">✓ Guardar</button>
@@ -601,12 +781,7 @@ window.startRename = (id) => {
     </div>`;
   document.getElementById('rename-' + id).focus();
 };
-
-window.handleRenameKey = (e, id) => {
-  if (e.key === 'Enter') saveRename(id);
-  if (e.key === 'Escape') renderCatTable();
-};
-
+window.handleRenameKey = (e, id) => { if(e.key==='Enter')saveRename(id); if(e.key==='Escape')renderCatTable(); };
 window.saveRename = async (id) => {
   const input = document.getElementById('rename-' + id);
   if (!input) return;
@@ -624,9 +799,7 @@ window.openCatModal = (id = null) => {
   document.getElementById('catModalOverlay').classList.add('open');
   setTimeout(() => document.getElementById('fCatName').focus(), 100);
 };
-
 window.closeCatModal = () => document.getElementById('catModalOverlay').classList.remove('open');
-
 window.saveCat = async () => {
   const name = document.getElementById('fCatName').value.trim();
   if (!name) { showNotif('Escribe un nombre para la categoría', 'error'); return; }
@@ -635,10 +808,9 @@ window.saveCat = async () => {
   closeCatModal();
   showNotif(editingCatId ? 'Categoría actualizada ✓' : 'Categoría creada ✓');
 };
-
 window.deleteCat = async (id) => {
   const count = products.filter(p => p.cat === id).length;
-  let msg = `¿Eliminar esta categoría?`;
+  let msg = '¿Eliminar esta categoría?';
   if (count > 0) msg += `\n\n⚠️ ${count} producto(s) usan esta categoría y quedarán sin categoría.`;
   if (!confirm(msg)) return;
   await remove(ref(db, 'categorias/' + id));
@@ -657,8 +829,6 @@ window.openModal = (id = null) => {
   document.getElementById('fImgUrl').value = '';
   document.getElementById('urlPreviewWrap').style.display = 'none';
   switchImgTab('upload');
-
-  // Reset gender
   document.querySelectorAll('input[name="fGender"]').forEach(r => r.checked = false);
 
   if (id) {
@@ -669,27 +839,12 @@ window.openModal = (id = null) => {
     document.getElementById('fBadge').value = p.badge || '';
     document.getElementById('fPrice').value = p.price;
     document.getElementById('fOldPrice').value = p.oldPrice || '';
-
-    // Gender
-    if (p.gender) {
-      const r = document.getElementById('g' + p.gender.charAt(0).toUpperCase() + p.gender.slice(1));
-      if (r) r.checked = true;
-    }
-
-    // Sizes
+    if (p.gender) { const r = document.getElementById('g' + p.gender.charAt(0).toUpperCase() + p.gender.slice(1)); if(r) r.checked = true; }
     sizesData = p.sizes ? { ...p.sizes } : {};
-
     if (p.img) {
       currentImgData = p.img;
-      if (p.img.startsWith('data:')) {
-        document.getElementById('uploadPreview').src = p.img;
-        document.getElementById('uploadArea').classList.add('has-image');
-      } else {
-        switchImgTab('url');
-        document.getElementById('fImgUrl').value = p.img;
-        document.getElementById('urlPreview').src = p.img;
-        document.getElementById('urlPreviewWrap').style.display = 'block';
-      }
+      if (p.img.startsWith('data:')) { document.getElementById('uploadPreview').src = p.img; document.getElementById('uploadArea').classList.add('has-image'); }
+      else { switchImgTab('url'); document.getElementById('fImgUrl').value = p.img; document.getElementById('urlPreview').src = p.img; document.getElementById('urlPreviewWrap').style.display = 'block'; }
     }
   } else {
     document.getElementById('fName').value = '';
@@ -702,103 +857,76 @@ window.openModal = (id = null) => {
   renderSizesList();
   document.getElementById('modalOverlay').classList.add('open');
 };
-
 window.closeModal = () => document.getElementById('modalOverlay').classList.remove('open');
 
-// ── SIZES MANAGEMENT ──────────────────────────────────────────────
+// ── SIZES ─────────────────────────────────────────────────────────
 function renderSizesList() {
   const list = document.getElementById('sizesList');
   const entries = Object.entries(sizesData);
-  if (!entries.length) {
-    list.innerHTML = '<div class="sizes-empty">Agrega al menos una talla con su stock</div>';
-    return;
-  }
+  if (!entries.length) { list.innerHTML = '<div class="sizes-empty">Agrega al menos una talla con su stock</div>'; return; }
   list.innerHTML = entries.map(([sz, stock]) => `
     <div class="size-item ${stock <= 2 ? 'low-stock' : ''}" id="szitem-${sz}">
       <div class="size-item-label">${sz}</div>
       <div class="size-item-stock">Stock: <span>${stock}</span> unidades${stock <= 2 ? ' ⚠️ bajo' : ''}</div>
       <div class="size-stock-btns">
-        <button class="btn-sz" onclick="changeSzStock('${sz}', -1)" title="Quitar 1 unidad">−</button>
-        <button class="btn-sz" onclick="changeSzStock('${sz}', 1)" title="Agregar 1 unidad">+</button>
-        <button class="btn-sz del" onclick="removeSize('${sz}')" title="Eliminar talla">🗑</button>
+        <button class="btn-sz" onclick="changeSzStock('${sz}', -1)">−</button>
+        <button class="btn-sz" onclick="changeSzStock('${sz}', 1)">+</button>
+        <button class="btn-sz del" onclick="removeSize('${sz}')">🗑</button>
       </div>
     </div>`).join('');
 }
 
 window.addSize = () => {
-  const nameEl  = document.getElementById('newSizeName');
+  const nameEl = document.getElementById('newSizeName');
   const stockEl = document.getElementById('newSizeStock');
-  const name  = nameEl.value.trim().toUpperCase();
+  const name = nameEl.value.trim().toUpperCase();
   const stock = parseInt(stockEl.value);
-  if (!name) { showNotif('Escribe el nombre de la talla (ej: S, M, XL)', 'error'); nameEl.focus(); return; }
+  if (!name) { showNotif('Escribe el nombre de la talla', 'error'); nameEl.focus(); return; }
   if (!stock || stock < 1) { showNotif('Ingresa la cantidad de unidades (mínimo 1)', 'error'); stockEl.focus(); return; }
   if (sizesData[name] !== undefined) { showNotif(`La talla "${name}" ya existe`, 'error'); return; }
   sizesData[name] = stock;
-  nameEl.value = '';
-  stockEl.value = '';
-  renderSizesList();
-  nameEl.focus();
+  nameEl.value = ''; stockEl.value = '';
+  renderSizesList(); nameEl.focus();
 };
-
-window.removeSize = (sz) => {
-  if (!confirm(`¿Eliminar la talla "${sz}"? Se quitará del stock.`)) return;
-  delete sizesData[sz];
-  renderSizesList();
-};
-
+window.removeSize = (sz) => { if (!confirm(`¿Eliminar la talla "${sz}"?`)) return; delete sizesData[sz]; renderSizesList(); };
 window.changeSzStock = (sz, delta) => {
   if (sizesData[sz] === undefined) return;
   const newVal = sizesData[sz] + delta;
   if (newVal < 0) { showNotif('El stock no puede ser negativo', 'error'); return; }
   if (newVal === 0 && delta < 0) {
-    if (!confirm(`¿El stock de la talla "${sz}" llegó a 0. ¿Quieres eliminarla de la lista de tallas disponibles?`)) {
-      sizesData[sz] = 0;
-      renderSizesList();
-      return;
-    }
+    if (!confirm(`Stock de "${sz}" llegó a 0. ¿Eliminar esta talla?`)) { sizesData[sz] = 0; renderSizesList(); return; }
     delete sizesData[sz];
-  } else {
-    sizesData[sz] = newVal;
-  }
+  } else { sizesData[sz] = newVal; }
   renderSizesList();
 };
 
-// ── CONFIRM BEFORE SAVE ───────────────────────────────────────────
+// ── SAVE PRODUCT ──────────────────────────────────────────────────
 window.requestSaveConfirm = () => {
-  const name    = document.getElementById('fName').value.trim();
-  const cat     = document.getElementById('fCat').value;
-  const price   = parseInt(document.getElementById('fPrice').value);
-  const gender  = document.querySelector('input[name="fGender"]:checked')?.value;
+  const name   = document.getElementById('fName').value.trim();
+  const cat    = document.getElementById('fCat').value;
+  const price  = parseInt(document.getElementById('fPrice').value);
+  const gender = document.querySelector('input[name="fGender"]:checked')?.value;
   const catName = categories.find(c => c.id === cat)?.name || '(sin categoría)';
   const genderLabel = { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
   const sizeEntries = Object.entries(sizesData);
 
-  // VALIDATIONS
-  if (!name)   { showNotif('El nombre del producto no puede estar vacío', 'error'); document.getElementById('fName').focus(); return; }
-  if (!price || price < 1) { showNotif('Ingresa un precio válido', 'error'); document.getElementById('fPrice').focus(); return; }
-  if (!gender) { showNotif('Selecciona el género (Hombre, Mujer o Unisex)', 'error'); return; }
-  if (!sizeEntries.length) { showNotif('Agrega al menos una talla con su stock', 'error'); document.getElementById('newSizeName').focus(); return; }
+  if (!name)   { showNotif('El nombre del producto no puede estar vacío', 'error'); return; }
+  if (!price || price < 1) { showNotif('Ingresa un precio válido', 'error'); return; }
+  if (!gender) { showNotif('Selecciona el género', 'error'); return; }
+  if (!sizeEntries.length) { showNotif('Agrega al menos una talla con su stock', 'error'); return; }
 
-  // Build summary
-  const sizesText = sizeEntries.map(([s, q]) => `<strong>${s}</strong>: ${q} ud.`).join(' &nbsp;·&nbsp; ');
+  const sizesText = sizeEntries.map(([s, q]) => `<strong>${s}</strong>: ${q} ud.`).join(' · ');
   const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
-
   document.getElementById('confirmSummary').innerHTML = `
     <div><strong>Nombre:</strong> ${name}</div>
     <div><strong>Categoría:</strong> ${catName}</div>
     <div><strong>Género:</strong> ${genderLabel[gender]}</div>
     <div><strong>Precio:</strong> $${price.toLocaleString('es-CL')}${oldPrice ? ` <span style="text-decoration:line-through;color:var(--gray);font-size:12px;">$${oldPrice.toLocaleString('es-CL')}</span>` : ''}</div>
-    <div style="margin-top:6px;"><strong>Tallas y stock:</strong><br>${sizesText}</div>
-  `;
+    <div style="margin-top:6px;"><strong>Tallas y stock:</strong><br>${sizesText}</div>`;
   document.getElementById('confirmOverlay').classList.add('open');
 };
-
 window.closeConfirm = () => document.getElementById('confirmOverlay').classList.remove('open');
-
-window.confirmSaveProduct = async () => {
-  closeConfirm();
-  await doSaveProduct();
-};
+window.confirmSaveProduct = async () => { closeConfirm(); await doSaveProduct(); };
 
 async function doSaveProduct() {
   const name     = document.getElementById('fName').value.trim();
@@ -807,24 +935,15 @@ async function doSaveProduct() {
   const price    = parseInt(document.getElementById('fPrice').value);
   const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
   const gender   = document.querySelector('input[name="fGender"]:checked')?.value;
-
   let img = currentImgData;
-  if (currentImgTab === 'url') {
-    const urlVal = document.getElementById('fImgUrl').value.trim();
-    if (urlVal) img = urlVal;
-  }
-
+  if (currentImgTab === 'url') { const urlVal = document.getElementById('fImgUrl').value.trim(); if (urlVal) img = urlVal; }
   const id       = editingId || ('prod_' + Date.now());
   const existing = editingId ? products.find(x => x.id === editingId) : null;
   const prod     = { id, name, cat, badge, price, oldPrice, gender, sizes: sizesData, img: img || existing?.img || null };
-
   await set(ref(db, 'productos/' + id), prod);
   closeModal();
   showNotif(editingId ? 'Producto actualizado ✓' : 'Producto agregado ✓');
 }
-
-window.saveProduct = async () => { requestSaveConfirm(); };
-
 window.deleteProduct = async (id) => {
   if (!confirm('¿Eliminar este producto de la tienda?')) return;
   await remove(ref(db, 'productos/' + id));
@@ -839,30 +958,17 @@ window.switchImgTab = (tab) => {
   document.getElementById('imgTabUpload').style.display = tab === 'upload' ? 'block' : 'none';
   document.getElementById('imgTabUrl').style.display    = tab === 'url'    ? 'block' : 'none';
 };
-
 window.handleFileUpload = (e) => {
   const file = e.target.files[0];
   if (!file) return;
   if (file.size > 5 * 1024 * 1024) { showNotif('La imagen supera 5MB', 'error'); return; }
   const reader = new FileReader();
-  reader.onload = ev => {
-    currentImgData = ev.target.result;
-    document.getElementById('uploadPreview').src = currentImgData;
-    document.getElementById('uploadArea').classList.add('has-image');
-  };
+  reader.onload = ev => { currentImgData = ev.target.result; document.getElementById('uploadPreview').src = currentImgData; document.getElementById('uploadArea').classList.add('has-image'); };
   reader.readAsDataURL(file);
 };
-
-window.resetImage = (e) => {
-  e.preventDefault(); e.stopPropagation();
-  currentImgData = null;
-  document.getElementById('uploadPreview').src = '';
-  document.getElementById('uploadArea').classList.remove('has-image');
-  document.getElementById('fImgFile').value = '';
-};
-
+window.resetImage = (e) => { e.preventDefault(); e.stopPropagation(); currentImgData = null; document.getElementById('uploadPreview').src = ''; document.getElementById('uploadArea').classList.remove('has-image'); document.getElementById('fImgFile').value = ''; };
 window.previewUrl = () => {
-  const url  = document.getElementById('fImgUrl').value.trim();
+  const url = document.getElementById('fImgUrl').value.trim();
   if (!url) return;
   const wrap = document.getElementById('urlPreviewWrap');
   const img  = document.getElementById('urlPreview');
@@ -872,28 +978,19 @@ window.previewUrl = () => {
 };
 
 // ── SETTINGS ─────────────────────────────────────────────────────
-// Load settings from Firebase on startup
 onValue(ref(db, 'config'), snap => {
   const cfg = snap.val();
   if (!cfg) return;
   if (cfg.wsp)  document.getElementById('cfgWsp').value  = cfg.wsp;
   if (cfg.name) document.getElementById('cfgName').value = cfg.name;
-  // Update stored password if changed
   if (cfg.pass) CREDS.pass = cfg.pass;
 });
-
 window.saveSettings = async () => {
   const wsp  = document.getElementById('cfgWsp').value.trim();
   const name = document.getElementById('cfgName').value.trim();
   const pass = document.getElementById('cfgPass').value.trim();
-
-  const cfg = { wsp, name };
-  if (pass) {
-    cfg.pass = pass;
-    CREDS.pass = pass;
-    document.getElementById('cfgPass').value = '';
-  }
-
+  const cfg  = { wsp, name };
+  if (pass) { cfg.pass = pass; CREDS.pass = pass; document.getElementById('cfgPass').value = ''; }
   await set(ref(db, 'config'), cfg);
   showNotif('Configuración guardada ✓');
 };
@@ -903,15 +1000,15 @@ function showNotif(msg, type = 'success') {
   const n = document.getElementById('adminNotif');
   n.textContent = msg;
   n.className = 'admin-notif ' + type + ' show';
-  setTimeout(() => n.classList.remove('show'), 3000);
+  setTimeout(() => n.classList.remove('show'), 4000);
 }
 
 // ── MODAL CLOSE ON OVERLAY ────────────────────────────────────────
-document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target===this) closeModal(); });
-document.getElementById('catModalOverlay').addEventListener('click', function(e) { if (e.target===this) closeCatModal(); });
-document.getElementById('confirmOverlay').addEventListener('click', function(e) { if (e.target===this) closeConfirm(); });
+document.getElementById('modalOverlay').addEventListener('click', function(e) { if(e.target===this)closeModal(); });
+document.getElementById('catModalOverlay').addEventListener('click', function(e) { if(e.target===this)closeCatModal(); });
+document.getElementById('confirmOverlay').addEventListener('click', function(e) { if(e.target===this)closeConfirm(); });
+document.getElementById('orderConfirmOverlay').addEventListener('click', function(e) { if(e.target===this)closeOrderConfirm(); });
 
-// expose renderTable globally for search input
 window.renderTable = window.renderTable;
 </script>
 </body>
