@@ -2,7 +2,7 @@
 
 1__quiero que el boton avisar envio mande el mensaje: tu pedido fue entregado a la empresa de transporte cuando te llegue tu pedido avisame que tu pedido fue entregado coorectamente y el boton quiero que el boton de whatsap cumpla la funcion dependiendo en que estado se encuentra el producto por ejemplo si el producto fue cancelado que al apretar el boton de whatsap le envie un mensaje que el pedido ha sido cancelado y etc
 
-2__quiero en el formulario que llena el cliente incluyas solo las comunas que existen en chile y las regiones que existen en chile, quiero que incluyas un boton en la barra para buscar el pedido que al apretarlo te busque el pedido, que los pedidos listos y cancelados duren 24 horas y luego pasen a un historial de pedidos cancelados y listos que puedas buscar tambien en otra pestaña que se llame historial de todos los pedidos,quitarle la opcion de cambiar el nombre de la tienda
+2__quiero que incluyas un boton en la barra para buscar el pedido que al apretarlo te busque el pedido, que los pedidos listos y cancelados duren 24 horas y luego pasen a un historial de pedidos cancelados y listos que puedas buscar tambien en otra pestaña que se llame historial de todos los pedidos,quitarle la opcion de cambiar el nombre de la tienda
 
 
 3__ que en unidades de la prenda pueda poner "solo a pedido " y poder desactivar un producto tambien para que no aparezca en la pantalla principal pero quede gaurdado
