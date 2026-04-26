@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Palacio Store</title>
+<title>Project Venta</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -76,7 +76,7 @@
 
   /* ── HERO ── */
   .hero { background:var(--black); padding:80px 40px 70px; position:relative; overflow:hidden; border-bottom:1px solid #181818; }
-  .hero::before { content:'PALACIO'; position:absolute; font-family:'Bebas Neue',sans-serif; font-size:28vw; color:rgba(227,20,20,0.04); top:50%; left:50%; transform:translate(-50%,-50%); white-space:nowrap; pointer-events:none; letter-spacing:-5px; }
+  .hero::before { content:'PROJECT'; position:absolute; font-family:'Bebas Neue',sans-serif; font-size:28vw; color:rgba(227,20,20,0.04); top:50%; left:50%; transform:translate(-50%,-50%); white-space:nowrap; pointer-events:none; letter-spacing:-5px; }
   .hero-inner { position:relative; z-index:1; }
   .hero-label { display:inline-flex; align-items:center; gap:10px; font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:4px; text-transform:uppercase; color:var(--red); margin-bottom:18px; }
   .hero-label::before { content:''; width:32px; height:2px; background:var(--red); }
@@ -285,15 +285,12 @@
   .sp-confirmado { background:rgba(46,189,107,0.15); color:#2ebd6b; border:1px solid rgba(46,189,107,0.3); }
   .sp-cancelado { background:rgba(227,20,20,0.15); color:#e31414; border:1px solid rgba(227,20,20,0.3); }
 
-  /* ══════════════════════════════════════════
-     SECCIÓN DE RESEÑAS
-  ══════════════════════════════════════════ */
+  /* ── RESEÑAS ── */
   .reviews-section { padding:72px 40px; background:var(--black); border-top:2px solid #181818; }
   .reviews-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:36px; flex-wrap:wrap; gap:18px; }
   .reviews-header-left h2 { font-family:'Bebas Neue',sans-serif; font-size:52px; letter-spacing:5px; line-height:1; }
   .reviews-header-left h2 span { color:var(--red); }
   .reviews-header-left p { font-family:'Barlow Condensed',sans-serif; font-size:13px; color:var(--light); letter-spacing:2px; text-transform:uppercase; margin-top:6px; }
-  /* Resumen de calificación */
   .rating-summary { background:var(--off); border:2px solid #1a1a1a; padding:22px 28px; display:flex; align-items:center; gap:28px; margin-bottom:36px; flex-wrap:wrap; }
   .rating-big { text-align:center; }
   .rating-big .num { font-family:'Bebas Neue',sans-serif; font-size:72px; letter-spacing:-2px; color:var(--white); line-height:1; }
@@ -304,12 +301,10 @@
   .rating-bar-label { font-family:'Barlow Condensed',sans-serif; font-size:12px; color:var(--light); letter-spacing:1px; min-width:16px; text-align:right; }
   .rating-bar-star { color:var(--gold); font-size:11px; }
   .rating-bar-track { flex:1; height:6px; background:#1a1a1a; border-radius:3px; overflow:hidden; }
-  .rating-bar-fill { height:100%; background:var(--gold); border-radius:3px; transition:width 0.6s ease; }
+  .rating-bar-fill { height:100%; background:var(--gold); border-radius:3px; }
   .rating-bar-count { font-family:'Barlow Condensed',sans-serif; font-size:11px; color:var(--mid); min-width:20px; }
-  /* Botón dejar reseña */
   .write-review-btn { background:var(--red); color:var(--white); border:none; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:900; letter-spacing:4px; text-transform:uppercase; padding:16px 32px; clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%); transition:background 0.2s; align-self:flex-start; white-space:nowrap; }
   .write-review-btn:hover { background:var(--red-dark); }
-  /* Grid de reseñas */
   .reviews-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:36px; }
   .review-card { background:var(--off); border:1px solid #1e1e1e; padding:22px; transition:border-color 0.2s; }
   .review-card:hover { border-color:#2a2a2a; }
@@ -320,11 +315,9 @@
   .review-card-date { font-family:'Barlow Condensed',sans-serif; font-size:10px; color:var(--mid); letter-spacing:1.5px; text-transform:uppercase; }
   .review-card-avatar { width:42px; height:42px; background:var(--red); display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--white); flex-shrink:0; }
   .review-card-text { font-family:'Barlow',sans-serif; font-size:14px; color:#bbb; line-height:1.6; }
-  /* Rating estrellas interactivas */
   .star-input { display:flex; gap:4px; margin-bottom:6px; }
   .star-input .star-btn { background:none; border:none; font-size:28px; cursor:pointer; color:#333; transition:color 0.15s, transform 0.1s; padding:0 2px; }
   .star-input .star-btn:hover, .star-input .star-btn.on { color:var(--gold); transform:scale(1.15); }
-  /* Modal de reseña */
   .review-modal-bg { position:fixed; inset:0; background:rgba(0,0,0,0.96); opacity:0; pointer-events:none; transition:0.3s; z-index:800; display:flex; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
   .review-modal-bg.open { opacity:1; pointer-events:all; }
   .review-modal { background:var(--off); border:2px solid var(--red); width:100%; max-width:520px; padding:36px; max-height:90vh; overflow-y:auto; position:relative; }
@@ -337,7 +330,6 @@
   .review-form-group label { display:block; font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--light); margin-bottom:6px; }
   .review-form-group input, .review-form-group textarea { width:100%; padding:11px 12px; background:#0a0a0a; border:1.5px solid #222; color:var(--white); font-family:'Barlow',sans-serif; font-size:14px; outline:none; transition:border 0.2s; resize:vertical; }
   .review-form-group input:focus, .review-form-group textarea:focus { border-color:var(--red); }
-  .review-form-group input.error, .review-form-group textarea.error { border-color:var(--red); background:rgba(227,20,20,0.04); }
   .review-form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   .review-field-error { font-family:'Barlow Condensed',sans-serif; font-size:11px; color:var(--red); letter-spacing:1px; margin-top:3px; display:none; }
   .review-field-error.show { display:block; }
@@ -345,10 +337,8 @@
   .review-submit-btn:hover { background:var(--red-dark); }
   .review-cancel-btn { width:100%; margin-top:8px; background:transparent; color:var(--light); border:1px solid #2a2a2a; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:13px; transition:all 0.2s; }
   .review-cancel-btn:hover { border-color:var(--red); color:var(--white); }
-  /* Show more */
   .show-more-btn { display:block; margin:0 auto; background:transparent; color:var(--light); border:1.5px solid #2a2a2a; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:13px 36px; transition:all 0.2s; }
   .show-more-btn:hover { border-color:var(--red); color:var(--white); }
-  /* Invite banner */
   .review-invite { background:var(--red); padding:28px 36px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:18px; margin-bottom:32px; }
   .review-invite-text h3 { font-family:'Bebas Neue',sans-serif; font-size:28px; letter-spacing:3px; }
   .review-invite-text p { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; opacity:0.75; margin-top:3px; }
@@ -370,8 +360,6 @@
   .float-btn:hover { transform:scale(1.1); }
   .float-ig { background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
   .float-wsp { background:#25D366; }
-  .float-tiktok { background:#010101; border:1.5px solid #333; position:relative; }
-  .float-tiktok::before { content:''; position:absolute; width:24px; height:24px; background:#69C9D0; border-radius:50% 50% 0 0; clip-path:ellipse(10px 12px at 50% 50%); left:14px; top:12px; opacity:0.8; }
 
   /* ── FOOTER ── */
   footer { background:var(--black); border-top:2px solid var(--red); padding:50px 40px 32px; }
@@ -403,7 +391,7 @@
 <body>
 
 <div class="ticker-wrap">
-  <div class="ticker-content" id="tickerContent">★ PALACIO STORE ★ CATÁLOGO DIGITAL ★ PEDIDOS EN TIEMPO REAL ★ ENVÍO A TODO CHILE ★ PALACIO STORE ★ CATÁLOGO DIGITAL ★ PEDIDOS EN TIEMPO REAL ★ ENVÍO A TODO CHILE ★&nbsp;</div>
+  <div class="ticker-content" id="tickerContent">★ PROJECT VENTA ★ CATÁLOGO DIGITAL ★ PEDIDOS EN TIEMPO REAL ★ ENVÍO A TODO CHILE ★ PROJECT VENTA ★ CATÁLOGO DIGITAL ★ PEDIDOS EN TIEMPO REAL ★ ENVÍO A TODO CHILE ★&nbsp;</div>
 </div>
 
 <nav>
@@ -411,7 +399,7 @@
     <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleCatDrawer()" aria-label="Categorías">
       <span></span><span></span><span></span>
     </button>
-    <a href="#" class="nav-logo"><span class="star">★</span> PALACIO STORE</a>
+    <a href="#" class="nav-logo"><span class="star">★</span> PROJECT VENTA</a>
   </div>
   <div class="nav-right">
     <div class="nav-search" id="navSearch">
@@ -444,7 +432,7 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-label">★ Tu tienda favorita</div>
-    <h1 class="hero-title">PALACIO<br><span class="red">STORE</span></h1>
+    <h1 class="hero-title">PROJECT<br><span class="red">VENTA</span></h1>
     <p class="hero-sub">Ropa de calidad · Pedidos en tiempo real 🚀</p>
     <button class="hero-cta" onclick="document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">★ VER CATÁLOGO</button>
   </div>
@@ -468,7 +456,7 @@
   </div>
   <div class="products-wrap">
     <div class="products" id="productGrid">
-      <div class="store-loading"><div class="big">PS</div></div>
+      <div class="store-loading"><div class="big">PV</div></div>
     </div>
   </div>
 </div>
@@ -486,7 +474,7 @@
   </div>
 </section>
 
-<!-- ══════════════ SECCIÓN RESEÑAS ══════════════ -->
+<!-- RESEÑAS -->
 <section class="reviews-section" id="reviews">
   <div class="reviews-header">
     <div class="reviews-header-left">
@@ -496,7 +484,6 @@
     <button class="write-review-btn" onclick="openReviewModal()">★ DEJAR MI RESEÑA</button>
   </div>
 
-  <!-- Invite banner -->
   <div class="review-invite">
     <div class="review-invite-text">
       <h3>¿YA COMPRASTE CON NOSOTROS?</h3>
@@ -505,19 +492,15 @@
     <button class="review-invite-btn" onclick="openReviewModal()">ESCRIBIR RESEÑA →</button>
   </div>
 
-  <!-- Resumen de puntuaciones -->
   <div class="rating-summary" id="ratingSummary">
     <div class="rating-big">
       <div class="num" id="avgRating">—</div>
       <div class="stars-row" id="avgStars">☆☆☆☆☆</div>
       <div class="total" id="totalReviews">0 reseñas</div>
     </div>
-    <div class="rating-bars" id="ratingBars">
-      <!-- Rendered by JS -->
-    </div>
+    <div class="rating-bars" id="ratingBars"></div>
   </div>
 
-  <!-- Grid de reseñas -->
   <div class="reviews-grid" id="reviewsGrid">
     <div class="no-reviews-state">
       <div class="nr-icon">💬</div>
@@ -530,22 +513,19 @@
 <footer>
   <div class="foot-top">
     <div>
-      <div class="foot-logo">PALACIO<span>.</span></div>
+      <div class="foot-logo">PROJECT<span>.</span></div>
       <p class="foot-sub">Tu tienda de confianza 🖤</p>
     </div>
-    <div class="foot-social" id="footSocial">
-      <!-- Rendered by JS based on config -->
-    </div>
+    <div class="foot-social" id="footSocial"></div>
   </div>
   <div class="foot-bottom">
-    <p>© 2026 Palacio Store — Todos los derechos reservados</p>
+    <p>© 2026 Project Venta — Todos los derechos reservados</p>
     <div style="font-size:16px;">🇨🇱</div>
   </div>
 </footer>
 
 <!-- Float buttons -->
 <div class="float-btns" id="floatBtns">
-  <!-- Rendered by JS -->
   <a class="float-btn float-wsp" id="floatWsp" href="#" target="_blank">
     <svg viewBox="0 0 24 24" width="26" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
   </a>
@@ -641,7 +621,7 @@
     <p class="success-sub">Tu pedido está en espera de confirmación</p>
     <div class="order-number-box">
       <div class="order-number-label">TU CÓDIGO DE SEGUIMIENTO</div>
-      <div class="order-number-val" id="successOrderNum">PS000000</div>
+      <div class="order-number-val" id="successOrderNum">PV000000</div>
       <div class="order-number-tip">Úsalo en "SEGUIR PEDIDO" para ver el estado</div>
     </div>
     <p class="success-note">También hemos enviado el resumen por WhatsApp.<br>Usa el código para rastrear tu pedido en tiempo real.</p>
@@ -654,12 +634,10 @@
   <div class="review-modal">
     <h2>★ TU RESEÑA</h2>
     <div class="sub">Tu opinión importa — buena o mala, nos ayuda a mejorar.<br>Solo se permite <strong style="color:var(--white)">una reseña por correo y por número</strong>.</div>
-
     <div class="review-notice">
       ℹ️ <strong>¿Por qué pedimos estos datos?</strong><br>
       Tu nombre, correo y número son necesarios para que el dueño de la tienda pueda contactarte en caso de una mala experiencia y ofrecerte una solución. Estos datos <strong>NO</strong> serán publicados, solo se mostrará tu nombre.
     </div>
-
     <div class="review-form-group">
       <label>Tu calificación *</label>
       <div class="star-input" id="starInput">
@@ -671,13 +649,11 @@
       </div>
       <div class="review-field-error" id="errRating">Selecciona una calificación de 1 a 5 estrellas</div>
     </div>
-
     <div class="review-form-group">
       <label>Tu comentario *</label>
-      <textarea id="rvComment" rows="4" placeholder="Cuéntanos tu experiencia con Palacio Store..." maxlength="500"></textarea>
+      <textarea id="rvComment" rows="4" placeholder="Cuéntanos tu experiencia con Project Venta..." maxlength="500"></textarea>
       <div class="review-field-error" id="errComment">Escribe tu comentario (mínimo 10 caracteres)</div>
     </div>
-
     <div class="review-form-row">
       <div class="review-form-group">
         <label>Tu nombre *</label>
@@ -690,13 +666,11 @@
         <div class="review-field-error" id="errRvEmail">Ingresa un correo válido</div>
       </div>
     </div>
-
     <div class="review-form-group">
       <label>Número de WhatsApp * (+56912345678)</label>
       <input type="tel" id="rvTel" placeholder="+56912345678" maxlength="13" oninput="formatRvTel(this)">
       <div class="review-field-error" id="errRvTel">Ingresa un número válido con código de país (+569...)</div>
     </div>
-
     <button class="review-submit-btn" onclick="submitReview()">★ ENVIAR MI RESEÑA</button>
     <button class="review-cancel-btn" onclick="closeReviewModal()">CANCELAR</button>
   </div>
@@ -706,14 +680,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getDatabase, ref, onValue, set, push, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+// ── IMPORTANTE: Reemplaza estos valores con los de tu propio proyecto Firebase ──
 const firebaseConfig = {
-  apiKey: "AIzaSyB_Kgid_oL0wscMQlViW1ZweO9v6z_hsz0",
-  authDomain: "palacio-store.firebaseapp.com",
-  projectId: "palacio-store",
-  storageBucket: "palacio-store.firebasestorage.app",
-  messagingSenderId: "5927823600",
-  appId: "1:5927823600:web:211ffb13596d65c123fa35",
-  databaseURL: "https://palacio-store-default-rtdb.europe-west1.firebasedatabase.app"
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_PROYECTO.firebaseapp.com",
+  projectId: "TU_PROYECTO",
+  storageBucket: "TU_PROYECTO.firebasestorage.app",
+  messagingSenderId: "TU_SENDER_ID",
+  appId: "TU_APP_ID",
+  databaseURL: "https://TU_PROYECTO-default-rtdb.europe-west1.firebasedatabase.app"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -726,10 +701,10 @@ let REVIEWS_DB    = {};
 let cart          = [];
 let currentCat    = 'todos';
 let currentGender = 'todos';
-let wspNumber     = '569728650749';
+let wspNumber     = '56900000000'; // Cambia por tu número de WhatsApp
 let igUser        = '';
 let ttUser        = '';
-let bankData      = { banco:'FALABELLA', tipoCuenta:'Cuenta Vista', numeroCuenta:'000011122233344', rut:'21.902.467-3', nombre:'ignacio calderon', email:'ignaciocalderon.1805@gmail.com' };
+let bankData      = { banco:'', tipoCuenta:'', numeroCuenta:'', rut:'', nombre:'', email:'' };
 let sizeModalProduct  = null;
 let sizeModalSelected = null;
 let pendingFormData   = null;
@@ -771,12 +746,10 @@ function renderSocialLinks() {
   const floatBtns  = document.getElementById('floatBtns');
   let footHtml = '';
   let floatHtml = '';
-
   if (igUser) {
     footHtml += `<a class="foot-social-link" href="https://instagram.com/${igUser}" target="_blank">
       <svg viewBox="0 0 24 24" width="16" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      @${igUser}
-    </a>`;
+      @${igUser}</a>`;
     floatHtml += `<a class="float-btn float-ig" href="https://instagram.com/${igUser}" target="_blank">
       <svg viewBox="0 0 24 24" width="24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
     </a>`;
@@ -784,16 +757,14 @@ function renderSocialLinks() {
   if (ttUser) {
     footHtml += `<a class="foot-social-link" href="https://tiktok.com/@${ttUser}" target="_blank">
       <svg viewBox="0 0 24 24" width="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.73a4.85 4.85 0 0 1-1.01-.04z"/></svg>
-      @${ttUser}
-    </a>`;
-    floatHtml += `<a class="float-btn float-tiktok" href="https://tiktok.com/@${ttUser}" target="_blank" style="background:#010101;border:1.5px solid #333;">
+      @${ttUser}</a>`;
+    floatHtml += `<a class="float-btn" href="https://tiktok.com/@${ttUser}" target="_blank" style="background:#010101;border:1.5px solid #333;">
       <svg viewBox="0 0 24 24" width="22" fill="white"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.73a4.85 4.85 0 0 1-1.01-.04z"/></svg>
     </a>`;
   }
   floatHtml += `<a class="float-btn float-wsp" id="floatWsp" href="https://wa.me/${wspNumber.replace(/\D/g,'')}" target="_blank">
     <svg viewBox="0 0 24 24" width="26" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
   </a>`;
-
   footSocial.innerHTML = footHtml;
   floatBtns.innerHTML  = floatHtml;
 }
@@ -869,8 +840,8 @@ function renderProducts() {
   }
   const bl = { new:'NEW', sale:'SALE', hot:'HOT' };
   const bc = { new:'badge-new', sale:'badge-sale', hot:'badge-hot' };
-  const catName  = id => CATEGORIES.find(c => c.id === id)?.name || '';
-  const genderMap= { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
+  const catName   = id => CATEGORIES.find(c => c.id === id)?.name || '';
+  const genderMap = { hombre:'👕 Hombre', mujer:'👗 Mujer', unisex:'✨ Unisex' };
   grid.innerHTML = filtered.map(p => {
     const availSizes = p.sizes ? Object.entries(p.sizes).filter(([,q]) => q > 0 || q === 'pedido').map(([sz]) => sz) : [];
     const noStock    = !availSizes.length;
@@ -881,7 +852,7 @@ function renderProducts() {
     <div class="product-card">
       <div class="product-img">
         ${p.badge?`<span class="product-badge ${bc[p.badge]}">${bl[p.badge]}</span>`:''}
-        ${p.img?`<img src="${p.img}" alt="${p.name}" loading="lazy">`:`<div class="product-no-img"><span>PS</span></div>`}
+        ${p.img?`<img src="${p.img}" alt="${p.name}" loading="lazy">`:`<div class="product-no-img"><span>PV</span></div>`}
       </div>
       <div class="product-info">
         <div class="product-meta">
@@ -931,7 +902,7 @@ function addToCartDirect(p) {
   if (ex) ex.qty++; else cart.push({...p, selectedSize:sz, qty:1});
   updateCartUI(); toggleCart();
 }
-window.selectSize  = (sz, btn) => { sizeModalSelected=sz; document.querySelectorAll('.size-opt').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); };
+window.selectSize     = (sz, btn) => { sizeModalSelected=sz; document.querySelectorAll('.size-opt').forEach(b=>b.classList.remove('selected')); btn.classList.add('selected'); };
 window.closeSizeModal = () => { document.getElementById('sizeSelectorBg').classList.remove('open'); sizeModalProduct=null; sizeModalSelected=null; };
 window.confirmSizeAdd = () => { if (!sizeModalSelected){alert('Selecciona una talla.'); return;} addToCartDirect(sizeModalProduct); closeSizeModal(); };
 
@@ -945,7 +916,7 @@ function updateCartUI() {
   } else {
     el.innerHTML = cart.map((i,idx) => `
       <div class="cart-item">
-        <div class="cart-thumb">${i.img?`<img src="${i.img}" alt="${i.name}">`:`<div class="cart-thumb-empty">PS</div>`}</div>
+        <div class="cart-thumb">${i.img?`<img src="${i.img}" alt="${i.name}">`:`<div class="cart-thumb-empty">PV</div>`}</div>
         <div style="flex:1">
           <div class="cart-item-name">${i.name}</div>
           <div class="cart-item-size">Talla: ${i.selectedSize}</div>
@@ -973,7 +944,7 @@ window.openCheckoutForm = () => {
 };
 window.closeCheckoutModal = () => document.getElementById('checkoutModalBg').classList.remove('open');
 
-// ── REGIONES ───────────────────────────────────────────────────────
+// ── REGIONES Y COMUNAS ─────────────────────────────────────────────
 const COMUNAS_POR_REGION = {
   "Arica y Parinacota":["Arica","Camarones","Putre","General Lagos"],
   "Tarapacá":["Iquique","Alto Hospicio","Pozo Almonte","Camiña","Colchane","Huara","Pica"],
@@ -1007,9 +978,9 @@ window.updateComunas = () => {
   } else comunaSel.disabled = true;
 };
 
-// ── FIELD HELPERS ──────────────────────────────────────────────────
-window.formatRut = (i) => { let v=i.value.replace(/[^0-9kK]/g,'').toUpperCase(); if(v.length>1){const b=v.slice(0,-1).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); v=b+'-'+v.slice(-1);} i.value=v; };
-window.formatTel = (i) => { let v=i.value; if(!v.startsWith('+'))v='+'+v; v='+'+v.replace(/\D/g,''); if(v.length>13)v=v.slice(0,13); i.value=v; };
+// ── HELPERS ────────────────────────────────────────────────────────
+window.formatRut   = (i) => { let v=i.value.replace(/[^0-9kK]/g,'').toUpperCase(); if(v.length>1){const b=v.slice(0,-1).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); v=b+'-'+v.slice(-1);} i.value=v; };
+window.formatTel   = (i) => { let v=i.value; if(!v.startsWith('+'))v='+'+v; v='+'+v.replace(/\D/g,''); if(v.length>13)v=v.slice(0,13); i.value=v; };
 window.formatRvTel = (i) => { let v=i.value; if(!v.startsWith('+'))v='+'+v; v='+'+v.replace(/\D/g,''); if(v.length>13)v=v.slice(0,13); i.value=v; };
 
 function showFieldError(id, errId, show) {
@@ -1062,7 +1033,7 @@ window.closePreconfirm = () => document.getElementById('preconfirmBg').classList
 
 function generateOrderNumber() {
   const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  let code='PS';
+  let code='PV';
   for(let i=0;i<6;i++) code+=chars[Math.floor(Math.random()*chars.length)];
   if(ORDERS_DB[code]) return generateOrderNumber();
   return code;
@@ -1078,7 +1049,7 @@ window.finalSubmitOrder = async () => {
     items:cart.map(i=>({ productId:i.id, productName:i.name, selectedSize:i.selectedSize, qty:i.qty, price:i.price })), total };
   await set(ref(db,'pedidos/'+orderNum), order);
   const itemLines=cart.map(i=>`• ${i.name} (Talla: ${i.selectedSize}) x${i.qty} = $${(i.price*i.qty).toLocaleString('es-CL')}`).join('\n');
-  const wspMsg=encodeURIComponent(`★ PALACIO STORE ★ — NUEVO PEDIDO\n━━━━━━━━━━━━━━━━━━━━\n📦 CÓDIGO: ${orderNum}\n━━━━━━━━━━━━━━━━━━━━\n👤 ${d.nombre} ${d.apellido} | RUT: ${d.rut}\n📧 ${d.email} | 📱 ${d.tel}\n📍 ${d.region} — ${d.comuna}\n🏠 ${d.direccion}\n━━━━━━━━━━━━━━━━━━━━\n🛒 ${itemLines}\n💰 TOTAL: $${total.toLocaleString('es-CL')}\n━━━━━━━━━━━━━━━━━━━━`);
+  const wspMsg=encodeURIComponent(`★ PROJECT VENTA ★ — NUEVO PEDIDO\n━━━━━━━━━━━━━━━━━━━━\n📦 CÓDIGO: ${orderNum}\n━━━━━━━━━━━━━━━━━━━━\n👤 ${d.nombre} ${d.apellido} | RUT: ${d.rut}\n📧 ${d.email} | 📱 ${d.tel}\n📍 ${d.region} — ${d.comuna}\n🏠 ${d.direccion}\n━━━━━━━━━━━━━━━━━━━━\n🛒 ${itemLines}\n💰 TOTAL: $${total.toLocaleString('es-CL')}\n━━━━━━━━━━━━━━━━━━━━`);
   window.open(`https://wa.me/${wspNumber.replace(/\D/g,'')}?text=${wspMsg}`,'_blank');
   cart=[]; updateCartUI();
   document.getElementById('checkoutModalBg').classList.remove('open');
@@ -1136,9 +1107,7 @@ window.trackOrder = () => {
   </div>`;
 };
 
-// ════════════════════════════════════════════════════════
-//  SISTEMA DE RESEÑAS
-// ════════════════════════════════════════════════════════
+// ── RESEÑAS ────────────────────────────────────────────────────────
 window.openReviewModal = () => {
   currentRating = 0;
   updateStarUI(0);
@@ -1146,126 +1115,72 @@ window.openReviewModal = () => {
   document.getElementById('rvNombre').value  = '';
   document.getElementById('rvEmail').value   = '';
   document.getElementById('rvTel').value     = '';
-  ['errRating','errComment','errRvNombre','errRvEmail','errRvTel'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.classList.remove('show');
-  });
-  ['rvComment','rvNombre','rvEmail','rvTel'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.classList.remove('error');
-  });
+  ['errRating','errComment','errRvNombre','errRvEmail','errRvTel'].forEach(id => { const el=document.getElementById(id); if(el)el.classList.remove('show'); });
+  ['rvComment','rvNombre','rvEmail','rvTel'].forEach(id => { const el=document.getElementById(id); if(el)el.classList.remove('error'); });
   document.getElementById('reviewModalBg').classList.add('open');
 };
 window.closeReviewModal = () => document.getElementById('reviewModalBg').classList.remove('open');
-
-window.setRating = (val) => {
-  currentRating = val;
-  updateStarUI(val);
-  document.getElementById('errRating').classList.remove('show');
-};
-
-function updateStarUI(val) {
-  document.querySelectorAll('.star-btn').forEach((btn, idx) => {
-    btn.classList.toggle('on', idx < val);
-  });
-}
-
-// Hover star effect
-document.querySelectorAll('.star-btn').forEach((btn, idx) => {
-  btn.addEventListener('mouseenter', () => updateStarUI(idx+1));
-  btn.addEventListener('mouseleave', () => updateStarUI(currentRating));
+window.setRating = (val) => { currentRating=val; updateStarUI(val); document.getElementById('errRating').classList.remove('show'); };
+function updateStarUI(val) { document.querySelectorAll('.star-btn').forEach((btn,idx)=>btn.classList.toggle('on',idx<val)); }
+document.querySelectorAll('.star-btn').forEach((btn,idx)=>{
+  btn.addEventListener('mouseenter',()=>updateStarUI(idx+1));
+  btn.addEventListener('mouseleave',()=>updateStarUI(currentRating));
 });
-
-function showRvError(id, errId, show) {
-  const input = document.getElementById(id);
-  const err   = document.getElementById(errId);
+function showRvError(id,errId,show){
+  const input=document.getElementById(id); const err=document.getElementById(errId);
   if(!input||!err) return;
-  if(show){ input.classList.add('error'); err.classList.add('show'); }
-  else    { input.classList.remove('error'); err.classList.remove('show'); }
+  if(show){input.classList.add('error');err.classList.add('show');}
+  else{input.classList.remove('error');err.classList.remove('show');}
 }
-
 window.submitReview = async () => {
-  const comment = document.getElementById('rvComment').value.trim();
-  const nombre  = document.getElementById('rvNombre').value.trim();
-  const email   = document.getElementById('rvEmail').value.trim().toLowerCase();
-  const tel     = document.getElementById('rvTel').value.trim();
-  let valid = true;
-
-  if (!currentRating) { document.getElementById('errRating').classList.add('show'); valid=false; }
-  if (!comment || comment.length < 10) { showRvError('rvComment','errComment',true); valid=false; } else showRvError('rvComment','errComment',false);
-  if (!nombre) { showRvError('rvNombre','errRvNombre',true); valid=false; } else showRvError('rvNombre','errRvNombre',false);
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showRvError('rvEmail','errRvEmail',true); valid=false; } else showRvError('rvEmail','errRvEmail',false);
-  if (!tel || tel.length < 8) { showRvError('rvTel','errRvTel',true); valid=false; } else showRvError('rvTel','errRvTel',false);
-  if (!valid) return;
-
-  // Verificar duplicados: mismo correo O mismo teléfono
-  const allReviews = Object.values(REVIEWS_DB);
-  const cleanTel   = tel.replace(/\D/g,'');
-  const emailDup   = allReviews.find(r => r.email && r.email.toLowerCase() === email);
-  const telDup     = allReviews.find(r => r.tel && r.tel.replace(/\D/g,'') === cleanTel);
-
-  if (emailDup) {
-    alert(`Este correo (${email}) ya dejó una reseña. Solo se permite una reseña por correo.`);
-    return;
-  }
-  if (telDup) {
-    alert(`Este número de teléfono ya dejó una reseña. Solo se permite una reseña por número.`);
-    return;
-  }
-
-  // Guardar reseña
-  const reviewId = 'rv_' + Date.now();
-  const review   = {
-    id: reviewId,
-    nombre: nombre,
-    email: email,
-    tel: tel,
-    rating: currentRating,
-    comment: comment,
-    timestamp: Date.now(),
-    approved: true  // visible de inmediato (el admin puede eliminarla)
-  };
-  await set(ref(db, 'resenas/' + reviewId), review);
+  const comment=document.getElementById('rvComment').value.trim();
+  const nombre=document.getElementById('rvNombre').value.trim();
+  const email=document.getElementById('rvEmail').value.trim().toLowerCase();
+  const tel=document.getElementById('rvTel').value.trim();
+  let valid=true;
+  if(!currentRating){document.getElementById('errRating').classList.add('show');valid=false;}
+  if(!comment||comment.length<10){showRvError('rvComment','errComment',true);valid=false;}else showRvError('rvComment','errComment',false);
+  if(!nombre){showRvError('rvNombre','errRvNombre',true);valid=false;}else showRvError('rvNombre','errRvNombre',false);
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showRvError('rvEmail','errRvEmail',true);valid=false;}else showRvError('rvEmail','errRvEmail',false);
+  if(!tel||tel.length<8){showRvError('rvTel','errRvTel',true);valid=false;}else showRvError('rvTel','errRvTel',false);
+  if(!valid) return;
+  const allReviews=Object.values(REVIEWS_DB);
+  const cleanTel=tel.replace(/\D/g,'');
+  const emailDup=allReviews.find(r=>r.email&&r.email.toLowerCase()===email);
+  const telDup=allReviews.find(r=>r.tel&&r.tel.replace(/\D/g,'')===cleanTel);
+  if(emailDup){alert(`Este correo (${email}) ya dejó una reseña.`);return;}
+  if(telDup){alert(`Este número ya dejó una reseña.`);return;}
+  const reviewId='rv_'+Date.now();
+  const review={id:reviewId,nombre,email,tel,rating:currentRating,comment,timestamp:Date.now(),approved:true};
+  await set(ref(db,'resenas/'+reviewId),review);
   closeReviewModal();
   alert('¡Gracias por tu reseña! Tu opinión es muy importante para nosotros. 🖤');
 };
 
-// Render reseñas
 function renderReviews() {
-  const allReviews = Object.values(REVIEWS_DB).filter(r => r.approved !== false).sort((a,b) => b.timestamp - a.timestamp);
-  const total = allReviews.length;
-
-  // Promedio
-  const avg = total ? (allReviews.reduce((s,r)=>s+r.rating,0)/total) : 0;
-  document.getElementById('avgRating').textContent = total ? avg.toFixed(1) : '—';
-  document.getElementById('avgStars').textContent  = total ? starsText(Math.round(avg)) : '☆☆☆☆☆';
-  document.getElementById('totalReviews').textContent = `${total} reseña${total!==1?'s':''}`;
-
-  // Barras por estrella
-  const bars = document.getElementById('ratingBars');
-  bars.innerHTML = [5,4,3,2,1].map(star => {
-    const count = allReviews.filter(r=>r.rating===star).length;
-    const pct   = total ? Math.round((count/total)*100) : 0;
-    return `<div class="rating-bar-row">
-      <span class="rating-bar-label">${star}</span>
-      <span class="rating-bar-star">★</span>
-      <div class="rating-bar-track"><div class="rating-bar-fill" style="width:${pct}%"></div></div>
-      <span class="rating-bar-count">${count}</span>
-    </div>`;
+  const allReviews=Object.values(REVIEWS_DB).filter(r=>r.approved!==false).sort((a,b)=>b.timestamp-a.timestamp);
+  const total=allReviews.length;
+  const avg=total?(allReviews.reduce((s,r)=>s+r.rating,0)/total):0;
+  document.getElementById('avgRating').textContent=total?avg.toFixed(1):'—';
+  document.getElementById('avgStars').textContent=total?starsText(Math.round(avg)):'☆☆☆☆☆';
+  document.getElementById('totalReviews').textContent=`${total} reseña${total!==1?'s':''}`;
+  const bars=document.getElementById('ratingBars');
+  bars.innerHTML=[5,4,3,2,1].map(star=>{
+    const count=allReviews.filter(r=>r.rating===star).length;
+    const pct=total?Math.round((count/total)*100):0;
+    return `<div class="rating-bar-row"><span class="rating-bar-label">${star}</span><span class="rating-bar-star">★</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:${pct}%"></div></div><span class="rating-bar-count">${count}</span></div>`;
   }).join('');
-
-  // Grid de reseñas
-  const grid = document.getElementById('reviewsGrid');
-  if (!total) {
-    grid.innerHTML = `<div class="no-reviews-state"><div class="nr-icon">💬</div><p>Aún no hay reseñas — ¡sé el primero!</p></div>`;
+  const grid=document.getElementById('reviewsGrid');
+  if(!total){
+    grid.innerHTML=`<div class="no-reviews-state"><div class="nr-icon">💬</div><p>Aún no hay reseñas — ¡sé el primero!</p></div>`;
     document.getElementById('showMoreBtn').style.display='none';
     return;
   }
-  const visible = allReviews.slice(0, reviewsVisible);
-  grid.innerHTML = visible.map(r => {
-    const initials = (r.nombre||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
-    const date = new Date(r.timestamp).toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'});
-    const avatarColor = getAvatarColor(r.nombre||'');
+  const visible=allReviews.slice(0,reviewsVisible);
+  grid.innerHTML=visible.map(r=>{
+    const initials=(r.nombre||'?').split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+    const date=new Date(r.timestamp).toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'});
+    const avatarColor=getAvatarColor(r.nombre||'');
     return `<div class="review-card">
       <div class="review-card-header">
         <div class="review-card-author">
@@ -1278,40 +1193,20 @@ function renderReviews() {
       <div class="review-card-text">"${escapeHtml(r.comment)}"</div>
     </div>`;
   }).join('');
+  document.getElementById('showMoreBtn').style.display=total>reviewsVisible?'block':'none';
+}
+window.showMoreReviews=()=>{reviewsVisible+=6;renderReviews();};
 
-  const showMore = document.getElementById('showMoreBtn');
-  showMore.style.display = total > reviewsVisible ? 'block' : 'none';
-}
-
-window.showMoreReviews = () => { reviewsVisible += 6; renderReviews(); };
-
-function starsText(n) {
-  const full = '★'.repeat(Math.max(0,n));
-  const empty= '☆'.repeat(Math.max(0,5-n));
-  return `<span style="color:var(--gold)">${full}</span><span style="color:#333">${empty}</span>`;
-}
-function getAvatarColor(name) {
-  const colors = ['#e31414','#c0392b','#8e44ad','#2980b9','#27ae60','#d35400','#16a085','#2c3e50'];
-  let hash = 0;
-  for(let i=0;i<name.length;i++) hash=name.charCodeAt(i)+((hash<<5)-hash);
-  return colors[Math.abs(hash) % colors.length];
-}
-function escapeHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function showLiveBadge() {
-  const b=document.getElementById('liveBadge');
-  b.classList.add('show');
-  setTimeout(()=>b.classList.remove('show'),3000);
-}
+function starsText(n){return `<span style="color:var(--gold)">${'★'.repeat(Math.max(0,n))}</span><span style="color:#333">${'☆'.repeat(Math.max(0,5-n))}</span>`;}
+function getAvatarColor(name){const colors=['#e31414','#c0392b','#8e44ad','#2980b9','#27ae60','#d35400','#16a085','#2c3e50'];let hash=0;for(let i=0;i<name.length;i++)hash=name.charCodeAt(i)+((hash<<5)-hash);return colors[Math.abs(hash)%colors.length];}
+function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showLiveBadge(){const b=document.getElementById('liveBadge');b.classList.add('show');setTimeout(()=>b.classList.remove('show'),3000);}
 
 // Init
 populateRegions();
 updateCartUI();
 renderCatDrawer();
 renderSocialLinks();
-document.getElementById('floatWsp').href = `https://wa.me/${wspNumber.replace(/\D/g,'')}`;
 </script>
 </body>
 </html>
