@@ -233,6 +233,20 @@
   .sizes-pills { display: flex; flex-wrap: wrap; gap: 4px; }
   .sz-pill { font-family: 'Syne', sans-serif; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #f0ede8; color: var(--black); border: 1px solid #ddd; white-space: nowrap; }
   .sz-pill.low { background: #fde8e6; color: var(--red); border-color: #f5c0bb; }
+  .sz-pill.pedido { background: #eaf0fd; color: var(--blue); border-color: #c0d0f5; }
+  /* TOGGLE ACTIVO/INACTIVO */
+  .toggle-wrap { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #f8f8f8; border-radius: 6px; border: 1.5px solid #e0e0e0; margin-bottom: 18px; }
+  .toggle-label { font-size: 13px; font-weight: 500; color: var(--black); flex: 1; }
+  .toggle-label small { display: block; font-size: 11px; color: var(--gray); margin-top: 2px; }
+  .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; inset: 0; background: #ddd; border-radius: 24px; cursor: pointer; transition: 0.3s; }
+  .toggle-slider:before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.3s; }
+  .toggle-switch input:checked + .toggle-slider { background: var(--green); }
+  .toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+  /* PRODUCTO INACTIVO en tabla */
+  .prod-inactive { opacity: 0.45; }
+  .badge-inactive { background: #f0f0f0; color: var(--gray); font-size: 10px; padding: 2px 8px; border-radius: 4px; font-weight: 600; letter-spacing: 0.5px; }
 
   /* CONFIRM OVERLAY */
   .confirm-overlay { position: fixed; inset: 0; z-index: 400; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
@@ -480,8 +494,12 @@
     <div class="form-group">
       <label>Tallas y Stock *</label>
       <div class="sizes-manager">
-        <div class="sizes-add-row">
+        <div class="sizes-add-row" style="flex-wrap:wrap;gap:8px;">
           <input class="size-name-input" type="text" id="newSizeName" placeholder="Talla" maxlength="6" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter'){event.preventDefault();addSize()}">
+          <select id="newSizeStockType" onchange="toggleStockInput()" style="padding:8px 10px;border:1.5px solid #e0e0e0;border-radius:4px;font-family:inherit;font-size:13px;outline:none;background:white;cursor:pointer;">
+            <option value="numero">Cantidad</option>
+            <option value="pedido">Solo a pedido</option>
+          </select>
           <input class="size-stock-input" type="number" id="newSizeStock" placeholder="Unidades" min="1" max="9999" onkeydown="if(event.key==='Enter'){event.preventDefault();addSize()}">
           <button class="btn-add-size" onclick="addSize()">+ Agregar talla</button>
         </div>
@@ -520,6 +538,16 @@
           <img id="urlPreview" src="" alt="Preview" style="width:100%;max-height:160px;object-fit:contain;border-radius:6px;border:1px solid #eee;">
         </div>
       </div>
+    </div>
+    <div class="toggle-wrap">
+      <div class="toggle-label">
+        Producto activo (visible en la tienda)
+        <small>Desactívalo para ocultarlo sin eliminarlo</small>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="fActive" checked>
+        <span class="toggle-slider"></span>
+      </label>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
@@ -1156,13 +1184,19 @@ window.renderTable = () => {
   const catName = id => categories.find(c => c.id === id)?.name || id || '—';
   const renderSizesPills = sizes => {
     if (!sizes || !Object.keys(sizes).length) return '<span style="color:var(--gray);font-size:12px;">Sin tallas</span>';
-    return '<div class="sizes-pills">' + Object.entries(sizes).map(([sz, stock]) =>
-      `<span class="sz-pill ${stock <= 2 ? 'low' : ''}">${sz}: ${stock}</span>`).join('') + '</div>';
+    return '<div class="sizes-pills">' + Object.entries(sizes).map(([sz, stock]) => {
+      const isPedido = stock === 'pedido';
+      const cls2 = isPedido ? 'pedido' : (stock <= 2 ? 'low' : '');
+      const label = isPedido ? `${sz}: pedido` : `${sz}: ${stock}`;
+      return `<span class="sz-pill ${cls2}">${label}</span>`;
+    }).join('') + '</div>';
   };
-  document.getElementById('productTable').innerHTML = filtered.length ? filtered.map(p => `
-    <tr>
-      <td>${p.img ? `<img class="prod-thumb" src="${p.img}" alt="${p.name}">` : `<div style="width:48px;height:48px;background:#f0ede8;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid #eee;font-size:11px;color:var(--gray);">IMG</div>`}</td>
-      <td><strong>${p.name}</strong></td>
+  document.getElementById('productTable').innerHTML = filtered.length ? filtered.map(p => {
+    const isActive = p.active !== false;
+    return `
+    <tr class="${isActive ? '' : 'prod-inactive'}">
+      <td>${p.img ? `<img class="prod-thumb" src="${p.img}" alt="${p.name}" style="${isActive?'':'filter:grayscale(1)'}">` : `<div style="width:48px;height:48px;background:#f0ede8;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid #eee;font-size:11px;color:var(--gray);">IMG</div>`}</td>
+      <td><strong>${p.name}</strong>${!isActive ? ' <span class="badge-inactive">INACTIVO</span>' : ''}</td>
       <td style="color:var(--gray);font-size:13px;">${catName(p.cat)}</td>
       <td style="font-size:13px;">${genderLabel[p.gender] || '—'}</td>
       <td>${renderSizesPills(p.sizes)}</td>
@@ -1170,9 +1204,11 @@ window.renderTable = () => {
       <td>${p.badge ? `<span class="badge-pill ${cls[p.badge]}">${lbl[p.badge]}</span>` : '<span class="badge-pill pill-none">—</span>'}</td>
       <td><div class="action-btns">
         <button class="btn-edit" onclick="openModal('${p.id}')">✏ Editar</button>
+        <button class="${isActive ? 'btn-ship' : 'btn-accept'}" onclick="toggleProductActive('${p.id}',${isActive})" style="font-size:12px;">${isActive ? '👁 Desactivar' : '✓ Activar'}</button>
         <button class="btn-del" onclick="deleteProduct('${p.id}')">🗑 Eliminar</button>
       </div></td>
-    </tr>`).join('')
+    </tr>`;
+  }).join('')
   : '<tr><td colspan="8" style="text-align:center;color:var(--gray);padding:40px">No se encontraron productos</td></tr>';
 };
 
@@ -1289,6 +1325,7 @@ window.openModal = (id = null) => {
     document.getElementById('fOldPrice').value = '';
   }
 
+  document.getElementById('fActive').checked = id ? (products.find(x=>x.id===id)?.active !== false) : true;
   renderSizesList();
   document.getElementById('modalOverlay').classList.add('open');
 };
@@ -1299,33 +1336,52 @@ function renderSizesList() {
   const list = document.getElementById('sizesList');
   const entries = Object.entries(sizesData);
   if (!entries.length) { list.innerHTML = '<div class="sizes-empty">Agrega al menos una talla con su stock</div>'; return; }
-  list.innerHTML = entries.map(([sz, stock]) => `
-    <div class="size-item ${stock <= 2 ? 'low-stock' : ''}" id="szitem-${sz}">
+  list.innerHTML = entries.map(([sz, stock]) => {
+    const isPedido = stock === 'pedido';
+    const isLow = !isPedido && stock <= 2;
+    const stockLabel = isPedido
+      ? '<span style="color:var(--blue);font-weight:700;">Solo a pedido</span>'
+      : `Stock: <span>${stock}</span> unidades${isLow ? ' ⚠️ bajo' : ''}`;
+    const btns = isPedido
+      ? `<button class="btn-sz del" onclick="removeSize('${sz}')">🗑</button>`
+      : `<button class="btn-sz" onclick="changeSzStock('${sz}', -1)">−</button>
+         <button class="btn-sz" onclick="changeSzStock('${sz}', 1)">+</button>
+         <button class="btn-sz del" onclick="removeSize('${sz}')">🗑</button>`;
+    return `
+    <div class="size-item ${isLow ? 'low-stock' : ''}" id="szitem-${sz}">
       <div class="size-item-label">${sz}</div>
-      <div class="size-item-stock">Stock: <span>${stock}</span> unidades${stock <= 2 ? ' ⚠️ bajo' : ''}</div>
-      <div class="size-stock-btns">
-        <button class="btn-sz" onclick="changeSzStock('${sz}', -1)">−</button>
-        <button class="btn-sz" onclick="changeSzStock('${sz}', 1)">+</button>
-        <button class="btn-sz del" onclick="removeSize('${sz}')">🗑</button>
-      </div>
-    </div>`).join('');
+      <div class="size-item-stock">${stockLabel}</div>
+      <div class="size-stock-btns">${btns}</div>
+    </div>`;
+  }).join('');
 }
+
+window.toggleStockInput = () => {
+  const type = document.getElementById('newSizeStockType').value;
+  const stockEl = document.getElementById('newSizeStock');
+  stockEl.style.display = type === 'pedido' ? 'none' : 'block';
+  if (type === 'pedido') stockEl.value = '';
+};
 
 window.addSize = () => {
   const nameEl = document.getElementById('newSizeName');
   const stockEl = document.getElementById('newSizeStock');
+  const typeEl = document.getElementById('newSizeStockType');
   const name = nameEl.value.trim().toUpperCase();
-  const stock = parseInt(stockEl.value);
+  const isPedido = typeEl.value === 'pedido';
+  const stock = isPedido ? 'pedido' : parseInt(stockEl.value);
   if (!name) { showNotif('Escribe el nombre de la talla', 'error'); nameEl.focus(); return; }
-  if (!stock || stock < 1) { showNotif('Ingresa la cantidad de unidades (mínimo 1)', 'error'); stockEl.focus(); return; }
+  if (!isPedido && (!stock || stock < 1)) { showNotif('Ingresa la cantidad de unidades (mínimo 1)', 'error'); stockEl.focus(); return; }
   if (sizesData[name] !== undefined) { showNotif(`La talla "${name}" ya existe`, 'error'); return; }
   sizesData[name] = stock;
   nameEl.value = ''; stockEl.value = '';
+  typeEl.value = 'numero'; stockEl.style.display = 'block';
   renderSizesList(); nameEl.focus();
 };
 window.removeSize = (sz) => { if (!confirm(`¿Eliminar la talla "${sz}"?`)) return; delete sizesData[sz]; renderSizesList(); };
 window.changeSzStock = (sz, delta) => {
   if (sizesData[sz] === undefined) return;
+  if (sizesData[sz] === 'pedido') return;
   const newVal = sizesData[sz] + delta;
   if (newVal < 0) { showNotif('El stock no puede ser negativo', 'error'); return; }
   if (newVal === 0 && delta < 0) {
@@ -1352,12 +1408,14 @@ window.requestSaveConfirm = () => {
 
   const sizesText = sizeEntries.map(([s, q]) => `<strong>${s}</strong>: ${q} ud.`).join(' · ');
   const oldPrice = parseInt(document.getElementById('fOldPrice').value) || null;
+  const isActiveCheck = document.getElementById('fActive').checked;
   document.getElementById('confirmSummary').innerHTML = `
     <div><strong>Nombre:</strong> ${name}</div>
     <div><strong>Categoría:</strong> ${catName}</div>
     <div><strong>Género:</strong> ${genderLabel[gender]}</div>
     <div><strong>Precio:</strong> $${price.toLocaleString('es-CL')}${oldPrice ? ` <span style="text-decoration:line-through;color:var(--gray);font-size:12px;">$${oldPrice.toLocaleString('es-CL')}</span>` : ''}</div>
-    <div style="margin-top:6px;"><strong>Tallas y stock:</strong><br>${sizesText}</div>`;
+    <div style="margin-top:6px;"><strong>Tallas y stock:</strong><br>${sizesText}</div>
+    <div style="margin-top:8px;"><strong>Estado:</strong> ${isActiveCheck ? '✅ Activo (visible en la tienda)' : '🔴 Inactivo (oculto en la tienda)'}</div>`;
   document.getElementById('confirmOverlay').classList.add('open');
 };
 window.closeConfirm = () => document.getElementById('confirmOverlay').classList.remove('open');
@@ -1374,11 +1432,17 @@ async function doSaveProduct() {
   if (currentImgTab === 'url') { const urlVal = document.getElementById('fImgUrl').value.trim(); if (urlVal) img = urlVal; }
   const id       = editingId || ('prod_' + Date.now());
   const existing = editingId ? products.find(x => x.id === editingId) : null;
-  const prod     = { id, name, cat, badge, price, oldPrice, gender, sizes: sizesData, img: img || existing?.img || null };
+  const active   = document.getElementById('fActive').checked;
+  const prod     = { id, name, cat, badge, price, oldPrice, gender, sizes: sizesData, img: img || existing?.img || null, active };
   await set(ref(db, 'productos/' + id), prod);
   closeModal();
   showNotif(editingId ? 'Producto actualizado ✓' : 'Producto agregado ✓');
 }
+window.toggleProductActive = async (id, currentActive) => {
+  await set(ref(db, 'productos/' + id + '/active'), !currentActive);
+  showNotif(currentActive ? 'Producto desactivado — no aparece en la tienda' : 'Producto activado ✓');
+};
+
 window.deleteProduct = async (id) => {
   if (!confirm('¿Eliminar este producto de la tienda?')) return;
   await remove(ref(db, 'productos/' + id));
