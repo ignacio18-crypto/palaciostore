@@ -417,11 +417,49 @@
     <!-- SETTINGS -->
     <div class="panel" id="panel-settings">
       <div class="page-header"><h1 class="page-title">Configuración</h1></div>
-      <div class="table-card" style="padding:32px;max-width:600px;">
-        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:24px;">Configuración de la tienda</h3>
-        <div class="form-group"><label>Número de WhatsApp</label><input type="text" id="cfgWsp" value="569728650749"></div>
-        <div class="form-group"><label>Cambiar contraseña admin</label><input type="password" id="cfgPass" placeholder="Nueva contraseña"></div>
-        <button class="btn-save" onclick="saveSettings()" style="margin-top:8px;">Guardar cambios</button>
+      <div style="display:flex;flex-direction:column;gap:20px;max-width:640px;">
+
+        <!-- Acceso admin -->
+        <div class="table-card" style="padding:28px;">
+          <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px;">🔐 Acceso al panel</h3>
+          <p style="font-size:12px;color:var(--gray);margin-bottom:20px;">Cambia el usuario o contraseña para ingresar al panel de administración.</p>
+          <div class="form-group"><label>Usuario admin</label><input type="text" id="cfgUser" placeholder="Nuevo nombre de usuario"></div>
+          <div class="form-group"><label>Contraseña admin</label><input type="password" id="cfgPass" placeholder="Nueva contraseña (dejar vacío para no cambiar)"></div>
+          <div style="font-size:11px;color:var(--gray);background:#fdf2e6;padding:10px 14px;border-radius:4px;border:1px solid #f5d8a0;margin-bottom:16px;">⚠️ Anota los cambios antes de guardar. Si olvidas el usuario o contraseña deberás contactar al desarrollador.</div>
+          <button class="btn-save" onclick="saveSettings()">Guardar acceso</button>
+        </div>
+
+        <!-- WhatsApp -->
+        <div class="table-card" style="padding:28px;">
+          <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px;">📱 WhatsApp de la tienda</h3>
+          <p style="font-size:12px;color:var(--gray);margin-bottom:20px;">Número al que llegan las notificaciones de nuevos pedidos desde la tienda.</p>
+          <div class="form-group"><label>Número WhatsApp (con código de país)</label><input type="text" id="cfgWsp" placeholder="569912345678"></div>
+          <button class="btn-save" onclick="saveSettings()">Guardar WhatsApp</button>
+        </div>
+
+        <!-- Datos bancarios -->
+        <div class="table-card" style="padding:28px;">
+          <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px;">💳 Datos bancarios para cobros</h3>
+          <p style="font-size:12px;color:var(--gray);margin-bottom:20px;">Estos datos se incluyen automáticamente en el mensaje de WhatsApp cuando le pides el pago al cliente.</p>
+          <div class="form-row">
+            <div class="form-group"><label>Banco</label><input type="text" id="cfgBanco" oninput="bankData.banco=this.value;updateBankPreview()" placeholder="Ej: FALABELLA, BCI..."></div>
+            <div class="form-group"><label>Tipo de cuenta</label><input type="text" id="cfgTipoCuenta" oninput="bankData.tipoCuenta=this.value;updateBankPreview()" placeholder="Ej: Cuenta Vista"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>N° de cuenta</label><input type="text" id="cfgNumeroCuenta" oninput="bankData.numeroCuenta=this.value;updateBankPreview()" placeholder="000011122233344"></div>
+            <div class="form-group"><label>RUT del titular</label><input type="text" id="cfgRutBanco" oninput="bankData.rut=this.value;updateBankPreview()" placeholder="21.902.467-3"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Nombre del titular</label><input type="text" id="cfgNombreBanco" oninput="bankData.nombre=this.value;updateBankPreview()" placeholder="Ignacio Calderón"></div>
+            <div class="form-group"><label>Email de la cuenta</label><input type="text" id="cfgEmailBanco" oninput="bankData.email=this.value;updateBankPreview()" placeholder="correo@gmail.com"></div>
+          </div>
+          <div style="background:#f8f8f8;border:1px solid #eee;border-radius:6px;padding:14px 16px;margin-bottom:16px;font-size:12px;color:var(--gray);line-height:1.8;" id="bankPreview">
+            <strong style="color:var(--black);font-size:11px;text-transform:uppercase;letter-spacing:1px;">Vista previa del mensaje:</strong><br>
+            Banco: —<br>Tipo: —<br>N° cuenta: —<br>RUT: —<br>Nombre: —<br>Email: —
+          </div>
+          <button class="btn-save" onclick="saveSettings()">Guardar datos bancarios</button>
+        </div>
+
       </div>
     </div>
 
@@ -661,12 +699,41 @@ onValue(ref(db, 'pedidos'), snap => {
   renderOrdersPanel();
   updateOrderBadges();
 });
+// Variables globales de datos bancarios
+let bankData = {
+  banco: 'FALABELLA', tipoCuenta: 'Cuenta Vista',
+  numeroCuenta: '000011122233344', rut: '21.902.467-3',
+  nombre: 'ignacio calderon', email: 'ignaciocalderon.1805@gmail.com'
+};
+
 onValue(ref(db, 'config'), snap => {
   const cfg = snap.val();
   if (!cfg) return;
-  if (cfg.wsp)  { document.getElementById('cfgWsp').value = cfg.wsp; wspNumber = cfg.wsp; }
+  if (cfg.wsp)  { const el = document.getElementById('cfgWsp'); if(el) el.value = cfg.wsp; wspNumber = cfg.wsp; }
   if (cfg.pass) CREDS.pass = cfg.pass;
+  if (cfg.user) CREDS.user = cfg.user;
+  if (cfg.user) { const el = document.getElementById('cfgUser'); if(el) el.placeholder = cfg.user; }
+  // Datos bancarios
+  if (cfg.banco)        { bankData.banco = cfg.banco;               const el = document.getElementById('cfgBanco');        if(el) el.value = cfg.banco; }
+  if (cfg.tipoCuenta)   { bankData.tipoCuenta = cfg.tipoCuenta;     const el = document.getElementById('cfgTipoCuenta');   if(el) el.value = cfg.tipoCuenta; }
+  if (cfg.numeroCuenta) { bankData.numeroCuenta = cfg.numeroCuenta; const el = document.getElementById('cfgNumeroCuenta'); if(el) el.value = cfg.numeroCuenta; }
+  if (cfg.rutBanco)     { bankData.rut = cfg.rutBanco;              const el = document.getElementById('cfgRutBanco');     if(el) el.value = cfg.rutBanco; }
+  if (cfg.nombreBanco)  { bankData.nombre = cfg.nombreBanco;        const el = document.getElementById('cfgNombreBanco');  if(el) el.value = cfg.nombreBanco; }
+  if (cfg.emailBanco)   { bankData.email = cfg.emailBanco;          const el = document.getElementById('cfgEmailBanco');   if(el) el.value = cfg.emailBanco; }
+  updateBankPreview();
 });
+
+function updateBankPreview() {
+  const el = document.getElementById('bankPreview');
+  if (!el) return;
+  el.innerHTML = `<strong style="color:var(--black);font-size:11px;text-transform:uppercase;letter-spacing:1px;">Vista previa del mensaje:</strong><br>
+Banco: <strong>${bankData.banco}</strong><br>
+Tipo de cuenta: <strong>${bankData.tipoCuenta}</strong><br>
+N° de cuenta: <strong>${bankData.numeroCuenta}</strong><br>
+RUT: <strong>${bankData.rut}</strong><br>
+Nombre: <strong>${bankData.nombre}</strong><br>
+Email: <strong>${bankData.email}</strong>`;
+}
 
 // ── LOGIN ────────────────────────────────────────────────────────
 window.doLogin = () => {
@@ -867,12 +934,12 @@ ${itemLines}
 
 ━━━━━━━━━━━━━━━━━━━━
 💳 *DATOS PARA TRANSFERENCIA*
-Banco: FALABELLA
-Tipo de cuenta: Cuenta Vista
-N° de cuenta: 000011122233344
-RUT: 21.902.467-3
-Nombre: ignacio calderon
-Email: ignaciocalderon.1805@gmail.com
+Banco: ${bankData.banco}
+Tipo de cuenta: ${bankData.tipoCuenta}
+N° de cuenta: ${bankData.numeroCuenta}
+RUT: ${bankData.rut}
+Nombre: ${bankData.nombre}
+Email: ${bankData.email}
 ━━━━━━━━━━━━━━━━━━━━
 
 📸 Por favor envíame el *comprobante de transferencia* por este mismo chat.
@@ -967,12 +1034,12 @@ ${itemLines}
 
 ━━━━━━━━━━━━━━━━━━━━
 💳 *DATOS PARA TRANSFERENCIA*
-Banco: FALABELLA
-Tipo de cuenta: Cuenta Vista
-N° de cuenta: 000011122233344
-RUT: 21.902.467-3
-Nombre: ignacio calderon
-Email: ignaciocalderon.1805@gmail.com
+Banco: ${bankData.banco}
+Tipo de cuenta: ${bankData.tipoCuenta}
+N° de cuenta: ${bankData.numeroCuenta}
+RUT: ${bankData.rut}
+Nombre: ${bankData.nombre}
+Email: ${bankData.email}
 ━━━━━━━━━━━━━━━━━━━━
 
 📸 Por favor envíame el *comprobante de transferencia* por este mismo chat.
@@ -1478,12 +1545,34 @@ window.previewUrl = () => {
 
 // ── SETTINGS ─────────────────────────────────────────────────────
 window.saveSettings = async () => {
-  const wsp  = document.getElementById('cfgWsp').value.trim();
-  const pass = document.getElementById('cfgPass').value.trim();
-  const cfg  = { wsp };
-  if (pass) { cfg.pass = pass; CREDS.pass = pass; document.getElementById('cfgPass').value = ''; }
-  wspNumber = wsp;
+  // Leer config actual de Firebase para no pisarla completa
+  const snap = await get(ref(db, 'config'));
+  const currentCfg = snap.val() || {};
+
+  const wsp  = document.getElementById('cfgWsp')?.value.trim();
+  const pass = document.getElementById('cfgPass')?.value.trim();
+  const user = document.getElementById('cfgUser')?.value.trim();
+  const banco        = document.getElementById('cfgBanco')?.value.trim();
+  const tipoCuenta   = document.getElementById('cfgTipoCuenta')?.value.trim();
+  const numeroCuenta = document.getElementById('cfgNumeroCuenta')?.value.trim();
+  const rutBanco     = document.getElementById('cfgRutBanco')?.value.trim();
+  const nombreBanco  = document.getElementById('cfgNombreBanco')?.value.trim();
+  const emailBanco   = document.getElementById('cfgEmailBanco')?.value.trim();
+
+  const cfg = { ...currentCfg };
+
+  if (wsp)           { cfg.wsp = wsp; wspNumber = wsp; }
+  if (pass)          { cfg.pass = pass; CREDS.pass = pass; document.getElementById('cfgPass').value = ''; }
+  if (user)          { cfg.user = user; CREDS.user = user; document.getElementById('cfgUser').value = ''; document.getElementById('cfgUser').placeholder = user; }
+  if (banco)         { cfg.banco = banco;               bankData.banco = banco; }
+  if (tipoCuenta)    { cfg.tipoCuenta = tipoCuenta;     bankData.tipoCuenta = tipoCuenta; }
+  if (numeroCuenta)  { cfg.numeroCuenta = numeroCuenta; bankData.numeroCuenta = numeroCuenta; }
+  if (rutBanco)      { cfg.rutBanco = rutBanco;         bankData.rut = rutBanco; }
+  if (nombreBanco)   { cfg.nombreBanco = nombreBanco;   bankData.nombre = nombreBanco; }
+  if (emailBanco)    { cfg.emailBanco = emailBanco;     bankData.email = emailBanco; }
+
   await set(ref(db, 'config'), cfg);
+  updateBankPreview();
   showNotif('Configuración guardada ✓');
 };
 
