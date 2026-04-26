@@ -102,6 +102,14 @@
   .search-bar { display: flex; gap: 12px; align-items: center; margin-bottom: 20px; }
   .search-input { flex: 1; padding: 10px 16px; border: 1.5px solid #e0e0e0; border-radius: 4px; font-family: inherit; font-size: 14px; outline: none; transition: border 0.2s; }
   .search-input:focus { border-color: var(--accent); }
+  .search-btn { padding: 10px 20px; background: var(--black); color: var(--white); border: none; border-radius: 4px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+  .search-btn:hover { background: var(--accent); color: var(--black); }
+  /* HISTORIAL */
+  .hist-filter-row { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .hist-status-btn { padding: 7px 16px; border-radius: 999px; border: 1.5px solid #e0e0e0; background: var(--white); font-family: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; color: var(--gray); }
+  .hist-status-btn:hover { border-color: var(--accent); color: var(--black); }
+  .hist-status-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+  .hist-info { font-size: 12px; color: var(--gray); background: #f5f0eb; padding: 6px 14px; border-radius: 4px; border: 1px solid #e8e2da; }
 
   /* ORDER TABS */
   .order-tabs { display: flex; gap: 0; margin-bottom: 20px; background: var(--white); border-radius: 8px; overflow: hidden; border: 1px solid rgba(0,0,0,0.06); }
@@ -294,6 +302,7 @@
     <div class="nav-item" onclick="showPanel('products',this)"><span class="nav-icon">👕</span> Productos</div>
     <div class="nav-item" onclick="showPanel('categories',this)"><span class="nav-icon">🏷️</span> Categorías</div>
     <div class="nav-item" onclick="showPanel('settings',this)"><span class="nav-icon">⚙️</span> Configuración</div>
+    <div class="nav-item" onclick="showPanel('historial',this)"><span class="nav-icon">🗂️</span> Historial</div>
     <div class="sidebar-footer">
       <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-bottom:10px;">Sesión activa: <span id="activeUser"></span></div>
       <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
@@ -332,7 +341,8 @@
         <div style="font-size:13px;color:var(--gray)" id="ordersCount">—</div>
       </div>
       <div class="search-bar">
-        <input class="search-input" type="text" placeholder="Buscar por código, nombre, email, RUT..." id="orderSearchInput" oninput="renderOrdersPanel()">
+        <input class="search-input" type="text" placeholder="Buscar por código, nombre, email, RUT..." id="orderSearchInput" onkeydown="if(event.key==='Enter')renderOrdersPanel()">
+        <button class="search-btn" onclick="renderOrdersPanel()">🔍 Buscar</button>
       </div>
       <div class="order-tabs">
         <button class="order-tab active" onclick="switchOrderTab('espera',this)">⏳ En espera <span class="order-tab-badge" id="tab-badge-espera">0</span></button>
@@ -396,9 +406,43 @@
       <div class="table-card" style="padding:32px;max-width:600px;">
         <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-bottom:24px;">Configuración de la tienda</h3>
         <div class="form-group"><label>Número de WhatsApp</label><input type="text" id="cfgWsp" value="569728650749"></div>
-        <div class="form-group"><label>Nombre de la tienda</label><input type="text" id="cfgName" value="Palacio Store"></div>
         <div class="form-group"><label>Cambiar contraseña admin</label><input type="password" id="cfgPass" placeholder="Nueva contraseña"></div>
         <button class="btn-save" onclick="saveSettings()" style="margin-top:8px;">Guardar cambios</button>
+      </div>
+    </div>
+
+
+    <!-- HISTORIAL -->
+    <div class="panel" id="panel-historial">
+      <div class="page-header">
+        <h1 class="page-title">Historial de Pedidos</h1>
+        <div style="font-size:13px;color:var(--gray)" id="histCount">—</div>
+      </div>
+      <div class="search-bar">
+        <input class="search-input" type="text" placeholder="Buscar por código, nombre, email, RUT..." id="histSearchInput" onkeydown="if(event.key==='Enter')renderHistorial()">
+        <button class="search-btn" onclick="renderHistorial()">🔍 Buscar</button>
+      </div>
+      <div class="hist-filter-row">
+        <button class="hist-status-btn active" onclick="switchHistTab('todos',this)">Todos</button>
+        <button class="hist-status-btn" onclick="switchHistTab('confirmado',this)">🎉 Entregados</button>
+        <button class="hist-status-btn" onclick="switchHistTab('cancelado',this)">❌ Cancelados</button>
+        <div class="hist-info">📌 Los pedidos entregados y cancelados pasan aquí automáticamente después de 24 horas</div>
+      </div>
+      <div class="table-card" style="overflow-x:auto;">
+        <table style="min-width:900px;">
+          <thead>
+            <tr>
+              <th>Código / Fecha</th>
+              <th>Cliente</th>
+              <th>Dirección</th>
+              <th>Productos</th>
+              <th>Total</th>
+              <th>Estado final</th>
+              <th>Archivado</th>
+            </tr>
+          </thead>
+          <tbody id="histTable"><tr><td colspan="7" class="fb-loading">Cargando historial...</td></tr></tbody>
+        </table>
       </div>
     </div>
 
@@ -593,7 +637,6 @@ onValue(ref(db, 'config'), snap => {
   const cfg = snap.val();
   if (!cfg) return;
   if (cfg.wsp)  { document.getElementById('cfgWsp').value = cfg.wsp; wspNumber = cfg.wsp; }
-  if (cfg.name) document.getElementById('cfgName').value = cfg.name;
   if (cfg.pass) CREDS.pass = cfg.pass;
 });
 
@@ -810,19 +853,12 @@ Una vez confirmado el pago, tu pedido será *ACEPTADO* y ¡prepararemos tu pedid
 
 Gracias por elegir *Palacio Store* 🖤`;
 
-  // ─── ✅ ACEPTADO → aviso de aceptación ───────────────────────
+  // ─── ✅ ACEPTADO → solo aviso de aceptación, sin datos bancarios ─
   } else if (o.status === 'aceptado') {
     msg =
 `¡Hola ${o.cliente?.nombre}! 👋 Te escribe *PALACIO STORE* ⭐
 
 ¡Buenas noticias! Tu pedido *${o.id}* ha sido *ACEPTADO* ✅🎉
-
-━━━━━━━━━━━━━━━━━━━━
-🛒 *Productos:*
-${itemLines}
-
-💰 *Total: $${o.total?.toLocaleString('es-CL')} CLP*
-━━━━━━━━━━━━━━━━━━━━
 
 Estamos preparando tu pedido con mucho cuidado 📦
 Pronto te avisaremos cuando sea despachado 🚚
@@ -1379,9 +1415,8 @@ window.previewUrl = () => {
 // ── SETTINGS ─────────────────────────────────────────────────────
 window.saveSettings = async () => {
   const wsp  = document.getElementById('cfgWsp').value.trim();
-  const name = document.getElementById('cfgName').value.trim();
   const pass = document.getElementById('cfgPass').value.trim();
-  const cfg  = { wsp, name };
+  const cfg  = { wsp };
   if (pass) { cfg.pass = pass; CREDS.pass = pass; document.getElementById('cfgPass').value = ''; }
   wspNumber = wsp;
   await set(ref(db, 'config'), cfg);
@@ -1401,6 +1436,116 @@ document.getElementById('modalOverlay').addEventListener('click', function(e) { 
 document.getElementById('catModalOverlay').addEventListener('click', function(e) { if(e.target===this)closeCatModal(); });
 document.getElementById('confirmOverlay').addEventListener('click', function(e) { if(e.target===this)closeConfirm(); });
 document.getElementById('orderConfirmOverlay').addEventListener('click', function(e) { if(e.target===this)closeOrderConfirm(); });
+
+
+// ══════════════════════════════════════════════════════════════════
+//  ARCHIVADO AUTOMÁTICO: confirmado/cancelado → historial tras 24h
+// ══════════════════════════════════════════════════════════════════
+const ARCHIVE_DELAY_MS = 24 * 60 * 60 * 1000; // 24 horas
+
+async function checkAndArchiveOrders() {
+  const now = Date.now();
+  const toArchive = Object.values(orders).filter(o =>
+    (o.status === 'confirmado' || o.status === 'cancelado') &&
+    !o.archived &&
+    o.timestamp &&
+    (now - o.timestamp) >= ARCHIVE_DELAY_MS
+  );
+  for (const o of toArchive) {
+    await set(ref(db, 'historial/' + o.id), { ...o, archived: true, archivedAt: now });
+    await remove(ref(db, 'pedidos/' + o.id));
+  }
+  if (toArchive.length > 0) {
+    showNotif(`${toArchive.length} pedido(s) movidos al historial`);
+  }
+}
+
+setTimeout(checkAndArchiveOrders, 3000);
+setInterval(checkAndArchiveOrders, 10 * 60 * 1000);
+
+// ══════════════════════════════════════════════════════════════════
+//  HISTORIAL DE PEDIDOS
+// ══════════════════════════════════════════════════════════════════
+let historial = {};
+let currentHistTab = 'todos';
+
+onValue(ref(db, 'historial'), snap => {
+  historial = snap.val() || {};
+  renderHistorial();
+});
+
+window.switchHistTab = (tab, btn) => {
+  currentHistTab = tab;
+  document.querySelectorAll('.hist-status-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderHistorial();
+};
+
+function renderHistorial() {
+  const q = (document.getElementById('histSearchInput')?.value || '').toLowerCase();
+  let allHist = Object.values(historial);
+
+  if (currentHistTab !== 'todos') {
+    allHist = allHist.filter(o => o.status === currentHistTab);
+  }
+  if (q) {
+    allHist = allHist.filter(o =>
+      o.id?.toLowerCase().includes(q) ||
+      `${o.cliente?.nombre} ${o.cliente?.apellido}`.toLowerCase().includes(q) ||
+      o.cliente?.email?.toLowerCase().includes(q) ||
+      o.cliente?.rut?.toLowerCase().includes(q)
+    );
+  }
+
+  const countEl = document.getElementById('histCount');
+  if (countEl) countEl.textContent = `${allHist.length} registro${allHist.length !== 1 ? 's' : ''}`;
+
+  const tbody = document.getElementById('histTable');
+  if (!tbody) return;
+
+  if (!allHist.length) {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--gray);padding:40px">Sin registros en el historial</td></tr>';
+    return;
+  }
+
+  const statusLabels = { confirmado:'🎉 Entregado', cancelado:'❌ Cancelado' };
+  const statusCls    = { confirmado:'sp-confirmado', cancelado:'sp-cancelado' };
+
+  tbody.innerHTML = allHist.sort((a,b) => (b.archivedAt||0) - (a.archivedAt||0)).map(o => {
+    const date = new Date(o.timestamp).toLocaleDateString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric'});
+    const time = new Date(o.timestamp).toLocaleTimeString('es-CL', {hour:'2-digit',minute:'2-digit'});
+    const archivedDate = o.archivedAt ? new Date(o.archivedAt).toLocaleDateString('es-CL', {day:'2-digit',month:'2-digit',year:'numeric'}) : '—';
+
+    const itemsHtml = o.items?.map(i =>
+      `<div class="item-line"><span>${i.productName}</span><span class="item-size-badge">${i.selectedSize}</span><span style="color:var(--gray)">×${i.qty}</span></div>`
+    ).join('') || '—';
+
+    return `<tr>
+      <td>
+        <div style="margin-bottom:4px;"><span class="order-code-chip">${o.id}</span></div>
+        <div class="order-date-small">${date} · ${time}</div>
+      </td>
+      <td>
+        <div class="client-data-block">
+          <div class="client-name">${o.cliente?.nombre || '—'} ${o.cliente?.apellido || ''}</div>
+          <div class="client-detail">📧 ${o.cliente?.email || '—'}</div>
+          <div class="client-detail">📱 ${o.cliente?.tel || '—'}</div>
+          <div class="client-rut">RUT: ${o.cliente?.rut || '—'}</div>
+        </div>
+      </td>
+      <td>
+        <div class="client-address-block">
+          <div><strong style="font-size:12px;color:#444;">🏙 ${o.cliente?.comuna || '—'}</strong></div>
+          <div style="font-size:12px;">${o.cliente?.direccion || '—'}</div>
+        </div>
+      </td>
+      <td><div class="order-items-compact">${itemsHtml}</div></td>
+      <td><div class="order-total-big">$${o.total?.toLocaleString('es-CL')}</div></td>
+      <td><span class="status-pill ${statusCls[o.status] || ''}">${statusLabels[o.status] || o.status}</span></td>
+      <td><div style="font-size:12px;color:var(--gray);">📁 ${archivedDate}</div></td>
+    </tr>`;
+  }).join('');
+}
 
 window.renderTable = window.renderTable;
 </script>
