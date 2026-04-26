@@ -1,7 +1,6 @@
 # palaciostore TAREAS POR REALIZAR
 
 
-3__ que en unidades de la prenda pueda poner "solo a pedido " y poder desactivar un producto tambien para que no aparezca en la pantalla principal pero quede gaurdado
 
 
 
