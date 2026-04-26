@@ -4,8 +4,6 @@
 
 
 
-4__que se pueda cambiar el nombre de usuario para ingresar a la pantalla de adminitracion, y los datos bancarios cual luego se le envian al cliente en el mensaje pidiendo el pago
-
 
 5__cambiale el nombre a la pagina y a todo y ponle " proyect venta" asi puedo ofrecer esta pagina web a distintas empresas y venderla
 que los catalogos no aparezcan en fila hacia el costado sino que halla 3 rayitas en la  izquierda que al precionar  aparezcan todas las categorías y una lupa para buscar mas rápido tu categoría y en la pagina inicial aparezcan todos los productos donde aparezcan los filtros como hombre,mujer o unisex un botón debajo de cada producto de 
